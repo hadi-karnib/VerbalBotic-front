@@ -23,7 +23,6 @@ export const loginUser = (email, password, navigation) => async (dispatch) => {
       await AsyncStorage.setItem("token", token);
       dispatch(userActions.loginUserSuccess(response.data));
 
-      // Navigate to Home screen upon successful login
       navigation.navigate("Home");
     } else {
       Alert.alert(
