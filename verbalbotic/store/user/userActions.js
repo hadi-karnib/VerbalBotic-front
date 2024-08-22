@@ -41,8 +41,7 @@ export const loginUser = (email, password, navigation) => async (dispatch) => {
     );
   }
 };
-
-export const signupUser = (formData) => async (dispatch) => {
+export const signupUser = (formData, navigation) => async (dispatch) => {
   dispatch(userActions.signupUserRequest());
 
   try {
@@ -53,13 +52,21 @@ export const signupUser = (formData) => async (dispatch) => {
     });
 
     console.log("signup response: ", response);
-    const { token } = response.data;
-    await AsyncStorage.setItem("token", token);
+    const { token, success } = response.data;
 
-    dispatch(userActions.signupUserSuccess(response.data));
+    if (success) {
+      await AsyncStorage.setItem("token", token);
+      dispatch(userActions.signupUserSuccess(response.data));
+    } else {
+      Alert.alert("Signup Failed", "Please try again.");
+    }
   } catch (err) {
     console.error("signup error: ", err);
     dispatch(userActions.signupUserFailure(err.response?.data || err.message));
+    Alert.alert(
+      "Signup Error",
+      err.response?.data?.message || "An error occurred"
+    );
   }
 };
 export const logoutUser = () => async (dispatch) => {
