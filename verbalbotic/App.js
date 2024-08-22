@@ -7,6 +7,7 @@ import SignupScreen from "./screens/SignupScreen";
 import { Provider } from "react-redux";
 import store from "./store/store";
 import { API_URL } from "@env";
+import HomeScreen from "./screens/HomeScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -22,6 +23,7 @@ export default function App() {
         >
           <Stack.Screen name="Login" component={loginScreen} />
           <Stack.Screen name="Signup" component={SignupScreen} />
+          <Stack.Screen name="Home" component={HomeScreen} />
         </Stack.Navigator>
         <StatusBar style="auto" />
       </NavigationContainer>
