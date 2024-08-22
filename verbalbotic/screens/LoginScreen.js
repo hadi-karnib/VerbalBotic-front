@@ -8,28 +8,33 @@ import {
   Alert,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { loginUser } from "../store/user/userActions";
+import AsyncStorage from "@react-native-async-storage/async-storage"; // Import AsyncStorage
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user);
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (email && password) {
-      dispatch(loginUser(email, password))
-        .then((response) => {
-          if (response.payload?.token) {
-            Alert.alert("Login Successful", `Token: ${response.payload.token}`);
-          } else if (error) {
-            Alert.alert("Login Failed", error);
-          }
-        })
-        .catch((err) => {
-          Alert.alert("Login Error", err.message || "An error occurred");
-        });
+      try {
+        // Dispatch the login action
+        await dispatch(loginUser(email, password));
+
+        // Get the stored token from AsyncStorage
+        const storedToken = await AsyncStorage.getItem("token");
+
+        // Check if the token exists in AsyncStorage
+        if (storedToken) {
+          Alert.alert("Login Successful", `Stored Token: ${storedToken}`);
+        } else {
+          Alert.alert("Login Failed", "No token found");
+        }
+      } catch (err) {
+        Alert.alert("Login Error", err.message || "An error occurred");
+      }
     } else {
       Alert.alert(
         "Missing Information",
