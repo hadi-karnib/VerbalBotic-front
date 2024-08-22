@@ -13,17 +13,11 @@ import RNPickerSelect from "react-native-picker-select";
 
 export default function SignupScreen({ navigation }) {
   const [date, setDate] = useState(new Date());
-  const [show, setShow] = useState(false);
   const [role, setRole] = useState("");
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
-    setShow(Platform.OS === "ios");
     setDate(currentDate);
-  };
-
-  const showDatepicker = () => {
-    setShow(true);
   };
 
   return (
@@ -42,25 +36,17 @@ export default function SignupScreen({ navigation }) {
           secureTextEntry
         />
 
-        <TouchableOpacity
-          onPress={showDatepicker}
-          style={styles.datePickerButton}
-        >
-          <Text style={styles.datePickerText}>
-            {date.toDateString() === new Date().toDateString()
-              ? "Your Date of Birth"
-              : date.toDateString()}
-          </Text>
-        </TouchableOpacity>
-        {show && (
+        <View style={styles.datePickerContainer}>
+          <Text style={styles.dateText}>Date of Birth</Text>
           <DateTimePicker
             value={date}
             mode="date"
             display="default"
             onChange={onChange}
             maximumDate={new Date()}
+            style={styles.datePicker}
           />
-        )}
+        </View>
 
         <TextInput
           placeholder="Phone number ie:03111111"
@@ -88,6 +74,7 @@ export default function SignupScreen({ navigation }) {
     </LinearGradient>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -116,7 +103,8 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     backgroundColor: "#fff",
   },
-  datePickerButton: {
+  datePickerContainer: {
+    display: "flex",
     width: "100%",
     height: 40,
     justifyContent: "center",
@@ -127,8 +115,9 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     backgroundColor: "#fff",
   },
-  datePickerText: {
-    color: "#999",
+  datePicker: {
+    width: "100%",
+    backgroundColor: "#fff",
   },
   button: {
     width: "100%",
