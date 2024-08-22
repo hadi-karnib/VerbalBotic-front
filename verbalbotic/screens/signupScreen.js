@@ -66,7 +66,7 @@ export default function SignupScreen({ navigation }) {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.container}>
         <View style={styles.signupBox}>
-          <Text style={styles.signupText}>Register</Text>
+          <Text style={styles.signupText}>Sign Up</Text>
           <TextInput
             placeholder="Username"
             style={styles.input}
