@@ -17,7 +17,6 @@ export const loginUser = (email, password, navigation) => async (dispatch) => {
       password,
     });
 
-    console.log("login response: ", response);
     const { token, success } = response.data;
 
     if (success) {
