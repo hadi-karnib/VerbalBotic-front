@@ -13,11 +13,31 @@ import RNPickerSelect from "react-native-picker-select";
 
 export default function SignupScreen({ navigation }) {
   const [date, setDate] = useState(new Date());
-  const [role, setRole] = useState("");
+  const [role, setRole] = useState(""); // Added setRole hook
+  const [age, setAge] = useState(null); // Added state for age
+  const [show, setShow] = useState(false);
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setDate(currentDate);
+    calculateAge(currentDate);
+    setShow(false);
+  };
+
+  const calculateAge = (birthDate) => {
+    const today = new Date();
+    let years = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+
+    // Adjust age if the birthdate hasn't occurred yet this year
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birthDate.getDate())
+    ) {
+      years--;
+    }
+
+    setAge(years);
   };
 
   return (
@@ -37,7 +57,12 @@ export default function SignupScreen({ navigation }) {
         />
 
         <View style={styles.datePickerContainer}>
-          <Text style={styles.dateText}>Date of Birth</Text>
+          <TextInput
+            placeholder="Your Date of Birth"
+            value={age !== null ? `Age: ${age} years` : ""}
+            style={styles.dateTextInput}
+            editable={false}
+          />
           <DateTimePicker
             value={date}
             mode="date"
@@ -115,10 +140,9 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     backgroundColor: "#fff",
   },
-  dateText: {
-    marginRight: 10,
-    fontSize: 16,
-    color: "#C7C7CD", // Lighter color similar to placeholders
+  dateTextInput: {
+    flex: 1,
+    color: "#000",
   },
   datePicker: {
     flex: 1,
@@ -135,6 +159,11 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     fontSize: 16,
+  },
+  ageText: {
+    fontSize: 16,
+    marginBottom: 10,
+    color: "#333",
   },
 });
 
