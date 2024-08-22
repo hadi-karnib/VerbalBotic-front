@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
+  Alert,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -15,6 +16,7 @@ const BioScreen = ({ navigation }) => {
   const [selectedHobbies, setSelectedHobbies] = useState([]);
 
   const hobbies = ["Reading", "Swimming", "Playing Football", "Cooking"];
+  const [token, setToken] = useState(null);
 
   const toggleHobby = (hobby) => {
     if (selectedHobbies.includes(hobby)) {
@@ -24,22 +26,22 @@ const BioScreen = ({ navigation }) => {
     }
     console.log(selectedHobbies);
   };
-  useEffect(() => {
-    const getToken = async () => {
-      try {
-        const storedToken = await AsyncStorage.getItem("token");
-        if (storedToken) {
-          setToken(storedToken);
-          console.log("Token:", storedToken);
-          Alert.alert("Token", storedToken);
-        }
-      } catch (error) {
-        console.error("Failed to load token from storage", error);
-      }
-    };
+  //   useEffect(() => {
+  //     const getToken = async () => {
+  //       try {
+  //         const storedToken = await AsyncStorage.getItem("token");
+  //         if (storedToken) {
+  //           setToken(storedToken);
+  //           console.log("Token:", storedToken);
+  //           Alert.alert("Token", storedToken);
+  //         }
+  //       } catch (error) {
+  //         console.error("Failed to load token from storage", error);
+  //       }
+  //     };
 
-    getToken();
-  }, []);
+  //     getToken();
+  //   }, []);
 
   return (
     <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.container}>
