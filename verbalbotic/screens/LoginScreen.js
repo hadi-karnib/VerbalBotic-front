@@ -10,7 +10,6 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../store/user/userActions";
-import AsyncStorage from "@react-native-async-storage/async-storage"; // Import AsyncStorage
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState("");
@@ -20,18 +19,7 @@ export default function LoginScreen({ navigation }) {
   const handleLogin = async () => {
     if (email && password) {
       try {
-        // Dispatch the login action
-        await dispatch(loginUser(email, password));
-
-        // Get the stored token from AsyncStorage
-        const storedToken = await AsyncStorage.getItem("token");
-
-        // Check if the token exists in AsyncStorage
-        if (storedToken) {
-          Alert.alert("Login Successful", `Stored Token: ${storedToken}`);
-        } else {
-          Alert.alert("Login Failed", "No token found");
-        }
+        await dispatch(loginUser(email, password, navigation));
       } catch (err) {
         Alert.alert("Login Error", err.message || "An error occurred");
       }
