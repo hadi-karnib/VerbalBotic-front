@@ -4,6 +4,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_URL } from "@env";
 
 export const loginUser = (email, password) => async (dispatch) => {
+  console.log(API_URL);
+
   console.log("login formData: ", { email, password });
   dispatch(userActions.loginUserRequest());
 
