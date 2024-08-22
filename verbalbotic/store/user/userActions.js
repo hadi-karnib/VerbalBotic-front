@@ -2,8 +2,10 @@ import axios from "axios";
 import { userActions } from "./userSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_URL } from "@env";
+import { Alert } from "react-native";
 
-export const loginUser = (email, password) => async (dispatch) => {
+// Modified loginUser Action
+export const loginUser = (email, password, navigation) => async (dispatch) => {
   console.log(API_URL);
 
   console.log("login formData: ", { email, password });
@@ -16,13 +18,27 @@ export const loginUser = (email, password) => async (dispatch) => {
     });
 
     console.log("login response: ", response);
-    const { token } = response.data;
-    await AsyncStorage.setItem("token", token);
+    const { token, success } = response.data;
 
-    dispatch(userActions.loginUserSuccess(response.data));
+    if (success) {
+      await AsyncStorage.setItem("token", token);
+      dispatch(userActions.loginUserSuccess(response.data));
+
+      // Navigate to Home screen upon successful login
+      navigation.navigate("Home");
+    } else {
+      Alert.alert(
+        "Login Failed",
+        "Please check your credentials and try again."
+      );
+    }
   } catch (err) {
     console.error("login error: ", err);
     dispatch(userActions.loginUserFailure(err.response?.data || err.message));
+    Alert.alert(
+      "Login Error",
+      err.response?.data?.message || "An error occurred"
+    );
   }
 };
 
