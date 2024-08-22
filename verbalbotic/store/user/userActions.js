@@ -23,3 +23,24 @@ export const loginUser = (email, password) => async (dispatch) => {
     dispatch(userActions.loginUserFailure(err.response?.data || err.message));
   }
 };
+
+export const signupUser = (formData) => async (dispatch) => {
+  dispatch(userActions.signupUserRequest());
+
+  try {
+    const response = await axios.post(`${API_URL}/api/user/signup`, formData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    console.log("signup response: ", response);
+    const { token } = response.data;
+    await AsyncStorage.setItem("token", token);
+
+    dispatch(userActions.signupUserSuccess(response.data));
+  } catch (err) {
+    console.error("signup error: ", err);
+    dispatch(userActions.signupUserFailure(err.response?.data || err.message));
+  }
+};
