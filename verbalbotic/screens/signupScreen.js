@@ -10,6 +10,8 @@ import {
   Alert,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { useDispatch } from "react-redux";
+import { signupUser } from "../store/user/userActions"; // Import the signupUser action
 import DateTimePicker from "@react-native-community/datetimepicker";
 import RNPickerSelect from "react-native-picker-select";
 
@@ -22,6 +24,7 @@ export default function SignupScreen({ navigation }) {
   const [role, setRole] = useState("");
   const [age, setAge] = useState(null);
   const [show, setShow] = useState(false);
+  const dispatch = useDispatch();
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
@@ -35,7 +38,6 @@ export default function SignupScreen({ navigation }) {
     let years = today.getFullYear() - birthDate.getFullYear();
     const monthDiff = today.getMonth() - birthDate.getMonth();
 
-    // Adjust age if the birthdate hasn't occurred yet this year
     if (
       monthDiff < 0 ||
       (monthDiff === 0 && today.getDate() < birthDate.getDate())
@@ -47,19 +49,18 @@ export default function SignupScreen({ navigation }) {
   };
 
   const handleRegister = () => {
-    // Log the values to the console
-    console.log("Username:", username);
-    console.log("Email:", email);
-    console.log("Password:", password);
-    console.log("Phone Number:", phoneNumber);
-    console.log("Role:", role);
-    console.log("Age:", age);
+    console.log(phoneNumber);
 
-    // You can also display an alert with the values
-    Alert.alert(
-      "Registration Info",
-      `Username: ${username}\nEmail: ${email}\nPhone Number: ${phoneNumber}\nRole: ${role}\nAge: ${age}`
-    );
+    const formData = {
+      name: username,
+      email: email,
+      password: password,
+      phoneNumber: phoneNumber,
+      UserType: role,
+      age: age,
+    };
+
+    dispatch(signupUser(formData, navigation));
   };
 
   return (
@@ -68,7 +69,7 @@ export default function SignupScreen({ navigation }) {
         <View style={styles.signupBox}>
           <Text style={styles.signupText}>Sign Up</Text>
           <TextInput
-            placeholder="Username"
+            placeholder="Full Name"
             style={styles.input}
             value={username}
             onChangeText={(text) => setUsername(text)}
