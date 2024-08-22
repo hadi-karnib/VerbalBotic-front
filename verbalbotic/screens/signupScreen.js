@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Keyboard,
   TouchableWithoutFeedback,
+  Alert,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -14,8 +15,12 @@ import RNPickerSelect from "react-native-picker-select";
 
 export default function SignupScreen({ navigation }) {
   const [date, setDate] = useState(new Date());
-  const [role, setRole] = useState(""); // Added setRole hook
-  const [age, setAge] = useState(null); // Added state for age
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [role, setRole] = useState("");
+  const [age, setAge] = useState(null);
   const [show, setShow] = useState(false);
 
   const onChange = (event, selectedDate) => {
@@ -41,21 +46,46 @@ export default function SignupScreen({ navigation }) {
     setAge(years);
   };
 
+  const handleRegister = () => {
+    // Log the values to the console
+    console.log("Username:", username);
+    console.log("Email:", email);
+    console.log("Password:", password);
+    console.log("Phone Number:", phoneNumber);
+    console.log("Role:", role);
+    console.log("Age:", age);
+
+    // You can also display an alert with the values
+    Alert.alert(
+      "Registration Info",
+      `Username: ${username}\nEmail: ${email}\nPhone Number: ${phoneNumber}\nRole: ${role}\nAge: ${age}`
+    );
+  };
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.container}>
         <View style={styles.signupBox}>
           <Text style={styles.signupText}>Register</Text>
-          <TextInput placeholder="Username" style={styles.input} />
+          <TextInput
+            placeholder="Username"
+            style={styles.input}
+            value={username}
+            onChangeText={(text) => setUsername(text)}
+          />
           <TextInput
             placeholder="Email"
             style={styles.input}
             keyboardType="email-address"
+            value={email}
+            onChangeText={(text) => setEmail(text)}
           />
           <TextInput
             placeholder="Password"
             style={styles.input}
             secureTextEntry
+            value={password}
+            onChangeText={(text) => setPassword(text)}
           />
 
           <View style={styles.datePickerContainer}>
@@ -79,6 +109,8 @@ export default function SignupScreen({ navigation }) {
             placeholder="Phone number ie:03111111"
             style={styles.input}
             keyboardType="phone-pad"
+            value={phoneNumber}
+            onChangeText={(text) => setPhoneNumber(text)}
           />
 
           <RNPickerSelect
@@ -94,7 +126,7 @@ export default function SignupScreen({ navigation }) {
             style={pickerSelectStyles}
           />
 
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={handleRegister}>
             <Text style={styles.buttonText}>Register</Text>
           </TouchableOpacity>
         </View>
