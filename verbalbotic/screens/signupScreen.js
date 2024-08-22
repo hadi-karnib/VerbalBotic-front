@@ -9,15 +9,19 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import RNPickerSelect from "react-native-picker-select";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 export default function SignupScreen({ navigation }) {
   const [date, setDate] = useState(new Date());
-  const [role, setRole] = useState("");
+  const [show, setShow] = useState(false);
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setDate(currentDate);
+  };
+
+  const showDatepicker = () => {
+    setShow(true);
   };
 
   return (
@@ -37,7 +41,17 @@ export default function SignupScreen({ navigation }) {
         />
 
         <View style={styles.datePickerContainer}>
-          <Text style={styles.dateText}>Date of Birth</Text>
+          <Text style={styles.dateText}>
+            {date.toDateString() === new Date().toDateString()
+              ? "Your Date of Birth"
+              : date.toDateString()}
+          </Text>
+          <TouchableOpacity onPress={showDatepicker}>
+            <Icon name="calendar" size={20} color="#999" />
+          </TouchableOpacity>
+        </View>
+
+        {show && (
           <DateTimePicker
             value={date}
             mode="date"
@@ -46,25 +60,12 @@ export default function SignupScreen({ navigation }) {
             maximumDate={new Date()}
             style={styles.datePicker}
           />
-        </View>
+        )}
 
         <TextInput
           placeholder="Phone number ie:03111111"
           style={styles.input}
           keyboardType="phone-pad"
-        />
-
-        <RNPickerSelect
-          onValueChange={(value) => setRole(value)}
-          items={[
-            { label: "Parent", value: "parent" },
-            { label: "Child", value: "child" },
-          ]}
-          placeholder={{
-            label: "Role",
-            value: null,
-          }}
-          style={pickerSelectStyles}
         />
 
         <TouchableOpacity style={styles.button}>
@@ -106,6 +107,7 @@ const styles = StyleSheet.create({
   datePickerContainer: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
     width: "100%",
     height: 40,
     borderColor: "#ddd",
@@ -113,15 +115,12 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 15,
     paddingLeft: 10,
+    paddingRight: 10,
     backgroundColor: "#fff",
   },
   dateText: {
-    marginRight: 10,
     fontSize: 16,
-    color: "#C7C7CD", // Lighter color similar to placeholders
-  },
-  datePicker: {
-    flex: 1,
+    color: "#C7C7CD",
   },
   button: {
     width: "100%",
@@ -135,34 +134,5 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     fontSize: 16,
-  },
-});
-
-const pickerSelectStyles = StyleSheet.create({
-  inputIOS: {
-    fontSize: 16,
-    paddingVertical: 12,
-    paddingHorizontal: 10,
-    borderWidth: 1,
-    borderColor: "#ddd",
-    borderRadius: 5,
-    color: "black",
-    paddingRight: 30,
-    backgroundColor: "#fff",
-    marginBottom: 15,
-    width: "100%",
-  },
-  inputAndroid: {
-    fontSize: 16,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    borderWidth: 1,
-    borderColor: "#ddd",
-    borderRadius: 5,
-    color: "black",
-    paddingRight: 30,
-    backgroundColor: "#fff",
-    marginBottom: 15,
-    width: "100%",
   },
 });
