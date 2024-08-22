@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
   dateText: {
     marginRight: 10,
     fontSize: 16,
-    color: "#999",
+    color: "#C7C7CD", // Lighter color similar to placeholders
   },
   datePicker: {
     flex: 1,
