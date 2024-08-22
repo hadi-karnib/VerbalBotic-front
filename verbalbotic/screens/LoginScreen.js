@@ -1,25 +1,61 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
   View,
   TextInput,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "../store/user/userActions";
 
 export default function LoginScreen({ navigation }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
+
+  const handleLogin = () => {
+    if (email && password) {
+      dispatch(loginUser(email, password))
+        .then((response) => {
+          if (response.payload?.token) {
+            Alert.alert("Login Successful", `Token: ${response.payload.token}`);
+          } else if (error) {
+            Alert.alert("Login Failed", error);
+          }
+        })
+        .catch((err) => {
+          Alert.alert("Login Error", err.message || "An error occurred");
+        });
+    } else {
+      Alert.alert(
+        "Missing Information",
+        "Please enter both email and password"
+      );
+    }
+  };
+
   return (
     <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.container}>
       <View style={styles.loginBox}>
         <Text style={styles.loginText}>Login</Text>
-        <TextInput placeholder="Email" style={styles.input} />
+        <TextInput
+          placeholder="Email"
+          style={styles.input}
+          value={email}
+          onChangeText={(text) => setEmail(text)}
+        />
         <TextInput
           placeholder="Password"
           secureTextEntry
           style={styles.input}
+          value={password}
+          onChangeText={(text) => setPassword(text)}
         />
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
@@ -32,6 +68,7 @@ export default function LoginScreen({ navigation }) {
     </LinearGradient>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
