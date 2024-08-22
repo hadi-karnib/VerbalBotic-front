@@ -55,6 +55,7 @@ export const signupUser = (formData, navigation) => async (dispatch) => {
     if (success) {
       await AsyncStorage.setItem("token", token);
       dispatch(userActions.signupUserSuccess(response.data));
+      navigation.navigate("Bio");
     } else {
       Alert.alert("Signup Failed", "Please try again.");
     }
