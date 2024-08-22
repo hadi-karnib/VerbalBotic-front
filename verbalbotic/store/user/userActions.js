@@ -44,3 +44,11 @@ export const signupUser = (formData) => async (dispatch) => {
     dispatch(userActions.signupUserFailure(err.response?.data || err.message));
   }
 };
+export const logoutUser = () => async (dispatch) => {
+  try {
+    await AsyncStorage.removeItem("token");
+    dispatch(userActions.logoutUser());
+  } catch (err) {
+    console.error("logout error: ", err);
+  }
+};
