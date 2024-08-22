@@ -27,9 +27,8 @@ export default function SignupScreen({ navigation }) {
   };
 
   return (
-    <LinearGradient
-      colors={["#f3cfd6", "#90c2d8"]}
-      style={styles.container}
-    ></LinearGradient>
+    <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.container}>
+      <View style={styles.signupBox}></View>
+    </LinearGradient>
   );
 }
