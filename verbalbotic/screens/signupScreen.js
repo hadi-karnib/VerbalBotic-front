@@ -5,7 +5,8 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  Platform,
+  Keyboard,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -41,62 +42,64 @@ export default function SignupScreen({ navigation }) {
   };
 
   return (
-    <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.container}>
-      <View style={styles.signupBox}>
-        <Text style={styles.signupText}>Register</Text>
-        <TextInput placeholder="Username" style={styles.input} />
-        <TextInput
-          placeholder="Email"
-          style={styles.input}
-          keyboardType="email-address"
-        />
-        <TextInput
-          placeholder="Password"
-          style={styles.input}
-          secureTextEntry
-        />
-
-        <View style={styles.datePickerContainer}>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.container}>
+        <View style={styles.signupBox}>
+          <Text style={styles.signupText}>Register</Text>
+          <TextInput placeholder="Username" style={styles.input} />
           <TextInput
-            placeholder="Your Date of Birth"
-            value={age !== null ? `Age: ${age} years` : ""}
-            style={styles.dateTextInput}
-            editable={false}
+            placeholder="Email"
+            style={styles.input}
+            keyboardType="email-address"
           />
-          <DateTimePicker
-            value={date}
-            mode="date"
-            display="default"
-            onChange={onChange}
-            maximumDate={new Date()}
-            style={styles.datePicker}
+          <TextInput
+            placeholder="Password"
+            style={styles.input}
+            secureTextEntry
           />
+
+          <View style={styles.datePickerContainer}>
+            <TextInput
+              placeholder="Your Date of Birth"
+              value={age !== null ? `Age: ${age} years` : ""}
+              style={styles.dateTextInput}
+              editable={false}
+            />
+            <DateTimePicker
+              value={date}
+              mode="date"
+              display="default"
+              onChange={onChange}
+              maximumDate={new Date()}
+              style={styles.datePicker}
+            />
+          </View>
+
+          <TextInput
+            placeholder="Phone number ie:03111111"
+            style={styles.input}
+            keyboardType="phone-pad"
+          />
+
+          <RNPickerSelect
+            onValueChange={(value) => setRole(value)}
+            items={[
+              { label: "Parent", value: "parent" },
+              { label: "Child", value: "child" },
+            ]}
+            placeholder={{
+              label: "Role",
+              value: null,
+            }}
+            style={pickerSelectStyles}
+          />
+
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>Register</Text>
+          </TouchableOpacity>
         </View>
-
-        <TextInput
-          placeholder="Phone number ie:03111111"
-          style={styles.input}
-          keyboardType="phone-pad"
-        />
-
-        <RNPickerSelect
-          onValueChange={(value) => setRole(value)}
-          items={[
-            { label: "Parent", value: "parent" },
-            { label: "Child", value: "child" },
-          ]}
-          placeholder={{
-            label: "Role",
-            value: null,
-          }}
-          style={pickerSelectStyles}
-        />
-
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>Register</Text>
-        </TouchableOpacity>
-      </View>
-    </LinearGradient>
+      </LinearGradient>
+    </TouchableWithoutFeedback>
   );
 }
 
