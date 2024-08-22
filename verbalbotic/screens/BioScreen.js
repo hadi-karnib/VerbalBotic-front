@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -9,6 +9,7 @@ import {
   SafeAreaView,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const BioScreen = ({ navigation }) => {
   const [selectedHobbies, setSelectedHobbies] = useState([]);
@@ -23,6 +24,22 @@ const BioScreen = ({ navigation }) => {
     }
     console.log(selectedHobbies);
   };
+  useEffect(() => {
+    const getToken = async () => {
+      try {
+        const storedToken = await AsyncStorage.getItem("token");
+        if (storedToken) {
+          setToken(storedToken);
+          console.log("Token:", storedToken);
+          Alert.alert("Token", storedToken);
+        }
+      } catch (error) {
+        console.error("Failed to load token from storage", error);
+      }
+    };
+
+    getToken();
+  }, []);
 
   return (
     <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.container}>
