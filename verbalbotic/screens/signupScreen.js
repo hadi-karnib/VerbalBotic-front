@@ -104,10 +104,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   datePickerContainer: {
-    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
     width: "100%",
     height: 40,
-    justifyContent: "center",
     borderColor: "#ddd",
     borderWidth: 1,
     borderRadius: 5,
@@ -115,9 +115,13 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     backgroundColor: "#fff",
   },
+  dateText: {
+    marginRight: 10,
+    fontSize: 16,
+    color: "#000",
+  },
   datePicker: {
-    width: "100%",
-    backgroundColor: "#fff",
+    flex: 1,
   },
   button: {
     width: "100%",
@@ -143,7 +147,7 @@ const pickerSelectStyles = StyleSheet.create({
     borderColor: "#ddd",
     borderRadius: 5,
     color: "black",
-    paddingRight: 30, // to ensure the text is never behind the icon
+    paddingRight: 30,
     backgroundColor: "#fff",
     marginBottom: 15,
     width: "100%",
@@ -156,7 +160,7 @@ const pickerSelectStyles = StyleSheet.create({
     borderColor: "#ddd",
     borderRadius: 5,
     color: "black",
-    paddingRight: 30, // to ensure the text is never behind the icon
+    paddingRight: 30,
     backgroundColor: "#fff",
     marginBottom: 15,
     width: "100%",
