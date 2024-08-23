@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  user: null, // Changed to store the logged-in user's data
-  token: null, // Store the authentication token
+  user: null,
+  token: null,
   loading: false,
   error: null,
 };
@@ -17,7 +17,7 @@ const userSlice = createSlice({
     },
     loginUserSuccess: (state, action) => {
       state.loading = false;
-      state.user = action.payload.user; // Assuming the response includes the user data
+      state.user = action.payload.user;
       state.token = action.payload.token;
     },
     loginUserFailure: (state, action) => {
@@ -30,10 +30,22 @@ const userSlice = createSlice({
     },
     signupUserSuccess: (state, action) => {
       state.loading = false;
-      state.user = action.payload.user; // Assuming the response includes the user data
+      state.user = action.payload.user;
       state.token = action.payload.token;
     },
     signupUserFailure: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    updateUserRequest: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    updateUserSuccess: (state, action) => {
+      state.loading = false;
+      state.user = { ...state.user, ...action.payload };
+    },
+    updateUserFailure: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
