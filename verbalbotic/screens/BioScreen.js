@@ -5,20 +5,22 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  ScrollView,
   SafeAreaView,
-  KeyboardAvoidingView,
-  Platform,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const BioScreen = ({ navigation }) => {
   const [selectedHobbies, setSelectedHobbies] = useState([]);
+  const [work, setWork] = useState("");
+  const [illness, setIllness] = useState("");
+  const [bio, setBio] = useState("");
 
   const hobbies = ["Reading", "Swimming", "Playing Football", "Cooking"];
   useEffect(() => {
     console.log(selectedHobbies);
   }, [selectedHobbies]);
+
   const toggleHobby = (hobby) => {
     if (selectedHobbies.includes(hobby)) {
       setSelectedHobbies(selectedHobbies.filter((item) => item !== hobby));
@@ -30,46 +32,56 @@ const BioScreen = ({ navigation }) => {
   return (
     <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
-        <KeyboardAvoidingView
-          style={styles.container}
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          keyboardVerticalOffset={80}
+        <KeyboardAwareScrollView
+          contentContainerStyle={styles.scrollContainer}
+          extraScrollHeight={100} // Adjust if needed
+          enableOnAndroid={true}
         >
-          <ScrollView contentContainerStyle={styles.scrollContainer}>
-            <Text style={styles.title}>Please select your hobbies</Text>
-            {hobbies.map((hobby, index) => (
-              <TouchableOpacity
-                key={index}
-                style={styles.radioButtonContainer}
-                onPress={() => toggleHobby(hobby)}
-              >
-                <View
-                  style={[
-                    styles.radioButton,
-                    selectedHobbies.includes(hobby) &&
-                      styles.radioButtonSelected,
-                  ]}
-                />
-                <Text style={styles.radioText}>{hobby}</Text>
-              </TouchableOpacity>
-            ))}
-
-            <Text style={styles.title}>Please add your work</Text>
-            <TextInput style={styles.input} multiline={true} />
-
-            <Text style={styles.title}>
-              Any medical problem impairing speech
-            </Text>
-            <TextInput style={styles.input} multiline={true} />
-
-            <Text style={styles.title}>Tell us about yourself</Text>
-            <TextInput style={styles.input} multiline={true} />
-
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}>Next</Text>
+          <Text style={styles.title}>Please select your hobbies</Text>
+          {hobbies.map((hobby, index) => (
+            <TouchableOpacity
+              key={index}
+              style={styles.radioButtonContainer}
+              onPress={() => toggleHobby(hobby)}
+            >
+              <View
+                style={[
+                  styles.radioButton,
+                  selectedHobbies.includes(hobby) && styles.radioButtonSelected,
+                ]}
+              />
+              <Text style={styles.radioText}>{hobby}</Text>
             </TouchableOpacity>
-          </ScrollView>
-        </KeyboardAvoidingView>
+          ))}
+
+          <Text style={styles.title}>Please add your work</Text>
+          <TextInput
+            style={styles.input}
+            multiline={true}
+            value={work}
+            onChangeText={(text) => setWork(text)}
+          />
+
+          <Text style={styles.title}>Any medical problem impairing speech</Text>
+          <TextInput
+            style={styles.input}
+            multiline={true}
+            value={illness}
+            onChangeText={(text) => setIllness(text)}
+          />
+
+          <Text style={styles.title}>Tell us about yourself</Text>
+          <TextInput
+            style={styles.input}
+            multiline={true}
+            value={bio}
+            onChangeText={(text) => setBio(text)}
+          />
+
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>Next</Text>
+          </TouchableOpacity>
+        </KeyboardAwareScrollView>
       </SafeAreaView>
     </LinearGradient>
   );
