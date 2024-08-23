@@ -10,12 +10,13 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { addBio } from "../store/user/userActions";
+import { useDispatch } from "react-redux";
 const BioScreen = ({ navigation }) => {
   const [selectedHobbies, setSelectedHobbies] = useState([]);
   const [work, setWork] = useState("");
   const [illness, setIllness] = useState("");
   const [bio, setBio] = useState("");
-
+  const dispatch = useDispatch();
   const hobbies = ["Reading", "Swimming", "Playing Football", "Cooking"];
   useEffect(() => {
     console.log(selectedHobbies);
@@ -35,7 +36,7 @@ const BioScreen = ({ navigation }) => {
       illness,
       bio,
     };
-    console.log(buttonPressed);
+    console.log("buttonPressed");
 
     dispatch(addBio(bioData, navigation));
   };
@@ -89,10 +90,8 @@ const BioScreen = ({ navigation }) => {
             onChangeText={(text) => setBio(text)}
           />
 
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText} onPress={() => handleAddBio}>
-              Next
-            </Text>
+          <TouchableOpacity style={styles.button} onPress={handleAddBio}>
+            <Text style={styles.buttonText}>Next</Text>
           </TouchableOpacity>
         </KeyboardAwareScrollView>
       </SafeAreaView>
