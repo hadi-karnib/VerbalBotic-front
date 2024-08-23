@@ -28,6 +28,7 @@ const BioScreen = ({ navigation }) => {
       setSelectedHobbies([...selectedHobbies, hobby]);
     }
   };
+  const handleAddBio = () => {};
 
   return (
     <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.container}>
@@ -79,7 +80,9 @@ const BioScreen = ({ navigation }) => {
           />
 
           <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Next</Text>
+            <Text style={styles.buttonText} onPress={handleAddBio}>
+              Next
+            </Text>
           </TouchableOpacity>
         </KeyboardAwareScrollView>
       </SafeAreaView>
