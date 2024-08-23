@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -11,11 +11,16 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useDispatch, useSelector } from "react-redux";
 import { getMyChats } from "../store/Chats/chatsActions";
 import { Audio } from "expo-av";
-import { API_URL } from "@env"; // Ensure you have set up @env correctly to import the API_URL
+import Slider from "@react-native-community/slider"; // Use the new import for Slider
+import { API_URL } from "@env";
 
 const ChatsScreen = () => {
   const dispatch = useDispatch();
   const { chats, loading, error } = useSelector((state) => state.chats);
+  const [sound, setSound] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [duration, setDuration] = useState(0);
 
   useEffect(() => {
     dispatch(getMyChats());
@@ -32,16 +37,36 @@ const ChatsScreen = () => {
       const fullPath = `${API_URL}/${messagePath}`;
       console.log("Playing voice note from:", fullPath);
 
-      const { sound } = await Audio.Sound.createAsync({ uri: fullPath });
-      await sound.playAsync();
+      const { sound: newSound, status } = await Audio.Sound.createAsync(
+        { uri: fullPath },
+        { shouldPlay: true },
+        onPlaybackStatusUpdate
+      );
 
-      sound.setOnPlaybackStatusUpdate(async (status) => {
-        if (status.didJustFinish) {
-          await sound.unloadAsync();
-        }
-      });
+      setSound(newSound);
+      setDuration(status.durationMillis);
+      setIsPlaying(true);
     } catch (error) {
       console.error("Error playing sound", error);
+    }
+  };
+
+  const stopVoiceNote = async () => {
+    if (sound) {
+      await sound.stopAsync();
+      setIsPlaying(false);
+    }
+  };
+
+  const onPlaybackStatusUpdate = (status) => {
+    if (status.isPlaying) {
+      setProgress(status.positionMillis / status.durationMillis);
+    }
+
+    if (status.didJustFinish) {
+      setIsPlaying(false);
+      setProgress(0);
+      sound.unloadAsync();
     }
   };
 
@@ -54,12 +79,37 @@ const ChatsScreen = () => {
           {chats.map((chat) => (
             <View key={chat._id} style={styles.messageContainer}>
               <View style={styles.messageBubble}>
-                <TouchableOpacity
-                  onPress={() => playVoiceNote(chat.message)}
-                  style={styles.voiceNoteContainer}
-                >
-                  <Text style={styles.voiceNoteText}>Play Voice Note</Text>
-                </TouchableOpacity>
+                <View style={styles.voiceNoteContainer}>
+                  {isPlaying ? (
+                    <TouchableOpacity onPress={stopVoiceNote}>
+                      <Text style={styles.voiceNoteText}>Stop</Text>
+                    </TouchableOpacity>
+                  ) : (
+                    <TouchableOpacity
+                      onPress={() => playVoiceNote(chat.message)}
+                    >
+                      <Text style={styles.voiceNoteText}>Play</Text>
+                    </TouchableOpacity>
+                  )}
+                  <Slider
+                    style={styles.progressBar}
+                    value={progress}
+                    minimumValue={0}
+                    maximumValue={1}
+                    minimumTrackTintColor="#0288D1"
+                    maximumTrackTintColor="#ccc"
+                    onSlidingComplete={async (value) => {
+                      if (sound) {
+                        const position = value * duration;
+                        await sound.setPositionAsync(position);
+                      }
+                    }}
+                  />
+                  <Text style={styles.durationText}>
+                    {Math.floor((progress * duration) / 1000)}s /{" "}
+                    {Math.floor(duration / 1000)}s
+                  </Text>
+                </View>
                 <Text style={styles.timeText}>
                   {new Date(
                     chat.voiceNoteMetadata.uploadDate
@@ -117,6 +167,15 @@ const styles = StyleSheet.create({
   voiceNoteText: {
     color: "#0288D1",
     fontSize: 16,
+  },
+  progressBar: {
+    width: "100%",
+    height: 20,
+  },
+  durationText: {
+    fontSize: 12,
+    color: "#666",
+    marginTop: 5,
   },
   chatText: {
     fontSize: 16,
