@@ -106,6 +106,7 @@ const ChatsScreen = () => {
                     maximumValue={1}
                     minimumTrackTintColor="#0288D1"
                     maximumTrackTintColor="#ccc"
+                    thumbTintColor="white"
                     onSlidingComplete={async (value) => {
                       if (sound) {
                         const position = value * duration;
@@ -183,6 +184,12 @@ const styles = StyleSheet.create({
   progressBar: {
     flex: 1,
     height: 20,
+  },
+  thumb: {
+    width: 5,
+    height: 5,
+    borderRadius: 5,
+    backgroundColor: "#fff",
   },
   durationText: {
     fontSize: 12,
