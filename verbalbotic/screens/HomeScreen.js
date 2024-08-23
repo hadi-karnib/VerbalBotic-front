@@ -69,9 +69,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   streakBox: {
+    width: 60, // Ensure this is a square
+    height: 60, // Ensure this is a square
     backgroundColor: "#E0E0E0",
-    padding: 10,
-    borderRadius: 20,
+    borderRadius: 30, // Set this to half of width/height to make it circular
     justifyContent: "center",
     alignItems: "center",
   },
@@ -100,5 +101,4 @@ const styles = StyleSheet.create({
     color: "#555",
   },
 });
-
 export default HomeScreen;
