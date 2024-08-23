@@ -76,3 +76,37 @@ export const logoutUser = () => async (dispatch) => {
     console.error("logout error: ", err);
   }
 };
+
+export const addBio = (bioData, navigation) => async (dispatch) => {
+  try {
+    const token = await AsyncStorage.getItem("token");
+    if (!token) {
+      throw new Error("No token found, please log in again.");
+    }
+
+    const response = await axios.put(`${API_URL}/api/user/add-bio`, bioData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    const { success } = response.data;
+
+    if (success) {
+      dispatch(userActions.updateUserSuccess(response.data.data));
+      Alert.alert("Bio Updated", "Your bio has been successfully updated.");
+      navigation.navigate("Home");
+    } else {
+      Alert.alert("Update Failed", "Could not update bio, please try again.");
+    }
+  } catch (err) {
+    console.error("addBio error: ", err);
+    dispatch(userActions.updateUserFailure(err.response?.data || err.message));
+    Alert.alert(
+      "Update Error",
+      err.response?.data?.message ||
+        "An error occurred while updating your bio."
+    );
+  }
+};
