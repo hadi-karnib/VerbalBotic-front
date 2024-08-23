@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-
+import { addBio } from "../store/user/userActions";
 const BioScreen = ({ navigation }) => {
   const [selectedHobbies, setSelectedHobbies] = useState([]);
   const [work, setWork] = useState("");
@@ -28,14 +28,24 @@ const BioScreen = ({ navigation }) => {
       setSelectedHobbies([...selectedHobbies, hobby]);
     }
   };
-  const handleAddBio = () => {};
+  const handleAddBio = () => {
+    const bioData = {
+      hobbies: selectedHobbies,
+      work,
+      illness,
+      bio,
+    };
+    console.log(buttonPressed);
+
+    dispatch(addBio(bioData, navigation));
+  };
 
   return (
     <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
         <KeyboardAwareScrollView
           contentContainerStyle={styles.scrollContainer}
-          extraScrollHeight={100} // Adjust if needed
+          extraScrollHeight={100}
           enableOnAndroid={true}
         >
           <Text style={styles.title}>Please select your hobbies</Text>
@@ -80,7 +90,7 @@ const BioScreen = ({ navigation }) => {
           />
 
           <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText} onPress={handleAddBio}>
+            <Text style={styles.buttonText} onPress={() => handleAddBio}>
               Next
             </Text>
           </TouchableOpacity>
