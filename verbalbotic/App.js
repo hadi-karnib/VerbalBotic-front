@@ -18,7 +18,7 @@ export default function App() {
       <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={{ flex: 1 }}>
         <NavigationContainer>
           <Stack.Navigator
-            initialRouteName="Bio"
+            initialRouteName="Home"
             screenOptions={{
               headerShown: false,
             }}
