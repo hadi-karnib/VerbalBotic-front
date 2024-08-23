@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -16,14 +16,15 @@ const BioScreen = ({ navigation }) => {
   const [selectedHobbies, setSelectedHobbies] = useState([]);
 
   const hobbies = ["Reading", "Swimming", "Playing Football", "Cooking"];
-
+  useEffect(() => {
+    console.log(selectedHobbies);
+  }, [selectedHobbies]);
   const toggleHobby = (hobby) => {
     if (selectedHobbies.includes(hobby)) {
       setSelectedHobbies(selectedHobbies.filter((item) => item !== hobby));
     } else {
       setSelectedHobbies([...selectedHobbies, hobby]);
     }
-    console.log(selectedHobbies);
   };
 
   return (
