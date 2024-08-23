@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { StyleSheet, Text, View, SafeAreaView, ScrollView } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useDispatch, useSelector } from "react-redux";
+import { getMyChats } from "../store/Chats/chatsActions";
 
 const ChatsScreen = () => {
   const dispatch = useDispatch();
