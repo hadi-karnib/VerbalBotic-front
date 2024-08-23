@@ -1,9 +1,9 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialIcons, FontAwesome } from "@expo/vector-icons";
-import HomeScreen from "./HomeScreen";
+import HomeScreen from "../screens/HomeScreen";
 import ChatsScreen from "../screens/ChatsScreen";
-import ProfileScreen from "./ProfileScreen";
+import Profile from "../screens/Profile";
 
 const Tab = createBottomTabNavigator();
 
@@ -17,8 +17,8 @@ const Tabs = () => {
           if (route.name === "Home") {
             iconName = "home";
             return <MaterialIcons name={iconName} size={size} color={color} />;
-          } else if (route.name === "Settings") {
-            iconName = "robot";
+          } else if (route.name === "Chats") {
+            iconName = "robot"; // Use a different icon if needed
             return <FontAwesome name={iconName} size={size} color={color} />;
           } else if (route.name === "Profile") {
             iconName = "user";
@@ -36,13 +36,13 @@ const Tabs = () => {
         options={{ headerShown: false }}
       />
       <Tab.Screen
-        name="Settings"
-        component={SettingsScreen}
+        name="Chats"
+        component={ChatsScreen}
         options={{ headerShown: false }}
       />
       <Tab.Screen
         name="Profile"
-        component={ProfileScreen}
+        component={Profile}
         options={{ headerShown: false }}
       />
     </Tab.Navigator>
