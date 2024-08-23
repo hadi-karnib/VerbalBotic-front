@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
   },
   messageBubble: {
     backgroundColor: "#dcf8c6",
-    padding: 10,
+    padding: 15,
     borderRadius: 20,
     alignSelf: "flex-end",
     maxWidth: "80%",
@@ -201,10 +201,11 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   timeText: {
+    marginTop: "10px",
     fontSize: 10,
     color: "#666",
     position: "absolute",
-    bottom: 5,
+    bottom: 4,
     right: 10,
   },
 });
