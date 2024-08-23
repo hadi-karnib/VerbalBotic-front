@@ -1,11 +1,9 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 import HomeScreen from "../screens/HomeScreen";
 import ChatsScreen from "../screens/ChatsScreen";
 import ProfileScreen from "../screens/Profile";
-import HomeIcon from "../assets/Home.svg"; // Importing the SVG file as a component
-import MessageBotIcon from "../assets/Message Bot.svg"; // Importing the SVG file as a component
-import UserIcon from "../assets/User.svg"; // Importing the SVG file as a component
 
 const Tab = createBottomTabNavigator();
 
@@ -15,16 +13,16 @@ const Tabs = () => {
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           if (route.name === "Home") {
-            return <HomeIcon width={size} height={size} fill={color} />;
+            return <MaterialIcons name="home" size={size} color={color} />;
           } else if (route.name === "Chats") {
-            return <MessageBotIcon width={size} height={size} fill={color} />;
+            return <FontAwesome5 name="robot" size={size} color={color} />;
           } else if (route.name === "Profile") {
-            return <UserIcon width={size} height={size} fill={color} />;
+            return <FontAwesome5 name="user" size={size} color={color} />;
           }
         },
-        tabBarActiveTintColor: "#0288D1", // Blue when active
-        tabBarInactiveTintColor: "gray", // Gray when inactive
-        tabBarStyle: { backgroundColor: "#F5F5F5" }, // Background color
+        tabBarActiveTintColor: "#0288D1",
+        tabBarInactiveTintColor: "gray",
+        tabBarStyle: { backgroundColor: "#F5F5F5" },
       })}
     >
       <Tab.Screen
