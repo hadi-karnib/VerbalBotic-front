@@ -11,8 +11,9 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useDispatch, useSelector } from "react-redux";
 import { getMyChats } from "../store/Chats/chatsActions";
 import { Audio } from "expo-av";
-import Slider from "@react-native-community/slider"; // Use the new import for Slider
+import Slider from "@react-native-community/slider";
 import { API_URL } from "@env";
+import { MaterialIcons } from "@expo/vector-icons";
 
 const ChatsScreen = () => {
   const dispatch = useDispatch();
@@ -58,6 +59,14 @@ const ChatsScreen = () => {
     }
   };
 
+  const togglePlayPause = async (messagePath) => {
+    if (isPlaying) {
+      stopVoiceNote();
+    } else {
+      playVoiceNote(messagePath);
+    }
+  };
+
   const onPlaybackStatusUpdate = (status) => {
     if (status.isPlaying) {
       setProgress(status.positionMillis / status.durationMillis);
@@ -80,17 +89,16 @@ const ChatsScreen = () => {
             <View key={chat._id} style={styles.messageContainer}>
               <View style={styles.messageBubble}>
                 <View style={styles.voiceNoteContainer}>
-                  {isPlaying ? (
-                    <TouchableOpacity onPress={stopVoiceNote}>
-                      <Text style={styles.voiceNoteText}>Stop</Text>
-                    </TouchableOpacity>
-                  ) : (
-                    <TouchableOpacity
-                      onPress={() => playVoiceNote(chat.message)}
-                    >
-                      <Text style={styles.voiceNoteText}>Play</Text>
-                    </TouchableOpacity>
-                  )}
+                  <TouchableOpacity
+                    onPress={() => togglePlayPause(chat.message)}
+                    style={styles.iconButton}
+                  >
+                    <MaterialIcons
+                      name={isPlaying ? "pause" : "play-arrow"}
+                      size={24}
+                      color="#0288D1"
+                    />
+                  </TouchableOpacity>
                   <Slider
                     style={styles.progressBar}
                     value={progress}
@@ -149,11 +157,11 @@ const styles = StyleSheet.create({
   },
   messageBubble: {
     backgroundColor: "#dcf8c6",
-    padding: 15,
+    padding: 10,
     borderRadius: 20,
     alignSelf: "flex-end",
-    minWidth: "50%",
     maxWidth: "80%",
+    minWidth: "50%",
     position: "relative",
     marginBottom: 10,
   },
@@ -162,21 +170,24 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
   },
   voiceNoteContainer: {
-    justifyContent: "center",
+    flexDirection: "row",
     alignItems: "center",
+  },
+  iconButton: {
+    marginRight: 10,
   },
   voiceNoteText: {
     color: "#0288D1",
     fontSize: 16,
   },
   progressBar: {
-    width: "100%",
+    flex: 1,
     height: 20,
   },
   durationText: {
     fontSize: 12,
     color: "#666",
-    marginTop: 5,
+    marginLeft: 10,
   },
   chatText: {
     fontSize: 16,
