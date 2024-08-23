@@ -9,7 +9,9 @@ import LoginScreen from "./screens/LoginScreen";
 import SignupScreen from "./screens/SignupScreen";
 import HomeScreen from "./screens/HomeScreen";
 import BioScreen from "./screens/BioScreen";
-
+import Tabs from "./components/BottomTab";
+import ChatsScreen from "./screens/ChatsScreen";
+import Profile from "./screens/Profile";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -25,7 +27,9 @@ export default function App() {
           >
             <Stack.Screen name="Login" component={LoginScreen} />
             <Stack.Screen name="Signup" component={SignupScreen} />
+            <Stack.Screen name="Tabs" component={Tabs} />
             <Stack.Screen name="Home" component={HomeScreen} />
+
             <Stack.Screen name="Bio" component={BioScreen} />
           </Stack.Navigator>
           <StatusBar style="auto" />
