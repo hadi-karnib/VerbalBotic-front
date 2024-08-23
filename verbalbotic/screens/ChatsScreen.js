@@ -18,10 +18,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 const ChatsScreen = () => {
   const dispatch = useDispatch();
   const { chats, loading, error } = useSelector((state) => state.chats);
-  const [sound, setSound] = useState(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [duration, setDuration] = useState(0);
+  const [currentPlaying, setCurrentPlaying] = useState(null);
 
   useEffect(() => {
     dispatch(getMyChats());
@@ -33,49 +30,64 @@ const ChatsScreen = () => {
     }
   }, [chats]);
 
-  const playVoiceNote = async (messagePath) => {
+  const playVoiceNote = async (chatId, messagePath) => {
+    if (currentPlaying && currentPlaying.sound) {
+      await currentPlaying.sound.unloadAsync();
+      setCurrentPlaying(null);
+    }
+
     try {
       const fullPath = `${API_URL}/${messagePath}`;
       console.log("Playing voice note from:", fullPath);
 
-      const { sound: newSound, status } = await Audio.Sound.createAsync(
+      const { sound, status } = await Audio.Sound.createAsync(
         { uri: fullPath },
         { shouldPlay: true },
-        onPlaybackStatusUpdate
+        (status) => onPlaybackStatusUpdate(chatId, status)
       );
 
-      setSound(newSound);
-      setDuration(status.durationMillis);
-      setIsPlaying(true);
+      setCurrentPlaying({
+        chatId,
+        sound,
+        duration: status.durationMillis,
+        isPlaying: true,
+        progress: 0,
+      });
     } catch (error) {
       console.error("Error playing sound", error);
     }
   };
 
   const stopVoiceNote = async () => {
-    if (sound) {
-      await sound.stopAsync();
-      setIsPlaying(false);
+    if (currentPlaying && currentPlaying.sound) {
+      await currentPlaying.sound.stopAsync();
+      setCurrentPlaying(null);
     }
   };
 
-  const togglePlayPause = async (messagePath) => {
-    if (isPlaying) {
+  const togglePlayPause = async (chatId, messagePath) => {
+    if (
+      currentPlaying &&
+      currentPlaying.chatId === chatId &&
+      currentPlaying.isPlaying
+    ) {
       stopVoiceNote();
     } else {
-      playVoiceNote(messagePath);
+      playVoiceNote(chatId, messagePath);
     }
   };
 
-  const onPlaybackStatusUpdate = (status) => {
+  const onPlaybackStatusUpdate = (chatId, status) => {
     if (status.isPlaying) {
-      setProgress(status.positionMillis / status.durationMillis);
+      setCurrentPlaying((prev) => ({
+        ...prev,
+        progress: status.positionMillis / status.durationMillis,
+        isPlaying: true,
+      }));
     }
 
     if (status.didJustFinish) {
-      setIsPlaying(false);
-      setProgress(0);
-      sound.unloadAsync();
+      setCurrentPlaying(null);
     }
   };
 
@@ -90,33 +102,55 @@ const ChatsScreen = () => {
               <View style={styles.messageBubble}>
                 <View style={styles.voiceNoteContainer}>
                   <TouchableOpacity
-                    onPress={() => togglePlayPause(chat.message)}
+                    onPress={() => togglePlayPause(chat._id, chat.message)}
                     style={styles.iconButton}
                   >
                     <MaterialIcons
-                      name={isPlaying ? "pause" : "play-arrow"}
+                      name={
+                        currentPlaying &&
+                        currentPlaying.chatId === chat._id &&
+                        currentPlaying.isPlaying
+                          ? "pause"
+                          : "play-arrow"
+                      }
                       size={24}
                       color="#0288D1"
                     />
                   </TouchableOpacity>
                   <Slider
                     style={styles.progressBar}
-                    value={progress}
+                    value={
+                      currentPlaying && currentPlaying.chatId === chat._id
+                        ? currentPlaying.progress
+                        : 0
+                    }
                     minimumValue={0}
                     maximumValue={1}
                     minimumTrackTintColor="#0288D1"
                     maximumTrackTintColor="#ccc"
                     thumbTintColor="white"
                     onSlidingComplete={async (value) => {
-                      if (sound) {
-                        const position = value * duration;
-                        await sound.setPositionAsync(position);
+                      if (
+                        currentPlaying &&
+                        currentPlaying.sound &&
+                        currentPlaying.chatId === chat._id
+                      ) {
+                        const position = value * currentPlaying.duration;
+                        await currentPlaying.sound.setPositionAsync(position);
                       }
                     }}
                   />
                   <Text style={styles.durationText}>
-                    {Math.floor((progress * duration) / 1000)}s /{" "}
-                    {Math.floor(duration / 1000)}s
+                    {Math.floor(
+                      (currentPlaying && currentPlaying.chatId === chat._id
+                        ? currentPlaying.progress * currentPlaying.duration
+                        : 0) / 1000
+                    )}
+                    s /{" "}
+                    {Math.floor(
+                      currentPlaying ? currentPlaying.duration / 1000 : 0
+                    )}
+                    s
                   </Text>
                 </View>
                 <Text style={styles.timeText}>
