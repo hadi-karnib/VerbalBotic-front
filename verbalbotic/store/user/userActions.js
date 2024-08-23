@@ -78,6 +78,8 @@ export const logoutUser = () => async (dispatch) => {
 };
 
 export const addBio = (bioData, navigation) => async (dispatch) => {
+  dispatch(userActions.updateUserRequest());
+
   try {
     const token = await AsyncStorage.getItem("token");
     if (!token) {
@@ -91,10 +93,10 @@ export const addBio = (bioData, navigation) => async (dispatch) => {
       },
     });
 
-    const { success } = response.data;
+    const { success, data } = response.data;
 
     if (success) {
-      dispatch(userActions.updateUserSuccess(response.data.data));
+      dispatch(userActions.updateUserSuccess(data));
       Alert.alert("Bio Updated", "Your bio has been successfully updated.");
       navigation.navigate("Home");
     } else {
