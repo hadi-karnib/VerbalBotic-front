@@ -26,7 +26,7 @@ const HomeScreen = ({ navigation }) => {
 
         <View style={styles.microphoneContainer}>
           <TouchableOpacity style={styles.microphoneButton}>
-            <MaterialIcons name="mic" size={80} color="#0288D1" />
+            <MaterialIcons name="mic" size={100} color="#0288D1" />
           </TouchableOpacity>
         </View>
 
@@ -69,15 +69,15 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   streakBox: {
-    width: 60, // Ensure this is a square
-    height: 60, // Ensure this is a square
+    width: 60,
+    height: 60,
     backgroundColor: "#E0E0E0",
-    borderRadius: 30, // Set this to half of width/height to make it circular
+    borderRadius: 30,
     justifyContent: "center",
     alignItems: "center",
   },
   streakNumber: {
-    fontSize: 24,
+    fontSize: 30,
     color: "#0288D1",
     fontWeight: "bold",
   },
@@ -87,10 +87,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   microphoneButton: {
-    width: 100,
-    height: 100,
+    width: 150,
+    height: 150,
     backgroundColor: "#B3E5FC",
-    borderRadius: 50,
+    borderRadius: 75,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -101,4 +101,5 @@ const styles = StyleSheet.create({
     color: "#555",
   },
 });
+
 export default HomeScreen;
