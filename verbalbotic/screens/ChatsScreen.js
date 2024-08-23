@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     alignSelf: "flex-end",
     maxWidth: "80%",
-    minWidth: "50%",
+    minWidth: "60%",
     position: "relative",
     marginBottom: 10,
   },
