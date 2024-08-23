@@ -8,7 +8,7 @@ export const getMyChats = () => async (dispatch) => {
     dispatch(chatsActions.getChatsRequest());
 
     const token = await AsyncStorage.getItem("token");
-    const response = await axios.get(`${API_URL}/messages/`, {
+    const response = await axios.get(`${API_URL}api/messages/`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
