@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -7,16 +7,16 @@ import {
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
-  Alert,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const BioScreen = ({ navigation }) => {
   const [selectedHobbies, setSelectedHobbies] = useState([]);
+  const [work, setWork] = useState("");
+  const [illness, setIllness] = useState("");
+  const [bio, setBio] = useState("");
 
   const hobbies = ["Reading", "Swimming", "Playing Football", "Cooking"];
-  const [token, setToken] = useState(null);
 
   const toggleHobby = (hobby) => {
     if (selectedHobbies.includes(hobby)) {
@@ -26,22 +26,6 @@ const BioScreen = ({ navigation }) => {
     }
     console.log(selectedHobbies);
   };
-  //   useEffect(() => {
-  //     const getToken = async () => {
-  //       try {
-  //         const storedToken = await AsyncStorage.getItem("token");
-  //         if (storedToken) {
-  //           setToken(storedToken);
-  //           console.log("Token:", storedToken);
-  //           Alert.alert("Token", storedToken);
-  //         }
-  //       } catch (error) {
-  //         console.error("Failed to load token from storage", error);
-  //       }
-  //     };
-
-  //     getToken();
-  //   }, []);
 
   return (
     <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.container}>
@@ -65,13 +49,28 @@ const BioScreen = ({ navigation }) => {
           ))}
 
           <Text style={styles.title}>Please add your work</Text>
-          <TextInput style={styles.input} multiline={true} />
+          <TextInput
+            style={styles.input}
+            multiline={true}
+            value={work}
+            onChangeText={(text) => setWork(text)}
+          />
 
           <Text style={styles.title}>Any medical problem impairing speech</Text>
-          <TextInput style={styles.input} multiline={true} />
+          <TextInput
+            style={styles.input}
+            multiline={true}
+            value={illness}
+            onChangeText={(text) => setIllness(text)}
+          />
 
           <Text style={styles.title}>Tell us about yourself</Text>
-          <TextInput style={styles.input} multiline={true} />
+          <TextInput
+            style={styles.input}
+            multiline={true}
+            value={bio}
+            onChangeText={(text) => setBio(text)}
+          />
 
           <TouchableOpacity style={styles.button}>
             <Text style={styles.buttonText}>Next</Text>
