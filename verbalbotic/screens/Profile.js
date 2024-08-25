@@ -213,6 +213,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   settingContainer: {
+    maxWidth: "98%",
     marginBottom: 15,
     borderRadius: 10,
     backgroundColor: "#fff",
@@ -283,6 +284,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   dropdownMargin: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    paddingLeft: 7,
     marginTop: 15,
   },
 });
