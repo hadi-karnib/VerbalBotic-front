@@ -26,6 +26,7 @@
     "lottie-react-native": "^6.7.2",
     "react": "18.2.0",
     "react-native": "0.74.5",
+    "react-native-audio-toolkit": "^1.0.6",
     "react-native-config": "^1.5.3",
     "react-native-dotenv": "^3.4.11",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
