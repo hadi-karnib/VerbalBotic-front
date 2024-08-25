@@ -29,6 +29,7 @@ const Profile = () => {
   });
 
   const [expandedId, setExpandedId] = useState(null);
+  const [animationState, setAnimationState] = useState({});
 
   useEffect(() => {
     dispatch(getSelf());
@@ -56,7 +57,22 @@ const Profile = () => {
   };
 
   const toggleExpand = (settingId) => {
-    setExpandedId(expandedId === settingId ? null : settingId);
+    if (expandedId === settingId) {
+      // If the section is expanded, trigger a slide-out animation
+      setAnimationState((prevState) => ({
+        ...prevState,
+        [settingId]: "slideOutUp",
+      }));
+      setTimeout(() => {
+        setExpandedId(null);
+      }, 400); // Delay to match the animation duration
+    } else {
+      setExpandedId(settingId);
+      setAnimationState((prevState) => ({
+        ...prevState,
+        [settingId]: "slideInDown",
+      }));
+    }
   };
 
   return (
@@ -71,12 +87,12 @@ const Profile = () => {
           contentContainerStyle={styles.scrollContent}
           scrollEnabled={true}
         >
-          <Animatable.View animation="fadeInUp" style={styles.header}>
+          <Animatable.View animation="slideInDown" style={styles.header}>
             <Text style={styles.headerText}>Hello, {formData.name}</Text>
           </Animatable.View>
           <View style={styles.dropdownMargin}>
             <Animatable.View
-              animation="fadeInUp"
+              animation="slideInDown"
               duration={800}
               style={styles.settingContainer}
             >
@@ -93,8 +109,8 @@ const Profile = () => {
               </TouchableOpacity>
               {expandedId === "1" && (
                 <Animatable.View
-                  animation="fadeInUp"
-                  duration={800}
+                  animation={animationState["1"]}
+                  duration={400}
                   style={styles.optionsContainer}
                 >
                   <Text style={styles.label}>Name</Text>
@@ -148,7 +164,7 @@ const Profile = () => {
             </Animatable.View>
 
             <Animatable.View
-              animation="fadeInUp"
+              animation="slideInDown"
               duration={800}
               style={styles.settingContainer}
             >
@@ -165,8 +181,8 @@ const Profile = () => {
               </TouchableOpacity>
               {expandedId === "2" && (
                 <Animatable.View
-                  animation="fadeInUp"
-                  duration={800}
+                  animation={animationState["2"]}
+                  duration={400}
                   style={styles.optionsContainer}
                 >
                   <View style={styles.qrContainer}>
