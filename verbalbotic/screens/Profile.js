@@ -149,6 +149,13 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     backgroundColor: "#FFF",
   },
+
+  button: {
+    backgroundColor: "#00ACC1",
+    padding: 15,
+    borderRadius: 10,
+    alignItems: "center",
+  },
 });
 
 export default Profile;
