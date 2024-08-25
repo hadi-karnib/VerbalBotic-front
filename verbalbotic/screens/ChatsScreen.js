@@ -198,6 +198,8 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     padding: 20,
+    flexGrow: 1,
+    justifyContent: "center",
   },
   messageContainer: {
     marginBottom: 20,
@@ -254,10 +256,15 @@ const styles = StyleSheet.create({
     bottom: 4,
     right: 10,
   },
+  lottieContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    height: 300,
+  },
   lottie: {
-    width: 100,
-    height: 100,
-    alignSelf: "center",
+    width: 200,
+    height: 200,
   },
 });
 
