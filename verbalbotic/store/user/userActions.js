@@ -23,7 +23,7 @@ export const loginUser = (email, password, navigation) => async (dispatch) => {
       await AsyncStorage.setItem("token", token);
       dispatch(userActions.loginUserSuccess(response.data));
 
-      navigation.navigate("Home");
+      navigation.navigate("Tabs");
     } else {
       Alert.alert(
         "Login Failed",
@@ -72,7 +72,7 @@ export const logoutUser = (navigation) => async (dispatch) => {
   try {
     await AsyncStorage.removeItem("token");
     dispatch(userActions.logoutUser());
-    navigation.navigate("Login")
+    navigation.navigate("Login");
   } catch (err) {
     console.error("logout error: ", err);
   }
