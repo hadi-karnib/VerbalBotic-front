@@ -114,6 +114,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#E0F7FA",
   },
+  container: {
+    flex: 1,
+    backgroundColor: "#E0F7FA",
+  },
 });
 
 export default Profile;
