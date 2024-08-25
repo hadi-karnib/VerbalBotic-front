@@ -5,13 +5,13 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  ScrollView,
   SafeAreaView,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { getSelf, updateUser } from "../store/user/userActions";
 import * as Animatable from "react-native-animatable";
 import { LinearGradient } from "expo-linear-gradient";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const Profile = () => {
   const { user } = useSelector((state) => state.user);
@@ -57,7 +57,12 @@ const Profile = () => {
       style={styles.gradientContainer}
     >
       <SafeAreaView style={styles.safeArea}>
-        <ScrollView style={styles.container}>
+        <KeyboardAwareScrollView
+          style={styles.container}
+          resetScrollToCoords={{ x: 0, y: 0 }}
+          contentContainerStyle={styles.scrollContent}
+          scrollEnabled={true}
+        >
           <Animatable.View animation="fadeInUp" style={styles.header}>
             <Text style={styles.headerText}>Hello, {formData.name}</Text>
           </Animatable.View>
@@ -109,7 +114,7 @@ const Profile = () => {
               <Text style={styles.buttonText}>Save Profile</Text>
             </TouchableOpacity>
           </Animatable.View>
-        </ScrollView>
+        </KeyboardAwareScrollView>
       </SafeAreaView>
     </LinearGradient>
   );
@@ -124,6 +129,9 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
   },
   header: {
     padding: 20,
