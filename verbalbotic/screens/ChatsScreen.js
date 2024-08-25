@@ -21,40 +21,10 @@ const ChatsScreen = () => {
   const dispatch = useDispatch();
   const { chats, loading, error } = useSelector((state) => state.chats);
   const [currentPlaying, setCurrentPlaying] = useState(null);
-  const [durations, setDurations] = useState({}); // Store duration for each chat
-  const [progresses, setProgresses] = useState({}); // Store progress for each chat
 
   useEffect(() => {
     dispatch(getMyChats());
   }, [dispatch]);
-
-  useEffect(() => {
-    if (chats.length > 0) {
-      preloadDurations(chats);
-    }
-  }, [chats]);
-
-  const preloadDurations = async (chats) => {
-    const durationPromises = chats.map(async (chat) => {
-      const fullPath = `${API_URL}/${chat.message}`;
-      try {
-        const { sound } = await Audio.Sound.createAsync({ uri: fullPath });
-        const status = await sound.getStatusAsync();
-        return { chatId: chat._id, duration: status.durationMillis };
-      } catch (error) {
-        console.error("Error preloading duration", error);
-        return { chatId: chat._id, duration: 0 };
-      }
-    });
-
-    const durationsArray = await Promise.all(durationPromises);
-    const durationsMap = durationsArray.reduce((acc, { chatId, duration }) => {
-      acc[chatId] = duration;
-      return acc;
-    }, {});
-
-    setDurations(durationsMap);
-  };
 
   const playVoiceNote = async (chatId, messagePath) => {
     if (currentPlaying && currentPlaying.sound) {
@@ -89,15 +59,11 @@ const ChatsScreen = () => {
         setCurrentPlaying({
           chatId,
           sound,
-          duration: durations[chatId] || status.durationMillis,
+          duration:
+            chats.find((chat) => chat._id === chatId).voiceNoteMetadata
+              .duration * 1000, // get duration from state
           isPlaying: true,
         });
-        setProgresses((prev) => ({
-          ...prev,
-          [chatId]:
-            status.positionMillis /
-            (durations[chatId] || status.durationMillis),
-        }));
       } catch (error) {
         console.error("Error playing sound", error);
       }
@@ -130,12 +96,8 @@ const ChatsScreen = () => {
     if (status.isPlaying) {
       setCurrentPlaying((prev) => ({
         ...prev,
-        progress: status.positionMillis / durations[chatId],
+        progress: status.positionMillis / prev.duration,
         isPlaying: true,
-      }));
-      setProgresses((prev) => ({
-        ...prev,
-        [chatId]: status.positionMillis / durations[chatId],
       }));
     }
 
@@ -144,10 +106,6 @@ const ChatsScreen = () => {
         ...prev,
         isPlaying: false,
         progress: 0,
-      }));
-      setProgresses((prev) => ({
-        ...prev,
-        [chatId]: 0,
       }));
     }
   };
@@ -190,7 +148,11 @@ const ChatsScreen = () => {
                     </TouchableOpacity>
                     <Slider
                       style={styles.progressBar}
-                      value={progresses[chat._id] || 0}
+                      value={
+                        currentPlaying && currentPlaying.chatId === chat._id
+                          ? currentPlaying.progress
+                          : 0
+                      }
                       minimumValue={0}
                       maximumValue={1}
                       minimumTrackTintColor="#0288D1"
@@ -202,23 +164,21 @@ const ChatsScreen = () => {
                           currentPlaying.sound &&
                           currentPlaying.chatId === chat._id
                         ) {
-                          const position = value * durations[chat._id];
+                          const position = value * currentPlaying.duration;
                           await currentPlaying.sound.setPositionAsync(position);
-                          setProgresses((prev) => ({
-                            ...prev,
-                            [chat._id]: value,
-                          }));
                         }
                       }}
                     />
                     <Text style={styles.durationText}>
-                      {durations[chat._id]
-                        ? `${Math.floor(
-                            ((progresses[chat._id] || 0) *
-                              durations[chat._id]) /
-                              1000
-                          )}s / ${Math.floor(durations[chat._id] / 1000)}s`
-                        : `Loading...`}
+                      {`${Math.floor(
+                        ((currentPlaying && currentPlaying.chatId === chat._id
+                          ? currentPlaying.progress
+                          : 0) *
+                          (currentPlaying?.duration || 0)) /
+                          1000
+                      )}s / ${Math.floor(
+                        (currentPlaying?.duration || 0) / 1000
+                      )}s`}
                     </Text>
                   </View>
                   <Text style={styles.timeText}>
