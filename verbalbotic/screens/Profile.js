@@ -140,6 +140,15 @@ const styles = StyleSheet.create({
     color: "#00796B",
     marginBottom: 5,
   },
+
+  input: {
+    borderWidth: 1,
+    borderColor: "#B2EBF2",
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 15,
+    backgroundColor: "#FFF",
+  },
 });
 
 export default Profile;
