@@ -32,7 +32,8 @@ const Profile = ({ navigation }) => {
 
   useEffect(() => {
     dispatch(getSelf());
-  }, [dispatch]);
+    console.log(user);
+  }, []);
 
   useEffect(() => {
     if (user) {
@@ -186,8 +187,6 @@ const Profile = ({ navigation }) => {
               )}
             </Animatable.View>
           </View>
-
-          {/* Logout Button */}
         </KeyboardAwareScrollView>
 
         <View style={styles.logoutButtonContainer}>
@@ -287,7 +286,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   logoutButton: {
-    backgroundColor: "#FFD700",
+    backgroundColor: "#74b4c4",
     width: "50%",
     maxWidth: 150,
   },
