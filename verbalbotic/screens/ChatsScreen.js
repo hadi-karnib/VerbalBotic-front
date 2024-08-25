@@ -21,88 +21,138 @@ const ChatsScreen = () => {
   const dispatch = useDispatch();
   const { chats, loading, error } = useSelector((state) => state.chats);
   const [currentPlaying, setCurrentPlaying] = useState(null);
-  const [progress, setProgress] = useState(0);
+  const [durations, setDurations] = useState({}); // Store duration for each chat
+  const [progresses, setProgresses] = useState({}); // Store progress for each chat
 
   useEffect(() => {
     dispatch(getMyChats());
   }, [dispatch]);
 
+  useEffect(() => {
+    if (chats.length > 0) {
+      preloadDurations(chats);
+    }
+  }, [chats]);
+
+  const preloadDurations = async (chats) => {
+    const durationPromises = chats.map(async (chat) => {
+      const fullPath = `${API_URL}/${chat.message}`;
+      try {
+        const { sound } = await Audio.Sound.createAsync({ uri: fullPath });
+        const status = await sound.getStatusAsync();
+        return { chatId: chat._id, duration: status.durationMillis };
+      } catch (error) {
+        console.error("Error preloading duration", error);
+        return { chatId: chat._id, duration: 0 };
+      }
+    });
+
+    const durationsArray = await Promise.all(durationPromises);
+    const durationsMap = durationsArray.reduce((acc, { chatId, duration }) => {
+      acc[chatId] = duration;
+      return acc;
+    }, {});
+
+    setDurations(durationsMap);
+  };
+
   const playVoiceNote = async (chatId, messagePath) => {
-    if (currentPlaying?.sound) {
-      await currentPlaying.sound.unloadAsync(); // Stop and unload the previous sound
+    if (currentPlaying && currentPlaying.sound) {
+      await currentPlaying.sound.pauseAsync();
+      setCurrentPlaying((prev) => ({
+        ...prev,
+        isPlaying: false,
+      }));
     }
 
-    const chat = chats.find((chat) => chat._id === chatId);
-    if (!chat || !chat.voiceNoteMetadata?.duration) {
-      console.error("Error: Invalid or missing duration.");
-      return;
-    }
+    if (currentPlaying && currentPlaying.chatId === chatId) {
+      await currentPlaying.sound.playAsync();
+      setCurrentPlaying((prev) => ({
+        ...prev,
+        isPlaying: true,
+      }));
+    } else {
+      if (currentPlaying && currentPlaying.sound) {
+        await currentPlaying.sound.unloadAsync();
+      }
 
-    try {
-      const fullPath = `${API_URL}/${messagePath}`;
-      console.log("Playing voice note from:", fullPath);
+      try {
+        const fullPath = `${API_URL}/${messagePath}`;
+        console.log("Playing voice note from:", fullPath);
 
-      const { sound, status } = await Audio.Sound.createAsync(
-        { uri: fullPath },
-        { shouldPlay: true },
-        (status) => onPlaybackStatusUpdate(chatId, status)
-      );
+        const { sound } = await Audio.Sound.createAsync(
+          { uri: fullPath },
+          { shouldPlay: true }
+        );
 
-      setCurrentPlaying({
-        chatId,
-        sound,
-        duration: chat.voiceNoteMetadata.duration,
-      });
-      setProgress(0); // Reset progress when a new note starts playing
-    } catch (error) {
-      console.error("Error playing sound", error);
+        const status = await sound.getStatusAsync(); // Correct way to get the status
+        console.log("Sound status:", status);
+
+        setCurrentPlaying({
+          chatId,
+          sound,
+          duration: durations[chatId] || status.durationMillis,
+          isPlaying: true,
+        });
+
+        setProgresses((prev) => ({
+          ...prev,
+          [chatId]:
+            status.positionMillis /
+            (durations[chatId] || status.durationMillis),
+        }));
+      } catch (error) {
+        console.error("Error playing sound", error);
+      }
     }
   };
 
   const stopVoiceNote = async () => {
-    if (currentPlaying?.sound) {
-      await currentPlaying.sound.unloadAsync();
-      setCurrentPlaying(null);
-      setProgress(0);
+    if (currentPlaying && currentPlaying.sound) {
+      await currentPlaying.sound.pauseAsync();
+      setCurrentPlaying((prev) => ({
+        ...prev,
+        isPlaying: false,
+      }));
     }
   };
 
   const togglePlayPause = async (chatId, messagePath) => {
-    if (currentPlaying?.chatId === chatId) {
+    if (currentPlaying && currentPlaying.chatId === chatId) {
       if (currentPlaying.isPlaying) {
-        await currentPlaying.sound.pauseAsync();
+        stopVoiceNote();
       } else {
-        await currentPlaying.sound.playAsync();
+        playVoiceNote(chatId, messagePath);
       }
     } else {
-      await playVoiceNote(chatId, messagePath);
+      playVoiceNote(chatId, messagePath);
     }
   };
 
   const onPlaybackStatusUpdate = (chatId, status) => {
-    if (status.isLoaded) {
-      const newProgress = status.positionMillis / (status.durationMillis || 1);
-      setProgress(newProgress);
-
+    if (status.isPlaying) {
       setCurrentPlaying((prev) => ({
         ...prev,
-        isPlaying: status.isPlaying,
+        progress: status.positionMillis / durations[chatId],
+        isPlaying: true,
       }));
-
-      if (status.didJustFinish) {
-        stopVoiceNote();
-      }
-    } else {
-      console.error("Error: Sound not loaded correctly.");
+      setProgresses((prev) => ({
+        ...prev,
+        [chatId]: status.positionMillis / durations[chatId],
+      }));
     }
-  };
 
-  const formatTime = (timeInMillis) => {
-    if (!timeInMillis || isNaN(timeInMillis)) return "0:00";
-    const timeInSeconds = Math.floor(timeInMillis / 1000);
-    const minutes = Math.floor(timeInSeconds / 60);
-    const seconds = timeInSeconds % 60;
-    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+    if (status.didJustFinish) {
+      setCurrentPlaying((prev) => ({
+        ...prev,
+        isPlaying: false,
+        progress: 0,
+      }));
+      setProgresses((prev) => ({
+        ...prev,
+        [chatId]: 0,
+      }));
+    }
   };
 
   return (
@@ -131,7 +181,8 @@ const ChatsScreen = () => {
                     >
                       <MaterialIcons
                         name={
-                          currentPlaying?.chatId === chat._id &&
+                          currentPlaying &&
+                          currentPlaying.chatId === chat._id &&
                           currentPlaying.isPlaying
                             ? "pause"
                             : "play-arrow"
@@ -142,26 +193,35 @@ const ChatsScreen = () => {
                     </TouchableOpacity>
                     <Slider
                       style={styles.progressBar}
-                      value={currentPlaying?.chatId === chat._id ? progress : 0}
+                      value={progresses[chat._id] || 0}
                       minimumValue={0}
                       maximumValue={1}
                       minimumTrackTintColor="#0288D1"
                       maximumTrackTintColor="#ccc"
                       thumbTintColor="white"
                       onSlidingComplete={async (value) => {
-                        if (currentPlaying?.chatId === chat._id) {
-                          const position =
-                            value * currentPlaying.duration * 1000;
+                        if (
+                          currentPlaying &&
+                          currentPlaying.sound &&
+                          currentPlaying.chatId === chat._id
+                        ) {
+                          const position = value * durations[chat._id];
                           await currentPlaying.sound.setPositionAsync(position);
-                          setProgress(value);
+                          setProgresses((prev) => ({
+                            ...prev,
+                            [chat._id]: value,
+                          }));
                         }
                       }}
                     />
                     <Text style={styles.durationText}>
-                      {formatTime(
-                        progress * (currentPlaying?.duration || 0) * 1000
-                      )}{" "}
-                      / {formatTime((currentPlaying?.duration || 0) * 1000)}
+                      {durations[chat._id]
+                        ? `${Math.floor(
+                            ((progresses[chat._id] || 0) *
+                              durations[chat._id]) /
+                              1000
+                          )}s / ${Math.floor(durations[chat._id] / 1000)}s`
+                        : `Loading...`}
                     </Text>
                   </View>
                   <Text style={styles.timeText}>
@@ -224,9 +284,19 @@ const styles = StyleSheet.create({
   iconButton: {
     marginRight: 10,
   },
+  voiceNoteText: {
+    color: "#0288D1",
+    fontSize: 16,
+  },
   progressBar: {
     flex: 1,
     height: 20,
+  },
+  thumb: {
+    width: 5,
+    height: 5,
+    borderRadius: 5,
+    backgroundColor: "#fff",
   },
   durationText: {
     fontSize: 12,
@@ -238,6 +308,7 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   timeText: {
+    marginTop: "10px",
     fontSize: 10,
     color: "#666",
     position: "absolute",
