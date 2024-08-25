@@ -114,49 +114,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#E0F7FA",
   },
-  container: {
-    flex: 1,
-    backgroundColor: "#E0F7FA",
-  },
-  header: {
-    padding: 20,
-    backgroundColor: "#00BCD4",
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
-    alignItems: "center",
-  },
-  headerText: {
-    color: "#FFF",
-    fontSize: 24,
-    fontWeight: "bold",
-  },
-  inputContainer: {
-    padding: 20,
-  },
-  label: {
-    fontSize: 16,
-    color: "#00796B",
-    marginBottom: 5,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#B2EBF2",
-    borderRadius: 10,
-    padding: 10,
-    marginBottom: 15,
-    backgroundColor: "#FFF",
-  },
-  button: {
-    backgroundColor: "#00ACC1",
-    padding: 15,
-    borderRadius: 10,
-    alignItems: "center",
-  },
-  buttonText: {
-    color: "#FFF",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
 });
 
 export default Profile;
