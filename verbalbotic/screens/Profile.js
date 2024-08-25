@@ -32,7 +32,7 @@ const Profile = ({ navigation }) => {
 
   useEffect(() => {
     dispatch(getSelf());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (user) {
@@ -185,17 +185,22 @@ const Profile = ({ navigation }) => {
                 </Animatable.View>
               )}
             </Animatable.View>
+
+            {/* Logout Button */}
+            <Animatable.View
+              animation="fadeInUp"
+              duration={800}
+              style={styles.logoutButtonContainer}
+            >
+              <TouchableOpacity
+                style={[styles.button, styles.logoutButton]}
+                onPress={handleLogout}
+              >
+                <Text style={styles.buttonText}>Logout</Text>
+              </TouchableOpacity>
+            </Animatable.View>
           </View>
         </KeyboardAwareScrollView>
-
-        <View style={styles.logoutButtonContainer}>
-          <TouchableOpacity
-            style={[styles.button, styles.logoutButton]}
-            onPress={handleLogout}
-          >
-            <Text style={styles.buttonText}>Logout</Text>
-          </TouchableOpacity>
-        </View>
       </SafeAreaView>
     </LinearGradient>
   );
@@ -286,8 +291,7 @@ const styles = StyleSheet.create({
   },
   logoutButton: {
     backgroundColor: "#74b4c4",
-    width: "50%",
-    maxWidth: 150,
+    width: "100%",
   },
   buttonText: {
     color: "#FFF",
@@ -311,11 +315,8 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   logoutButtonContainer: {
-    width: "100%",
-    position: "absolute",
-    bottom: 20,
-    right: 10,
-    alignItems: "flex-end",
+    width: "98%",
+    marginTop: 20,
   },
 });
 
