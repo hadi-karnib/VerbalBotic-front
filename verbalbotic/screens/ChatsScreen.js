@@ -21,15 +21,14 @@ const ChatsScreen = () => {
   const dispatch = useDispatch();
   const { chats, loading, error } = useSelector((state) => state.chats);
   const [currentPlaying, setCurrentPlaying] = useState(null);
-  const [progresses, setProgresses] = useState({}); // Store progress for each voice note
-  const [durations, setDurations] = useState({}); // Store durations for each voice note
+  const [progresses, setProgresses] = useState({});
+  const [durations, setDurations] = useState({});
 
   useEffect(() => {
     dispatch(getMyChats());
   }, [dispatch]);
 
   useEffect(() => {
-    // Set durations from Redux state as soon as chats are loaded
     if (chats.length > 0) {
       const initialDurations = {};
       chats.forEach((chat) => {
@@ -65,7 +64,7 @@ const ChatsScreen = () => {
       setCurrentPlaying({
         chatId,
         sound,
-        duration: chat.voiceNoteMetadata.duration * 1000, // convert to milliseconds
+        duration: chat.voiceNoteMetadata.duration * 1000,
         isPlaying: true,
       });
 
@@ -111,7 +110,7 @@ const ChatsScreen = () => {
     }
 
     const progressValue = status.positionMillis / durations[chatId];
-    console.log("Progress:", progressValue); // Log progress to see if it updates
+    console.log("Progress:", progressValue);
 
     if (!isNaN(progressValue) && progressValue >= 0) {
       setProgresses((prev) => ({
@@ -132,7 +131,7 @@ const ChatsScreen = () => {
   const formatTime = (timeInSeconds) => {
     const parsedTime = parseFloat(timeInSeconds);
     if (isNaN(parsedTime) || parsedTime < 0) {
-      return "0"; // Return "0" if the input is not a valid number
+      return "0";
     }
     return Math.floor(parsedTime);
   };
