@@ -34,8 +34,8 @@ const ChatsScreen = () => {
 
     const chat = chats.find((chat) => chat._id === chatId);
 
-    if (!chat || !chat.voiceNoteMetadata?.duration) {
-      console.error("Error: Duration is null or undefined.");
+    if (!chat || typeof chat.voiceNoteMetadata?.duration !== "number") {
+      console.error("Error: Duration is null, undefined, or not a number.");
       return;
     }
 
@@ -45,17 +45,18 @@ const ChatsScreen = () => {
 
       let { sound } = await Audio.Sound.createAsync(
         { uri: fullPath },
-        { shouldPlay: true, positionMillis: currentPlaying?.position || 0 }, // Start from the current position if available
+        { shouldPlay: true, positionMillis: currentPlaying?.position || 0 },
         (status) => onPlaybackStatusUpdate(chatId, status)
       );
 
       setCurrentPlaying({
         chatId,
         sound,
-        duration: chat.voiceNoteMetadata.duration, // Duration is now in seconds directly from the state
+        duration: chat.voiceNoteMetadata.duration || 1, // Ensure duration is set to a valid number
         position: currentPlaying?.position || 0,
         isPlaying: true,
       });
+
       setProgress(0); // Reset progress when a new note starts playing
     } catch (error) {
       console.error("Error playing sound", error);
@@ -85,12 +86,17 @@ const ChatsScreen = () => {
   };
 
   const onPlaybackStatusUpdate = (chatId, status) => {
+    if (!currentPlaying?.duration || currentPlaying.duration <= 0) {
+      console.error("Error: Invalid duration value.");
+      return;
+    }
+
     const newProgress =
-      status.positionMillis / (currentPlaying?.duration * 1000);
+      status.positionMillis / (currentPlaying.duration * 1000);
     console.log("Progress:", newProgress); // Debugging log
 
-    if (status.isPlaying || status.positionMillis > 0) {
-      setProgress(!isNaN(newProgress) && newProgress >= 0 ? newProgress : 0); // Ensure valid progress
+    if (!isNaN(newProgress) && newProgress >= 0) {
+      setProgress(newProgress);
       setCurrentPlaying((prev) => ({
         ...prev,
         position: status.positionMillis,
