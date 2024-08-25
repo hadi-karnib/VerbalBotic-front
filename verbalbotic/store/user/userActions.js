@@ -142,3 +142,44 @@ export const getSelf = () => async (dispatch) => {
     );
   }
 };
+export const updateUser = (formData, navigation) => async (dispatch) => {
+  dispatch(userActions.updateUserRequest());
+
+  try {
+    const token = await AsyncStorage.getItem("token");
+    if (!token) {
+      throw new Error("No token found, please log in again.");
+    }
+
+    const response = await axios.patch(`${API_URL}/api/user`, formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    const { success, data } = response.data;
+
+    if (success) {
+      dispatch(userActions.updateUserSuccess(data));
+      Alert.alert(
+        "Profile Updated",
+        "Your profile has been successfully updated."
+      );
+      navigation.navigate("Profile"); // Navigate to Profile screen or any other screen after successful update
+    } else {
+      Alert.alert(
+        "Update Failed",
+        "Could not update profile, please try again."
+      );
+    }
+  } catch (err) {
+    console.error("updateUser error: ", err);
+    dispatch(userActions.updateUserFailure(err.response?.data || err.message));
+    Alert.alert(
+      "Update Error",
+      err.response?.data?.message ||
+        "An error occurred while updating your profile."
+    );
+  }
+};
