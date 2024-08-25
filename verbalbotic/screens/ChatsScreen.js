@@ -21,16 +21,12 @@ const ChatsScreen = () => {
   const dispatch = useDispatch();
   const { chats, loading, error } = useSelector((state) => state.chats);
   const [currentPlaying, setCurrentPlaying] = useState(null);
+  const [durations, setDurations] = useState({}); // Store duration for each chat
+  const [progresses, setProgresses] = useState({}); // Store progress for each chat
 
   useEffect(() => {
     dispatch(getMyChats());
   }, [dispatch]);
-
-  useEffect(() => {
-    if (chats.length > 0) {
-      console.log("Chats: ", chats);
-    }
-  }, [chats]);
 
   const playVoiceNote = async (chatId, messagePath) => {
     if (currentPlaying && currentPlaying.sound) {
@@ -48,13 +44,11 @@ const ChatsScreen = () => {
         (status) => onPlaybackStatusUpdate(chatId, status)
       );
 
-      setCurrentPlaying({
-        chatId,
-        sound,
-        duration: status.durationMillis,
-        isPlaying: true,
-        progress: 0,
-      });
+      setCurrentPlaying({ chatId, sound });
+      setDurations((prev) => ({
+        ...prev,
+        [chatId]: status.durationMillis,
+      }));
     } catch (error) {
       console.error("Error playing sound", error);
     }
@@ -68,12 +62,12 @@ const ChatsScreen = () => {
   };
 
   const togglePlayPause = async (chatId, messagePath) => {
-    if (
-      currentPlaying &&
-      currentPlaying.chatId === chatId &&
-      currentPlaying.isPlaying
-    ) {
-      stopVoiceNote();
+    if (currentPlaying && currentPlaying.chatId === chatId) {
+      if (currentPlaying.sound && currentPlaying.isPlaying) {
+        stopVoiceNote();
+      } else {
+        playVoiceNote(chatId, messagePath);
+      }
     } else {
       playVoiceNote(chatId, messagePath);
     }
@@ -83,13 +77,20 @@ const ChatsScreen = () => {
     if (status.isPlaying) {
       setCurrentPlaying((prev) => ({
         ...prev,
-        progress: status.positionMillis / status.durationMillis,
         isPlaying: true,
+      }));
+      setProgresses((prev) => ({
+        ...prev,
+        [chatId]: status.positionMillis / durations[chatId],
       }));
     }
 
     if (status.didJustFinish) {
       setCurrentPlaying(null);
+      setProgresses((prev) => ({
+        ...prev,
+        [chatId]: 0,
+      }));
     }
   };
 
@@ -131,11 +132,7 @@ const ChatsScreen = () => {
                     </TouchableOpacity>
                     <Slider
                       style={styles.progressBar}
-                      value={
-                        currentPlaying && currentPlaying.chatId === chat._id
-                          ? currentPlaying.progress
-                          : 0
-                      }
+                      value={progresses[chat._id] || 0}
                       minimumValue={0}
                       maximumValue={1}
                       minimumTrackTintColor="#0288D1"
@@ -147,22 +144,18 @@ const ChatsScreen = () => {
                           currentPlaying.sound &&
                           currentPlaying.chatId === chat._id
                         ) {
-                          const position = value * currentPlaying.duration;
+                          const position = value * durations[chat._id];
                           await currentPlaying.sound.setPositionAsync(position);
                         }
                       }}
                     />
                     <Text style={styles.durationText}>
                       {Math.floor(
-                        (currentPlaying && currentPlaying.chatId === chat._id
-                          ? currentPlaying.progress * currentPlaying.duration
-                          : 0) / 1000
+                        ((progresses[chat._id] || 0) *
+                          (durations[chat._id] || 0)) /
+                          1000
                       )}
-                      s /{" "}
-                      {Math.floor(
-                        currentPlaying ? currentPlaying.duration / 1000 : 0
-                      )}
-                      s
+                      s / {Math.floor((durations[chat._id] || 0) / 1000)}s
                     </Text>
                   </View>
                   <Text style={styles.timeText}>
