@@ -75,7 +75,11 @@ export const logoutUser = (navigation) => async (dispatch) => {
   try {
     await AsyncStorage.removeItem("token");
     dispatch(userActions.logoutUser());
-    navigation.navigate("Login");
+
+    navigation.reset({
+      index: 0,
+      routes: [{ name: "Login" }],
+    });
   } catch (err) {
     console.error("logout error: ", err);
   }
