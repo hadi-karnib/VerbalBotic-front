@@ -19,10 +19,7 @@ const settingsData = [
   {
     id: "1",
     title: "Profile Settings",
-    options: [
-      { id: "1-1", name: "Change Password", navigateTo: "Password" },
-      { id: "1-2", name: "Update Email", navigateTo: "updateEmail" },
-    ],
+    options: [],
   },
   {
     id: "2",
@@ -90,54 +87,6 @@ const Profile = () => {
           <Animatable.View animation="fadeInUp" style={styles.header}>
             <Text style={styles.headerText}>Hello, {formData.name}</Text>
           </Animatable.View>
-          <Animatable.View
-            animation="fadeInUp"
-            delay={300}
-            style={styles.inputContainer}
-          >
-            <Text style={styles.label}>Name</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.name}
-              onChangeText={(value) => handleInputChange("name", value)}
-            />
-            <Text style={styles.label}>Email</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.email}
-              onChangeText={(value) => handleInputChange("email", value)}
-              keyboardType="email-address"
-            />
-            <Text style={styles.label}>Phone Number</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.phoneNumber}
-              onChangeText={(value) => handleInputChange("phoneNumber", value)}
-              keyboardType="phone-pad"
-            />
-            <Text style={styles.label}>Bio</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.bio}
-              onChangeText={(value) => handleInputChange("bio", value)}
-              multiline={true}
-            />
-            <Text style={styles.label}>Illness</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.illness}
-              onChangeText={(value) => handleInputChange("illness", value)}
-            />
-            <Text style={styles.label}>Work</Text>
-            <TextInput
-              style={styles.input}
-              value={formData.work}
-              onChangeText={(value) => handleInputChange("work", value)}
-            />
-            <TouchableOpacity style={styles.button} onPress={handleSave}>
-              <Text style={styles.buttonText}>Save Profile</Text>
-            </TouchableOpacity>
-          </Animatable.View>
 
           {/* Dropdown Section */}
           {settingsData.map((item) => (
@@ -164,12 +113,66 @@ const Profile = () => {
                   duration={800}
                   style={styles.optionsContainer}
                 >
-                  {item.options.length > 0 ? (
-                    item.options.map((option) => (
-                      <TouchableOpacity key={option.id} style={styles.option}>
-                        <Text style={styles.optionText}>{option.name}</Text>
+                  {item.id === "1" ? (
+                    <>
+                      <Text style={styles.label}>Name</Text>
+                      <TextInput
+                        style={styles.input}
+                        value={formData.name}
+                        onChangeText={(value) =>
+                          handleInputChange("name", value)
+                        }
+                      />
+                      <Text style={styles.label}>Email</Text>
+                      <TextInput
+                        style={styles.input}
+                        value={formData.email}
+                        onChangeText={(value) =>
+                          handleInputChange("email", value)
+                        }
+                        keyboardType="email-address"
+                      />
+                      <Text style={styles.label}>Phone Number</Text>
+                      <TextInput
+                        style={styles.input}
+                        value={formData.phoneNumber}
+                        onChangeText={(value) =>
+                          handleInputChange("phoneNumber", value)
+                        }
+                        keyboardType="phone-pad"
+                      />
+                      <Text style={styles.label}>Bio</Text>
+                      <TextInput
+                        style={styles.input}
+                        value={formData.bio}
+                        onChangeText={(value) =>
+                          handleInputChange("bio", value)
+                        }
+                        multiline={true}
+                      />
+                      <Text style={styles.label}>Illness</Text>
+                      <TextInput
+                        style={styles.input}
+                        value={formData.illness}
+                        onChangeText={(value) =>
+                          handleInputChange("illness", value)
+                        }
+                      />
+                      <Text style={styles.label}>Work</Text>
+                      <TextInput
+                        style={styles.input}
+                        value={formData.work}
+                        onChangeText={(value) =>
+                          handleInputChange("work", value)
+                        }
+                      />
+                      <TouchableOpacity
+                        style={styles.button}
+                        onPress={handleSave}
+                      >
+                        <Text style={styles.buttonText}>Save Profile</Text>
                       </TouchableOpacity>
-                    ))
+                    </>
                   ) : (
                     <View style={styles.qrContainer}>
                       <QRCode
@@ -216,33 +219,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
   },
-  inputContainer: {
-    padding: 20,
-  },
-  label: {
-    fontSize: 16,
-    color: "#00796B",
-    marginBottom: 5,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#B2EBF2",
-    borderRadius: 10,
-    padding: 10,
-    marginBottom: 15,
-    backgroundColor: "#FFF",
-  },
-  button: {
-    backgroundColor: "#00ACC1",
-    padding: 15,
-    borderRadius: 10,
-    alignItems: "center",
-  },
-  buttonText: {
-    color: "#FFF",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
   settingContainer: {
     marginBottom: 15,
     borderRadius: 10,
@@ -274,17 +250,30 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
   },
-  option: {
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderBottomColor: "#00ACC1",
-    borderBottomWidth: 1,
-    borderRadius: 8,
-    marginVertical: 5,
+  input: {
+    borderWidth: 1,
+    borderColor: "#B2EBF2",
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 15,
+    backgroundColor: "#FFF",
   },
-  optionText: {
+  label: {
     fontSize: 16,
-    color: "#000",
+    color: "#00796B",
+    marginBottom: 5,
+  },
+  button: {
+    backgroundColor: "#00ACC1",
+    padding: 15,
+    borderRadius: 10,
+    alignItems: "center",
+    marginTop: 10,
+  },
+  buttonText: {
+    color: "#FFF",
+    fontSize: 18,
+    fontWeight: "bold",
   },
   qrContainer: {
     alignItems: "center",
