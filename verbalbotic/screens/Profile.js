@@ -12,6 +12,24 @@ import { getSelf, updateUser } from "../store/user/userActions";
 import * as Animatable from "react-native-animatable";
 import { LinearGradient } from "expo-linear-gradient";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { MaterialIcons } from "@expo/vector-icons";
+import QRCode from "react-native-qrcode-svg";
+
+const settingsData = [
+  {
+    id: "1",
+    title: "Profile Settings",
+    options: [
+      { id: "1-1", name: "Change Password", navigateTo: "Password" },
+      { id: "1-2", name: "Update Email", navigateTo: "updateEmail" },
+    ],
+  },
+  {
+    id: "2",
+    title: "QR Code",
+    options: [],
+  },
+];
 
 const Profile = () => {
   const { user } = useSelector((state) => state.user);
@@ -25,6 +43,8 @@ const Profile = () => {
     illness: "",
     work: "",
   });
+
+  const [expandedId, setExpandedId] = useState(null);
 
   useEffect(() => {
     dispatch(getSelf());
@@ -49,6 +69,10 @@ const Profile = () => {
 
   const handleSave = () => {
     dispatch(updateUser(formData));
+  };
+
+  const toggleExpand = (settingId) => {
+    setExpandedId(expandedId === settingId ? null : settingId);
   };
 
   return (
@@ -114,6 +138,53 @@ const Profile = () => {
               <Text style={styles.buttonText}>Save Profile</Text>
             </TouchableOpacity>
           </Animatable.View>
+
+          {/* Dropdown Section */}
+          {settingsData.map((item) => (
+            <Animatable.View
+              key={item.id}
+              animation="fadeInUp"
+              duration={800}
+              style={styles.settingContainer}
+            >
+              <TouchableOpacity
+                onPress={() => toggleExpand(item.id)}
+                style={styles.settingHeader}
+              >
+                <Text style={styles.settingText}>{item.title}</Text>
+                <MaterialIcons
+                  name={expandedId === item.id ? "expand-less" : "expand-more"}
+                  size={24}
+                  color="#fff"
+                />
+              </TouchableOpacity>
+              {expandedId === item.id && (
+                <Animatable.View
+                  animation="fadeInUp"
+                  duration={800}
+                  style={styles.optionsContainer}
+                >
+                  {item.options.length > 0 ? (
+                    item.options.map((option) => (
+                      <TouchableOpacity key={option.id} style={styles.option}>
+                        <Text style={styles.optionText}>{option.name}</Text>
+                      </TouchableOpacity>
+                    ))
+                  ) : (
+                    <View style={styles.qrContainer}>
+                      <QRCode
+                        value={user._id || ""}
+                        size={120}
+                        color="#0c7076"
+                        backgroundColor="transparent"
+                      />
+                      <Text style={styles.qrText}>ID: {user._id}</Text>
+                    </View>
+                  )}
+                </Animatable.View>
+              )}
+            </Animatable.View>
+          ))}
         </KeyboardAwareScrollView>
       </SafeAreaView>
     </LinearGradient>
@@ -171,6 +242,58 @@ const styles = StyleSheet.create({
     color: "#FFF",
     fontSize: 18,
     fontWeight: "bold",
+  },
+  settingContainer: {
+    marginBottom: 15,
+    borderRadius: 10,
+    backgroundColor: "#fff",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+    overflow: "hidden",
+  },
+  settingHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 18,
+    backgroundColor: "#00ACC1",
+    alignItems: "center",
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+  },
+  settingText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#ffffff",
+  },
+  optionsContainer: {
+    padding: 20,
+    backgroundColor: "#fff",
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
+  },
+  option: {
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    borderBottomColor: "#00ACC1",
+    borderBottomWidth: 1,
+    borderRadius: 8,
+    marginVertical: 5,
+  },
+  optionText: {
+    fontSize: 16,
+    color: "#000",
+  },
+  qrContainer: {
+    alignItems: "center",
+    marginTop: 20,
+  },
+  qrText: {
+    fontSize: 16,
+    color: "#05161a",
+    marginTop: 10,
   },
 });
 
