@@ -55,6 +55,10 @@ const userSlice = createSlice({
       state.error = null;
       state.loading = false;
     },
+    getSelfRequest: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
   },
 });
 
