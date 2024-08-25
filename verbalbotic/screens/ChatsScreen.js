@@ -30,40 +30,67 @@ const ChatsScreen = () => {
 
   const playVoiceNote = async (chatId, messagePath) => {
     if (currentPlaying && currentPlaying.sound) {
-      await currentPlaying.sound.unloadAsync();
-      setCurrentPlaying(null);
+      await currentPlaying.sound.pauseAsync();
+      setCurrentPlaying((prev) => ({
+        ...prev,
+        isPlaying: false,
+      }));
     }
 
-    try {
-      const fullPath = `${API_URL}/${messagePath}`;
-      console.log("Playing voice note from:", fullPath);
-
-      const { sound, status } = await Audio.Sound.createAsync(
-        { uri: fullPath },
-        { shouldPlay: true },
-        (status) => onPlaybackStatusUpdate(chatId, status)
-      );
-
-      setCurrentPlaying({ chatId, sound });
-      setDurations((prev) => ({
+    if (currentPlaying && currentPlaying.chatId === chatId) {
+      await currentPlaying.sound.playAsync();
+      setCurrentPlaying((prev) => ({
         ...prev,
-        [chatId]: status.durationMillis,
+        isPlaying: true,
       }));
-    } catch (error) {
-      console.error("Error playing sound", error);
+    } else {
+      if (currentPlaying && currentPlaying.sound) {
+        await currentPlaying.sound.unloadAsync();
+      }
+
+      try {
+        const fullPath = `${API_URL}/${messagePath}`;
+        console.log("Playing voice note from:", fullPath);
+
+        const { sound, status } = await Audio.Sound.createAsync(
+          { uri: fullPath },
+          { shouldPlay: true },
+          (status) => onPlaybackStatusUpdate(chatId, status)
+        );
+
+        setCurrentPlaying({
+          chatId,
+          sound,
+          duration: status.durationMillis,
+          isPlaying: true,
+        });
+        setDurations((prev) => ({
+          ...prev,
+          [chatId]: status.durationMillis,
+        }));
+        setProgresses((prev) => ({
+          ...prev,
+          [chatId]: status.positionMillis / status.durationMillis,
+        }));
+      } catch (error) {
+        console.error("Error playing sound", error);
+      }
     }
   };
 
   const stopVoiceNote = async () => {
     if (currentPlaying && currentPlaying.sound) {
-      await currentPlaying.sound.stopAsync();
-      setCurrentPlaying(null);
+      await currentPlaying.sound.pauseAsync();
+      setCurrentPlaying((prev) => ({
+        ...prev,
+        isPlaying: false,
+      }));
     }
   };
 
   const togglePlayPause = async (chatId, messagePath) => {
     if (currentPlaying && currentPlaying.chatId === chatId) {
-      if (currentPlaying.sound && currentPlaying.isPlaying) {
+      if (currentPlaying.isPlaying) {
         stopVoiceNote();
       } else {
         playVoiceNote(chatId, messagePath);
@@ -77,6 +104,7 @@ const ChatsScreen = () => {
     if (status.isPlaying) {
       setCurrentPlaying((prev) => ({
         ...prev,
+        progress: status.positionMillis / durations[chatId],
         isPlaying: true,
       }));
       setProgresses((prev) => ({
@@ -86,7 +114,11 @@ const ChatsScreen = () => {
     }
 
     if (status.didJustFinish) {
-      setCurrentPlaying(null);
+      setCurrentPlaying((prev) => ({
+        ...prev,
+        isPlaying: false,
+        progress: 0,
+      }));
       setProgresses((prev) => ({
         ...prev,
         [chatId]: 0,
@@ -146,6 +178,10 @@ const ChatsScreen = () => {
                         ) {
                           const position = value * durations[chat._id];
                           await currentPlaying.sound.setPositionAsync(position);
+                          setProgresses((prev) => ({
+                            ...prev,
+                            [chat._id]: value,
+                          }));
                         }
                       }}
                     />
