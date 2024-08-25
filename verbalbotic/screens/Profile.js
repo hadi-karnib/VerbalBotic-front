@@ -118,6 +118,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#E0F7FA",
   },
+  header: {
+    padding: 20,
+    backgroundColor: "#00BCD4",
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+    alignItems: "center",
+  },
 });
 
 export default Profile;
