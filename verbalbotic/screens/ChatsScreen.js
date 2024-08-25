@@ -98,88 +98,91 @@ const ChatsScreen = () => {
       <SafeAreaView style={styles.safeArea}>
         <ScrollView contentContainerStyle={styles.scrollContainer}>
           {loading && (
-            <LottieView
-              source={loadingAnimation}
-              autoPlay
-              loop
-              style={styles.lottie}
-            />
+            <View style={styles.lottieContainer}>
+              <LottieView
+                source={loadingAnimation}
+                autoPlay
+                loop
+                style={styles.lottie}
+              />
+            </View>
           )}
           {error && <Text>Error: {error}</Text>}
-          {chats.map((chat) => (
-            <View key={chat._id} style={styles.messageContainer}>
-              <View style={styles.messageBubble}>
-                <View style={styles.voiceNoteContainer}>
-                  <TouchableOpacity
-                    onPress={() => togglePlayPause(chat._id, chat.message)}
-                    style={styles.iconButton}
-                  >
-                    <MaterialIcons
-                      name={
-                        currentPlaying &&
-                        currentPlaying.chatId === chat._id &&
-                        currentPlaying.isPlaying
-                          ? "pause"
-                          : "play-arrow"
+          {!loading &&
+            chats.map((chat) => (
+              <View key={chat._id} style={styles.messageContainer}>
+                <View style={styles.messageBubble}>
+                  <View style={styles.voiceNoteContainer}>
+                    <TouchableOpacity
+                      onPress={() => togglePlayPause(chat._id, chat.message)}
+                      style={styles.iconButton}
+                    >
+                      <MaterialIcons
+                        name={
+                          currentPlaying &&
+                          currentPlaying.chatId === chat._id &&
+                          currentPlaying.isPlaying
+                            ? "pause"
+                            : "play-arrow"
+                        }
+                        size={24}
+                        color="#0288D1"
+                      />
+                    </TouchableOpacity>
+                    <Slider
+                      style={styles.progressBar}
+                      value={
+                        currentPlaying && currentPlaying.chatId === chat._id
+                          ? currentPlaying.progress
+                          : 0
                       }
-                      size={24}
-                      color="#0288D1"
+                      minimumValue={0}
+                      maximumValue={1}
+                      minimumTrackTintColor="#0288D1"
+                      maximumTrackTintColor="#ccc"
+                      thumbTintColor="white"
+                      onSlidingComplete={async (value) => {
+                        if (
+                          currentPlaying &&
+                          currentPlaying.sound &&
+                          currentPlaying.chatId === chat._id
+                        ) {
+                          const position = value * currentPlaying.duration;
+                          await currentPlaying.sound.setPositionAsync(position);
+                        }
+                      }}
                     />
-                  </TouchableOpacity>
-                  <Slider
-                    style={styles.progressBar}
-                    value={
-                      currentPlaying && currentPlaying.chatId === chat._id
-                        ? currentPlaying.progress
-                        : 0
-                    }
-                    minimumValue={0}
-                    maximumValue={1}
-                    minimumTrackTintColor="#0288D1"
-                    maximumTrackTintColor="#ccc"
-                    thumbTintColor="white"
-                    onSlidingComplete={async (value) => {
-                      if (
-                        currentPlaying &&
-                        currentPlaying.sound &&
-                        currentPlaying.chatId === chat._id
-                      ) {
-                        const position = value * currentPlaying.duration;
-                        await currentPlaying.sound.setPositionAsync(position);
-                      }
-                    }}
-                  />
-                  <Text style={styles.durationText}>
-                    {Math.floor(
-                      (currentPlaying && currentPlaying.chatId === chat._id
-                        ? currentPlaying.progress * currentPlaying.duration
-                        : 0) / 1000
-                    )}
-                    s /{" "}
-                    {Math.floor(
-                      currentPlaying ? currentPlaying.duration / 1000 : 0
-                    )}
-                    s
-                  </Text>
-                </View>
-                <Text style={styles.timeText}>
-                  {new Date(
-                    chat.voiceNoteMetadata.uploadDate
-                  ).toLocaleTimeString()}
-                </Text>
-              </View>
-              {chat.AI_response && (
-                <View style={[styles.messageBubble, styles.aiResponseBubble]}>
-                  <Text style={styles.chatText}>{chat.AI_response}</Text>
+                    <Text style={styles.durationText}>
+                      {Math.floor(
+                        (currentPlaying && currentPlaying.chatId === chat._id
+                          ? currentPlaying.progress * currentPlaying.duration
+                          : 0) / 1000
+                      )}
+                      s /{" "}
+                      {Math.floor(
+                        currentPlaying ? currentPlaying.duration / 1000 : 0
+                      )}
+                      s
+                    </Text>
+                  </View>
                   <Text style={styles.timeText}>
                     {new Date(
                       chat.voiceNoteMetadata.uploadDate
                     ).toLocaleTimeString()}
                   </Text>
                 </View>
-              )}
-            </View>
-          ))}
+                {chat.AI_response && (
+                  <View style={[styles.messageBubble, styles.aiResponseBubble]}>
+                    <Text style={styles.chatText}>{chat.AI_response}</Text>
+                    <Text style={styles.timeText}>
+                      {new Date(
+                        chat.voiceNoteMetadata.uploadDate
+                      ).toLocaleTimeString()}
+                    </Text>
+                  </View>
+                )}
+              </View>
+            ))}
         </ScrollView>
       </SafeAreaView>
     </LinearGradient>
