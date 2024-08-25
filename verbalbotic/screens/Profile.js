@@ -15,19 +15,6 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { MaterialIcons } from "@expo/vector-icons";
 import QRCode from "react-native-qrcode-svg";
 
-const settingsData = [
-  {
-    id: "1",
-    title: "Profile Settings",
-    options: [],
-  },
-  {
-    id: "2",
-    title: "QR Code",
-    options: [],
-  },
-];
-
 const Profile = () => {
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -88,106 +75,110 @@ const Profile = () => {
             <Text style={styles.headerText}>Hello, {formData.name}</Text>
           </Animatable.View>
 
-          {/* Dropdown Section */}
-          {settingsData.map((item) => (
-            <Animatable.View
-              key={item.id}
-              animation="fadeInUp"
-              duration={800}
-              style={styles.settingContainer}
+          <Animatable.View
+            animation="fadeInUp"
+            duration={800}
+            style={styles.settingContainer}
+          >
+            <TouchableOpacity
+              onPress={() => toggleExpand("1")}
+              style={styles.settingHeader}
             >
-              <TouchableOpacity
-                onPress={() => toggleExpand(item.id)}
-                style={styles.settingHeader}
+              <Text style={styles.settingText}>Profile Settings</Text>
+              <MaterialIcons
+                name={expandedId === "1" ? "expand-less" : "expand-more"}
+                size={24}
+                color="#fff"
+              />
+            </TouchableOpacity>
+            {expandedId === "1" && (
+              <Animatable.View
+                animation="fadeInUp"
+                duration={800}
+                style={styles.optionsContainer}
               >
-                <Text style={styles.settingText}>{item.title}</Text>
-                <MaterialIcons
-                  name={expandedId === item.id ? "expand-less" : "expand-more"}
-                  size={24}
-                  color="#fff"
+                <Text style={styles.label}>Name</Text>
+                <TextInput
+                  style={styles.input}
+                  value={formData.name}
+                  onChangeText={(value) => handleInputChange("name", value)}
                 />
-              </TouchableOpacity>
-              {expandedId === item.id && (
-                <Animatable.View
-                  animation="fadeInUp"
-                  duration={800}
-                  style={styles.optionsContainer}
-                >
-                  {item.id === "1" ? (
-                    <>
-                      <Text style={styles.label}>Name</Text>
-                      <TextInput
-                        style={styles.input}
-                        value={formData.name}
-                        onChangeText={(value) =>
-                          handleInputChange("name", value)
-                        }
-                      />
-                      <Text style={styles.label}>Email</Text>
-                      <TextInput
-                        style={styles.input}
-                        value={formData.email}
-                        onChangeText={(value) =>
-                          handleInputChange("email", value)
-                        }
-                        keyboardType="email-address"
-                      />
-                      <Text style={styles.label}>Phone Number</Text>
-                      <TextInput
-                        style={styles.input}
-                        value={formData.phoneNumber}
-                        onChangeText={(value) =>
-                          handleInputChange("phoneNumber", value)
-                        }
-                        keyboardType="phone-pad"
-                      />
-                      <Text style={styles.label}>Bio</Text>
-                      <TextInput
-                        style={styles.input}
-                        value={formData.bio}
-                        onChangeText={(value) =>
-                          handleInputChange("bio", value)
-                        }
-                        multiline={true}
-                      />
-                      <Text style={styles.label}>Illness</Text>
-                      <TextInput
-                        style={styles.input}
-                        value={formData.illness}
-                        onChangeText={(value) =>
-                          handleInputChange("illness", value)
-                        }
-                      />
-                      <Text style={styles.label}>Work</Text>
-                      <TextInput
-                        style={styles.input}
-                        value={formData.work}
-                        onChangeText={(value) =>
-                          handleInputChange("work", value)
-                        }
-                      />
-                      <TouchableOpacity
-                        style={styles.button}
-                        onPress={handleSave}
-                      >
-                        <Text style={styles.buttonText}>Save Profile</Text>
-                      </TouchableOpacity>
-                    </>
-                  ) : (
-                    <View style={styles.qrContainer}>
-                      <QRCode
-                        value={user._id || ""}
-                        size={120}
-                        color="#0c7076"
-                        backgroundColor="transparent"
-                      />
-                      <Text style={styles.qrText}>ID: {user._id}</Text>
-                    </View>
-                  )}
-                </Animatable.View>
-              )}
-            </Animatable.View>
-          ))}
+                <Text style={styles.label}>Email</Text>
+                <TextInput
+                  style={styles.input}
+                  value={formData.email}
+                  onChangeText={(value) => handleInputChange("email", value)}
+                  keyboardType="email-address"
+                />
+                <Text style={styles.label}>Phone Number</Text>
+                <TextInput
+                  style={styles.input}
+                  value={formData.phoneNumber}
+                  onChangeText={(value) =>
+                    handleInputChange("phoneNumber", value)
+                  }
+                  keyboardType="phone-pad"
+                />
+                <Text style={styles.label}>Bio</Text>
+                <TextInput
+                  style={styles.input}
+                  value={formData.bio}
+                  onChangeText={(value) => handleInputChange("bio", value)}
+                  multiline={true}
+                />
+                <Text style={styles.label}>Illness</Text>
+                <TextInput
+                  style={styles.input}
+                  value={formData.illness}
+                  onChangeText={(value) => handleInputChange("illness", value)}
+                />
+                <Text style={styles.label}>Work</Text>
+                <TextInput
+                  style={styles.input}
+                  value={formData.work}
+                  onChangeText={(value) => handleInputChange("work", value)}
+                />
+                <TouchableOpacity style={styles.button} onPress={handleSave}>
+                  <Text style={styles.buttonText}>Save Profile</Text>
+                </TouchableOpacity>
+              </Animatable.View>
+            )}
+          </Animatable.View>
+
+          <Animatable.View
+            animation="fadeInUp"
+            duration={800}
+            style={styles.settingContainer}
+          >
+            <TouchableOpacity
+              onPress={() => toggleExpand("2")}
+              style={styles.settingHeader}
+            >
+              <Text style={styles.settingText}>QR Code</Text>
+              <MaterialIcons
+                name={expandedId === "2" ? "expand-less" : "expand-more"}
+                size={24}
+                color="#fff"
+              />
+            </TouchableOpacity>
+            {expandedId === "2" && (
+              <Animatable.View
+                animation="fadeInUp"
+                duration={800}
+                style={styles.optionsContainer}
+              >
+                <View style={styles.qrContainer}>
+                  <QRCode
+                    value={user._id || ""}
+                    size={120}
+                    color="#0c7076"
+                    backgroundColor="transparent"
+                  />
+                  <Text style={styles.qrText}>ID: {user._id}</Text>
+                </View>
+              </Animatable.View>
+            )}
+          </Animatable.View>
         </KeyboardAwareScrollView>
       </SafeAreaView>
     </LinearGradient>
