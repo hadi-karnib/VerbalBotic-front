@@ -112,3 +112,32 @@ export const addBio = (bioData, navigation) => async (dispatch) => {
     );
   }
 };
+
+export const getSelf = () => async (dispatch) => {
+  dispatch(userActions.getSelfRequest());
+
+  try {
+    const token = await AsyncStorage.getItem("token");
+    if (!token) {
+      throw new Error("No token found, please log in again.");
+    }
+
+    const response = await axios.get(`${API_URL}/api/user/self`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const { data } = response;
+
+    dispatch(userActions.getSelfSuccess(data));
+  } catch (err) {
+    console.error("getSelf error: ", err);
+    dispatch(userActions.getSelfFailure(err.response?.data || err.message));
+    Alert.alert(
+      "Fetch User Error",
+      err.response?.data?.message ||
+        "An error occurred while fetching user data."
+    );
+  }
+};
