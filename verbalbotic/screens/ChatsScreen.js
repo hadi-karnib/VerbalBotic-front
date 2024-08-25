@@ -30,27 +30,31 @@ const ChatsScreen = () => {
   const playVoiceNote = async (chatId, messagePath) => {
     if (currentPlaying && currentPlaying.sound) {
       await currentPlaying.sound.pauseAsync();
-      setCurrentPlaying(null);
     }
 
     const chat = chats.find((chat) => chat._id === chatId);
 
-    if (!chat) return;
+    if (!chat || !chat.voiceNoteMetadata?.duration) {
+      console.error("Error: Duration is null or undefined.");
+      return;
+    }
 
     try {
       const fullPath = `${API_URL}/${messagePath}`;
       console.log("Playing voice note from:", fullPath);
 
-      const { sound } = await Audio.Sound.createAsync(
+      let { sound } = await Audio.Sound.createAsync(
         { uri: fullPath },
-        { shouldPlay: true },
+        { shouldPlay: true, positionMillis: currentPlaying?.position || 0 }, // Start from the current position if available
         (status) => onPlaybackStatusUpdate(chatId, status)
       );
 
       setCurrentPlaying({
         chatId,
         sound,
-        duration: chat.voiceNoteMetadata.duration * 1000,
+        duration: chat.voiceNoteMetadata.duration, // Duration is now in seconds directly from the state
+        position: currentPlaying?.position || 0,
+        isPlaying: true,
       });
     } catch (error) {
       console.error("Error playing sound", error);
@@ -60,8 +64,10 @@ const ChatsScreen = () => {
   const stopVoiceNote = async () => {
     if (currentPlaying && currentPlaying.sound) {
       await currentPlaying.sound.pauseAsync();
-      setCurrentPlaying(null);
-      setProgress(0);
+      setCurrentPlaying((prev) => ({
+        ...prev,
+        isPlaying: false,
+      }));
     }
   };
 
@@ -79,15 +85,17 @@ const ChatsScreen = () => {
 
   const onPlaybackStatusUpdate = (chatId, status) => {
     if (status.isPlaying) {
-      setProgress(status.positionMillis / (currentPlaying?.duration || 1));
+      setProgress(status.positionMillis / (currentPlaying?.duration * 1000)); // Converting seconds to milliseconds for progress calculation
       setCurrentPlaying((prev) => ({
         ...prev,
+        position: status.positionMillis,
         isPlaying: true,
       }));
     }
 
     if (status.didJustFinish) {
       stopVoiceNote();
+      setProgress(0);
     }
   };
 
@@ -145,16 +153,24 @@ const ChatsScreen = () => {
                           currentPlaying.sound &&
                           currentPlaying.chatId === chat._id
                         ) {
-                          const position = value * currentPlaying.duration;
+                          const position =
+                            value * currentPlaying.duration * 1000;
                           await currentPlaying.sound.setPositionAsync(position);
+                          setCurrentPlaying((prev) => ({
+                            ...prev,
+                            position: position,
+                          }));
                           setProgress(value);
                         }
                       }}
                     />
                     <Text style={styles.durationText}>
                       {`${Math.floor(
-                        (progress * (currentPlaying?.duration || 0)) / 1000
-                      )}s / ${Math.floor(chat.voiceNoteMetadata.duration)}s`}
+                        progress * (currentPlaying?.duration || 0)
+                      )}s / ${Math.floor(
+                        currentPlaying?.duration ||
+                          chat.voiceNoteMetadata.duration
+                      )}s`}
                     </Text>
                   </View>
                   <Text style={styles.timeText}>
