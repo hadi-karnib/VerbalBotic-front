@@ -4,7 +4,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_URL } from "@env";
 import { Alert } from "react-native";
 
-// Modified loginUser Action
 export const loginUser = (email, password, navigation) => async (dispatch) => {
   console.log(API_URL);
 
@@ -23,7 +22,10 @@ export const loginUser = (email, password, navigation) => async (dispatch) => {
       await AsyncStorage.setItem("token", token);
       dispatch(userActions.loginUserSuccess(response.data));
 
-      navigation.navigate("Tabs");
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "Tabs" }],
+      });
     } else {
       Alert.alert(
         "Login Failed",
@@ -39,6 +41,7 @@ export const loginUser = (email, password, navigation) => async (dispatch) => {
     );
   }
 };
+
 export const signupUser = (formData, navigation) => async (dispatch) => {
   dispatch(userActions.signupUserRequest());
 
