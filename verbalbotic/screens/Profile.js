@@ -125,6 +125,12 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 30,
     alignItems: "center",
   },
+
+  headerText: {
+    color: "#FFF",
+    fontSize: 24,
+    fontWeight: "bold",
+  },
 });
 
 export default Profile;
