@@ -186,12 +186,13 @@ const ChatsScreen = () => {
                       }}
                     />
                     <Text style={styles.durationText}>
-                      {Math.floor(
-                        ((progresses[chat._id] || 0) *
-                          (durations[chat._id] || 0)) /
-                          1000
-                      )}
-                      s / {Math.floor((durations[chat._id] || 0) / 1000)}s
+                      {durations[chat._id]
+                        ? `${Math.floor(
+                            ((progresses[chat._id] || 0) *
+                              durations[chat._id]) /
+                              1000
+                          )}s / ${Math.floor(durations[chat._id] / 1000)}s`
+                        : `Loading...`}
                     </Text>
                   </View>
                   <Text style={styles.timeText}>
