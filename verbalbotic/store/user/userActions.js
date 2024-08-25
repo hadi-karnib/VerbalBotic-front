@@ -142,7 +142,7 @@ export const getSelf = () => async (dispatch) => {
     );
   }
 };
-export const updateUser = (formData, navigation) => async (dispatch) => {
+export const updateUser = (formData) => async (dispatch) => {
   dispatch(userActions.updateUserRequest());
 
   try {
@@ -166,7 +166,7 @@ export const updateUser = (formData, navigation) => async (dispatch) => {
         "Profile Updated",
         "Your profile has been successfully updated."
       );
-      navigation.navigate("Profile"); // Navigate to Profile screen or any other screen after successful update
+      dispatch(getSelf());
     } else {
       Alert.alert(
         "Update Failed",
