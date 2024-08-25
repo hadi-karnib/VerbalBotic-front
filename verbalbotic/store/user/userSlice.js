@@ -59,6 +59,10 @@ const userSlice = createSlice({
       state.loading = true;
       state.error = null;
     },
+    getSelfSuccess: (state, action) => {
+      state.loading = false;
+      state.user = action.payload;
+    },
   },
 });
 
