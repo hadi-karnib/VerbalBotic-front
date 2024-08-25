@@ -68,10 +68,11 @@ export const signupUser = (formData, navigation) => async (dispatch) => {
     );
   }
 };
-export const logoutUser = () => async (dispatch) => {
+export const logoutUser = (navigation) => async (dispatch) => {
   try {
     await AsyncStorage.removeItem("token");
     dispatch(userActions.logoutUser());
+    navigation.navigate("Login")
   } catch (err) {
     console.error("logout error: ", err);
   }
