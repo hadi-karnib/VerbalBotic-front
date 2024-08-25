@@ -134,6 +134,12 @@ const styles = StyleSheet.create({
   inputContainer: {
     padding: 20,
   },
+
+  label: {
+    fontSize: 16,
+    color: "#00796B",
+    marginBottom: 5,
+  },
 });
 
 export default Profile;
