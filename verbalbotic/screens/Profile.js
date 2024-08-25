@@ -187,7 +187,6 @@ const Profile = () => {
     </LinearGradient>
   );
 };
-
 const styles = StyleSheet.create({
   gradientContainer: {
     flex: 1,
@@ -219,9 +218,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 5,
     overflow: "hidden",
   },
   settingHeader: {
@@ -243,6 +242,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 5,
   },
   input: {
     borderWidth: 1,
