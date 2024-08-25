@@ -32,7 +32,6 @@ const Profile = ({ navigation }) => {
 
   useEffect(() => {
     dispatch(getSelf());
-    console.log(user);
   }, []);
 
   useEffect(() => {
