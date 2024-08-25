@@ -21,89 +21,60 @@ const ChatsScreen = () => {
   const dispatch = useDispatch();
   const { chats, loading, error } = useSelector((state) => state.chats);
   const [currentPlaying, setCurrentPlaying] = useState(null);
-  const [durations, setDurations] = useState({}); // Store duration for each chat
-  const [progresses, setProgresses] = useState({}); // Store progress for each chat
+  const [progresses, setProgresses] = useState({}); // Store progress for each voice note
+  const [durations, setDurations] = useState({}); // Store durations for each voice note
 
   useEffect(() => {
     dispatch(getMyChats());
   }, [dispatch]);
 
   useEffect(() => {
+    // Set durations from Redux state as soon as chats are loaded
     if (chats.length > 0) {
-      preloadDurations(chats);
+      const initialDurations = {};
+      chats.forEach((chat) => {
+        initialDurations[chat._id] = chat.voiceNoteMetadata.duration * 1000; // Convert to milliseconds
+      });
+      setDurations(initialDurations);
     }
   }, [chats]);
-
-  const preloadDurations = async (chats) => {
-    const durationPromises = chats.map(async (chat) => {
-      const fullPath = `${API_URL}/${chat.message}`;
-      try {
-        const { sound } = await Audio.Sound.createAsync({ uri: fullPath });
-        const status = await sound.getStatusAsync();
-        return { chatId: chat._id, duration: status.durationMillis };
-      } catch (error) {
-        console.error("Error preloading duration", error);
-        return { chatId: chat._id, duration: 0 };
-      }
-    });
-
-    const durationsArray = await Promise.all(durationPromises);
-    const durationsMap = durationsArray.reduce((acc, { chatId, duration }) => {
-      acc[chatId] = duration;
-      return acc;
-    }, {});
-
-    setDurations(durationsMap);
-  };
 
   const playVoiceNote = async (chatId, messagePath) => {
     if (currentPlaying && currentPlaying.sound) {
       await currentPlaying.sound.pauseAsync();
-      setCurrentPlaying((prev) => ({
-        ...prev,
-        isPlaying: false,
-      }));
+      setCurrentPlaying(null);
     }
 
-    if (currentPlaying && currentPlaying.chatId === chatId) {
-      await currentPlaying.sound.playAsync();
-      setCurrentPlaying((prev) => ({
-        ...prev,
+    const chat = chats.find((chat) => chat._id === chatId);
+
+    if (!chat || !chat.voiceNoteMetadata?.duration) {
+      console.error("Error: Duration is null or undefined.");
+      return;
+    }
+
+    try {
+      const fullPath = `${API_URL}/${messagePath}`;
+      console.log("Playing voice note from:", fullPath);
+
+      const { sound } = await Audio.Sound.createAsync(
+        { uri: fullPath },
+        { shouldPlay: true },
+        (status) => onPlaybackStatusUpdate(chatId, status)
+      );
+
+      setCurrentPlaying({
+        chatId,
+        sound,
+        duration: chat.voiceNoteMetadata.duration * 1000, // convert to milliseconds
         isPlaying: true,
+      });
+
+      setProgresses((prev) => ({
+        ...prev,
+        [chatId]: 0,
       }));
-    } else {
-      if (currentPlaying && currentPlaying.sound) {
-        await currentPlaying.sound.unloadAsync();
-      }
-
-      try {
-        const fullPath = `${API_URL}/${messagePath}`;
-        console.log("Playing voice note from:", fullPath);
-
-        const { sound } = await Audio.Sound.createAsync(
-          { uri: fullPath },
-          { shouldPlay: true }
-        );
-
-        const status = await sound.getStatusAsync(); // Correct way to get the status
-        console.log("Sound status:", status);
-
-        setCurrentPlaying({
-          chatId,
-          sound,
-          duration: durations[chatId] || status.durationMillis,
-          isPlaying: true,
-        });
-
-        setProgresses((prev) => ({
-          ...prev,
-          [chatId]:
-            status.positionMillis /
-            (durations[chatId] || status.durationMillis),
-        }));
-      } catch (error) {
-        console.error("Error playing sound", error);
-      }
+    } catch (error) {
+      console.error("Error playing sound", error);
     }
   };
 
@@ -122,7 +93,11 @@ const ChatsScreen = () => {
       if (currentPlaying.isPlaying) {
         stopVoiceNote();
       } else {
-        playVoiceNote(chatId, messagePath);
+        await currentPlaying.sound.playAsync();
+        setCurrentPlaying((prev) => ({
+          ...prev,
+          isPlaying: true,
+        }));
       }
     } else {
       playVoiceNote(chatId, messagePath);
@@ -130,29 +105,36 @@ const ChatsScreen = () => {
   };
 
   const onPlaybackStatusUpdate = (chatId, status) => {
-    if (status.isPlaying) {
-      setCurrentPlaying((prev) => ({
-        ...prev,
-        progress: status.positionMillis / durations[chatId],
-        isPlaying: true,
-      }));
+    if (!durations[chatId]) {
+      console.error("Error: Invalid duration value.");
+      return;
+    }
+
+    const progressValue = status.positionMillis / durations[chatId];
+    console.log("Progress:", progressValue); // Log progress to see if it updates
+
+    if (!isNaN(progressValue) && progressValue >= 0) {
       setProgresses((prev) => ({
         ...prev,
-        [chatId]: status.positionMillis / durations[chatId],
+        [chatId]: progressValue,
       }));
     }
 
     if (status.didJustFinish) {
-      setCurrentPlaying((prev) => ({
-        ...prev,
-        isPlaying: false,
-        progress: 0,
-      }));
+      stopVoiceNote();
       setProgresses((prev) => ({
         ...prev,
         [chatId]: 0,
       }));
     }
+  };
+
+  const formatTime = (timeInSeconds) => {
+    const parsedTime = parseFloat(timeInSeconds);
+    if (isNaN(parsedTime) || parsedTime < 0) {
+      return "0"; // Return "0" if the input is not a valid number
+    }
+    return Math.floor(parsedTime);
   };
 
   return (
@@ -215,13 +197,10 @@ const ChatsScreen = () => {
                       }}
                     />
                     <Text style={styles.durationText}>
-                      {durations[chat._id]
-                        ? `${Math.floor(
-                            ((progresses[chat._id] || 0) *
-                              durations[chat._id]) /
-                              1000
-                          )}s / ${Math.floor(durations[chat._id] / 1000)}s`
-                        : `Loading...`}
+                      {`${formatTime(
+                        ((progresses[chat._id] || 0) * durations[chat._id]) /
+                          1000
+                      )}s / ${formatTime((durations[chat._id] || 0) / 1000)}s`}
                     </Text>
                   </View>
                   <Text style={styles.timeText}>
