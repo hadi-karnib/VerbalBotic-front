@@ -56,6 +56,7 @@ const ChatsScreen = () => {
         position: currentPlaying?.position || 0,
         isPlaying: true,
       });
+      setProgress(0); // Reset progress when a new note starts playing
     } catch (error) {
       console.error("Error playing sound", error);
     }
@@ -84,12 +85,16 @@ const ChatsScreen = () => {
   };
 
   const onPlaybackStatusUpdate = (chatId, status) => {
-    if (status.isPlaying) {
-      setProgress(status.positionMillis / (currentPlaying?.duration * 1000)); // Converting seconds to milliseconds for progress calculation
+    const newProgress =
+      status.positionMillis / (currentPlaying?.duration * 1000);
+    console.log("Progress:", newProgress); // Debugging log
+
+    if (status.isPlaying || status.positionMillis > 0) {
+      setProgress(!isNaN(newProgress) && newProgress >= 0 ? newProgress : 0); // Ensure valid progress
       setCurrentPlaying((prev) => ({
         ...prev,
         position: status.positionMillis,
-        isPlaying: true,
+        isPlaying: status.isPlaying,
       }));
     }
 
@@ -97,6 +102,14 @@ const ChatsScreen = () => {
       stopVoiceNote();
       setProgress(0);
     }
+  };
+
+  const formatTime = (timeInSeconds) => {
+    const parsedTime = parseFloat(timeInSeconds);
+    if (isNaN(parsedTime) || parsedTime < 0) {
+      return "0"; // Return "0" if the input is not a valid number
+    }
+    return Math.floor(parsedTime);
   };
 
   return (
@@ -165,9 +178,9 @@ const ChatsScreen = () => {
                       }}
                     />
                     <Text style={styles.durationText}>
-                      {`${Math.floor(
+                      {`${formatTime(
                         progress * (currentPlaying?.duration || 0)
-                      )}s / ${Math.floor(
+                      )}s / ${formatTime(
                         currentPlaying?.duration ||
                           chat.voiceNoteMetadata.duration
                       )}s`}
