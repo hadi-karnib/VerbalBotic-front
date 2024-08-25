@@ -131,6 +131,9 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
   },
+  inputContainer: {
+    padding: 20,
+  },
 });
 
 export default Profile;
