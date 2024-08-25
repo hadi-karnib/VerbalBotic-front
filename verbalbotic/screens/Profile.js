@@ -8,14 +8,14 @@ import {
   SafeAreaView,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { getSelf, updateUser } from "../store/user/userActions";
+import { getSelf, updateUser, logoutUser } from "../store/user/userActions"; // Import the logoutUser action
 import * as Animatable from "react-native-animatable";
 import { LinearGradient } from "expo-linear-gradient";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { MaterialIcons } from "@expo/vector-icons";
 import QRCode from "react-native-qrcode-svg";
 
-const Profile = () => {
+const Profile = ({ navigation }) => {
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
@@ -53,6 +53,10 @@ const Profile = () => {
 
   const handleSave = () => {
     dispatch(updateUser(formData));
+  };
+
+  const handleLogout = () => {
+    dispatch(logoutUser(navigation));
   };
 
   const toggleExpand = (settingId) => {
@@ -182,11 +186,23 @@ const Profile = () => {
               )}
             </Animatable.View>
           </View>
+
+          {/* Logout Button */}
         </KeyboardAwareScrollView>
+
+        <View style={styles.logoutButtonContainer}>
+          <TouchableOpacity
+            style={[styles.button, styles.logoutButton]}
+            onPress={handleLogout}
+          >
+            <Text style={styles.buttonText}>Logout</Text>
+          </TouchableOpacity>
+        </View>
       </SafeAreaView>
     </LinearGradient>
   );
 };
+
 const styles = StyleSheet.create({
   gradientContainer: {
     flex: 1,
@@ -268,6 +284,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: "center",
     marginTop: 10,
+    width: "100%",
+  },
+  logoutButton: {
+    backgroundColor: "#FFD700",
+    width: "50%",
+    maxWidth: 150,
   },
   buttonText: {
     color: "#FFF",
@@ -289,6 +311,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingLeft: 7,
     marginTop: 15,
+  },
+  logoutButtonContainer: {
+    width: "100%",
+    position: "absolute",
+    bottom: 20,
+    right: 10,
+    alignItems: "flex-end",
   },
 });
 
