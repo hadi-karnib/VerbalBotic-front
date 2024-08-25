@@ -28,6 +28,34 @@ const ChatsScreen = () => {
     dispatch(getMyChats());
   }, [dispatch]);
 
+  useEffect(() => {
+    if (chats.length > 0) {
+      preloadDurations(chats);
+    }
+  }, [chats]);
+
+  const preloadDurations = async (chats) => {
+    const durationPromises = chats.map(async (chat) => {
+      const fullPath = `${API_URL}/${chat.message}`;
+      try {
+        const { sound } = await Audio.Sound.createAsync({ uri: fullPath });
+        const status = await sound.getStatusAsync();
+        return { chatId: chat._id, duration: status.durationMillis };
+      } catch (error) {
+        console.error("Error preloading duration", error);
+        return { chatId: chat._id, duration: 0 };
+      }
+    });
+
+    const durationsArray = await Promise.all(durationPromises);
+    const durationsMap = durationsArray.reduce((acc, { chatId, duration }) => {
+      acc[chatId] = duration;
+      return acc;
+    }, {});
+
+    setDurations(durationsMap);
+  };
+
   const playVoiceNote = async (chatId, messagePath) => {
     if (currentPlaying && currentPlaying.sound) {
       await currentPlaying.sound.pauseAsync();
@@ -52,7 +80,7 @@ const ChatsScreen = () => {
         const fullPath = `${API_URL}/${messagePath}`;
         console.log("Playing voice note from:", fullPath);
 
-        const { sound, status } = await Audio.Sound.createAsync(
+        const { sound } = await Audio.Sound.createAsync(
           { uri: fullPath },
           { shouldPlay: true },
           (status) => onPlaybackStatusUpdate(chatId, status)
@@ -61,16 +89,14 @@ const ChatsScreen = () => {
         setCurrentPlaying({
           chatId,
           sound,
-          duration: status.durationMillis,
+          duration: durations[chatId] || status.durationMillis,
           isPlaying: true,
         });
-        setDurations((prev) => ({
-          ...prev,
-          [chatId]: status.durationMillis,
-        }));
         setProgresses((prev) => ({
           ...prev,
-          [chatId]: status.positionMillis / status.durationMillis,
+          [chatId]:
+            status.positionMillis /
+            (durations[chatId] || status.durationMillis),
         }));
       } catch (error) {
         console.error("Error playing sound", error);
