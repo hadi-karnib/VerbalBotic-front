@@ -14,6 +14,8 @@ import { Audio } from "expo-av";
 import Slider from "@react-native-community/slider";
 import { API_URL } from "@env";
 import { MaterialIcons } from "@expo/vector-icons";
+import LottieView from "lottie-react-native";
+import loadingAnimation from "../assets/loading.json";
 
 const ChatsScreen = () => {
   const dispatch = useDispatch();
@@ -95,7 +97,14 @@ const ChatsScreen = () => {
     <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
         <ScrollView contentContainerStyle={styles.scrollContainer}>
-          {loading && <Text>Loading...</Text>}
+          {loading && (
+            <LottieView
+              source={loadingAnimation}
+              autoPlay
+              loop
+              style={styles.lottie}
+            />
+          )}
           {error && <Text>Error: {error}</Text>}
           {chats.map((chat) => (
             <View key={chat._id} style={styles.messageContainer}>
@@ -241,6 +250,11 @@ const styles = StyleSheet.create({
     position: "absolute",
     bottom: 4,
     right: 10,
+  },
+  lottie: {
+    width: 100,
+    height: 100,
+    alignSelf: "center",
   },
 });
 
