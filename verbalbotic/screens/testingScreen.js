@@ -1,12 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import getAdvice from "./../ChatGPT_Response/advice";
+import { useDispatch, useSelector } from "react-redux";
+import { getSelf } from "../store/user/userActions";
+
 const TestingScreen = () => {
+  const dispatch = useDispatch();
   const [advice, setAdvice] = useState("");
+  const { user } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    dispatch(getSelf());
+  }, [dispatch]);
 
   const fetchAdvice = async () => {
-    const result = await getAdvice("How can I improve my coding skills?");
-    setAdvice(result);
+    if (user) {
+      const question = `My name is ${user.name}, I work as a ${
+        user.work
+      }, age: ${user.age}. My bio is: "${user.bio}". My speech illness is "${
+        user.illness || "none"
+      }". i have a speech impairment stuttering how can i fix it .give me advice .i dont want introductions just what can i do generally and maybe give me  homework on what to do daily.be creative.i just want what to do no here are some tips or something`;
+      const result = await getAdvice(question);
+      setAdvice(result);
+      console.log(result);
+    }
   };
 
   return (
@@ -16,10 +33,13 @@ const TestingScreen = () => {
         title="Get Advice"
         onPress={fetchAdvice}
         style={styles.button}
-      />
+      >
+        <Text style={styles.buttonText}>Get Advice</Text>
+      </TouchableOpacity>
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   button: {
     backgroundColor: "blue",
@@ -27,6 +47,12 @@ const styles = StyleSheet.create({
     margin: 10,
     marginTop: 100,
     height: "50%",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 16,
   },
   text: {
     fontSize: 20,
@@ -35,4 +61,5 @@ const styles = StyleSheet.create({
     marginTop: 100,
   },
 });
+
 export default TestingScreen;
