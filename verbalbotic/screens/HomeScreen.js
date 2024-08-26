@@ -89,7 +89,70 @@ const HomeScreen = ({ navigation, route }) => {
 };
 
 const styles = StyleSheet.create({
-  // Same styles as before...
+  safeArea: {
+    flex: 1,
+  },
+  container: {
+    flex: 1,
+    justifyContent: "space-between",
+  },
+  header: {
+    marginTop: 20,
+    marginLeft: 20,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#000",
+  },
+  dailyStreakContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: "#FFF3E0",
+    margin: 20,
+    padding: 15,
+    borderRadius: 10,
+  },
+  dailyStreakText: {
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  streakBox: {
+    width: 60,
+    height: 60,
+    backgroundColor: "#E0E0E0",
+    borderRadius: 30,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  streakNumber: {
+    fontSize: 30,
+    color: "#0288D1",
+    fontWeight: "bold",
+  },
+  microphoneContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  microphoneButton: {
+    width: 150,
+    height: 150,
+    backgroundColor: "#B3E5FC",
+    borderRadius: 75,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  recordingButton: {
+    backgroundColor: "#FFCDD2",
+  },
+  analyzingText: {
+    textAlign: "center",
+    marginBottom: 40,
+    fontSize: 16,
+    color: "#555",
+  },
 });
 
 export default HomeScreen;
