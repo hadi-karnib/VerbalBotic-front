@@ -12,7 +12,7 @@ const getAdvice = async (question) => {
       {
         model: model,
         messages: [{ role: "user", content: question }],
-        max_tokens: 100,
+        max_tokens: 1000,
         temperature: 0.7,
       },
       {
