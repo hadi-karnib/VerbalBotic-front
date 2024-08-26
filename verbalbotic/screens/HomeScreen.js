@@ -8,33 +8,69 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { MaterialIcons } from "@expo/vector-icons";
-import AudioRecorderPlayer from "react-native-audio-recorder-player";
+import { Audio } from "expo-av";
 
 const HomeScreen = ({ navigation, route }) => {
   const { streak } = route.params || {};
   const [isRecording, setIsRecording] = useState(false);
+  const [recording, setRecording] = useState(null);
   const [recordingText, setRecordingText] = useState(
     "Press the microphone button to start recording your voice."
   );
-  const [audioFile, setAudioFile] = useState(null);
-  const audioRecorderPlayer = useRef(new AudioRecorderPlayer()).current;
+  const [recordingUri, setRecordingUri] = useState(null);
+  const [durationMillis, setDurationMillis] = useState(0);
+
+  const recordingInterval = useRef(null);
 
   const handleMicrophonePress = async () => {
     if (isRecording) {
-      const result = await audioRecorderPlayer.stopRecorder();
-      audioRecorderPlayer.removeRecordBackListener();
-      setAudioFile(result);
-      setIsRecording(false);
-    } else {
-      const path = "hello.wav";
-      await audioRecorderPlayer.startRecorder(path);
-      audioRecorderPlayer.addRecordBackListener((e) => {
+      // Stop recording
+      try {
+        await recording.stopAndUnloadAsync();
+        clearInterval(recordingInterval.current);
+        const uri = recording.getURI();
+        setRecordingUri(uri);
+        setIsRecording(false);
         setRecordingText(
-          `Recording${".".repeat(Math.floor((e.current_position / 500) % 4))}`
+          "Press the microphone button to start recording your voice."
         );
-      });
-      setIsRecording(true);
+        console.log("Recording stopped and stored at", uri);
+      } catch (error) {
+        console.error("Error stopping recording: ", error);
+      }
+    } else {
+      // Start recording
+      try {
+        await Audio.requestPermissionsAsync();
+
+        const recording = new Audio.Recording();
+        await recording.prepareToRecordAsync(
+          Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY
+        );
+        await recording.startAsync();
+
+        setRecording(recording);
+        setIsRecording(true);
+
+        recordingInterval.current = setInterval(() => {
+          const newDurationMillis = recording
+            .getStatusAsync()
+            .then((status) => status.durationMillis);
+          setDurationMillis(newDurationMillis);
+          setRecordingText(
+            `Recording${".".repeat(Math.floor(newDurationMillis / 1000) % 4)}`
+          );
+        }, 1000);
+      } catch (error) {
+        console.error("Error starting recording: ", error);
+      }
     }
+  };
+
+  const formatDuration = (millis) => {
+    const minutes = Math.floor(millis / 60000);
+    const seconds = ((millis % 60000) / 1000).toFixed(0);
+    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
   };
 
   return (
@@ -67,22 +103,11 @@ const HomeScreen = ({ navigation, route }) => {
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.analyzingText}>{recordingText}</Text>
-        {audioFile && (
-          <View style={styles.audioInfo}>
-            <Text>File: {audioFile}</Text>
-            <Text>
-              Duration:{" "}
-              {Math.round(
-                audioRecorderPlayer.mmssss(
-                  audioRecorderPlayer._player.current_position
-                ) / 1000
-              )}{" "}
-              s
-            </Text>
-            <Text>Size: {new Blob([audioFile]).size / 1024} KB</Text>
-          </View>
-        )}
+        <Text style={styles.analyzingText}>
+          {isRecording
+            ? `Recording... ${formatDuration(durationMillis)}`
+            : recordingText}
+        </Text>
       </SafeAreaView>
     </LinearGradient>
   );
