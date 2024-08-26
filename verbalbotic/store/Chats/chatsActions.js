@@ -2,6 +2,7 @@ import axios from "axios";
 import { chatsActions } from "./chatsSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_URL } from "@env";
+import { Alert } from "react-native";
 
 export const getMyChats = () => async (dispatch) => {
   try {
@@ -46,6 +47,7 @@ export const saveVoiceNote = (formData) => async (dispatch) => {
     );
 
     dispatch(chatsActions.saveVoiceNoteSuccess(response.data));
+    Alert.alert("Login Failed", "Please check your credentials and try again.");
   } catch (error) {
     dispatch(
       chatsActions.saveVoiceNoteFailure(
