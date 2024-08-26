@@ -28,4 +28,30 @@ export const getMyChats = () => async (dispatch) => {
   }
 };
 
-export const saveVoiceNote = (formData) => async (dispatch) => {};
+export const saveVoiceNote = (formData) => async (dispatch) => {
+  try {
+    dispatch(chatsActions.saveVoiceNoteRequest());
+
+    const token = await AsyncStorage.getItem("token");
+
+    const response = await axios.post(
+      `${API_URL}/api/messages/voiceNote`,
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    dispatch(chatsActions.saveVoiceNoteSuccess(response.data));
+  } catch (error) {
+    dispatch(
+      chatsActions.saveVoiceNoteFailure(
+        error.response?.data?.message || error.message
+      )
+    );
+    console.error("Error saving voice note: ", error);
+  }
+};
