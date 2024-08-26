@@ -23,7 +23,7 @@ const HomeScreen = ({ navigation, route }) => {
       interval = setInterval(() => {
         dots = dots.length < 3 ? dots + "." : "";
         setRecordingText(`Recording${dots}`);
-      }, 500);
+      }, 700);
     } else {
       setRecordingText(
         "Press the microphone button to start recording your voice."
