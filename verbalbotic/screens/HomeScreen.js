@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -10,10 +10,32 @@ import { LinearGradient } from "expo-linear-gradient";
 import { MaterialIcons } from "@expo/vector-icons";
 
 const HomeScreen = ({ navigation, route }) => {
-  // Destructure and set default value to avoid undefined
-  const { streak = 0 } = route.params || {};
+  const { streak } = route.params || {};
+  const [isRecording, setIsRecording] = useState(false);
+  const [recordingText, setRecordingText] = useState(
+    "Press the microphone button to start recording your voice."
+  );
 
-  console.log("Streak in HomeScreen:", streak);
+  useEffect(() => {
+    let interval;
+    if (isRecording) {
+      let dots = "";
+      interval = setInterval(() => {
+        dots = dots.length < 3 ? dots + "." : "";
+        setRecordingText(`Recording${dots}`);
+      }, 500);
+    } else {
+      setRecordingText(
+        "Press the microphone button to start recording your voice."
+      );
+    }
+
+    return () => clearInterval(interval);
+  }, [isRecording]);
+
+  const handleMicrophonePress = () => {
+    setIsRecording(!isRecording);
+  };
 
   return (
     <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.container}>
@@ -25,19 +47,27 @@ const HomeScreen = ({ navigation, route }) => {
         <View style={styles.dailyStreakContainer}>
           <Text style={styles.dailyStreakText}>Daily streak</Text>
           <View style={styles.streakBox}>
-            <Text style={styles.streakNumber}>{streak}</Text>
+            <Text style={styles.streakNumber}>{streak || 0}</Text>
           </View>
         </View>
 
         <View style={styles.microphoneContainer}>
-          <TouchableOpacity style={styles.microphoneButton}>
-            <MaterialIcons name="mic" size={100} color="#0288D1" />
+          <TouchableOpacity
+            style={[
+              styles.microphoneButton,
+              isRecording && styles.recordingButton,
+            ]}
+            onPress={handleMicrophonePress}
+          >
+            <MaterialIcons
+              name="mic"
+              size={100}
+              color={isRecording ? "#FF3B30" : "#0288D1"}
+            />
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.analyzingText}>
-          Analyzing ... Result will be underway
-        </Text>
+        <Text style={styles.analyzingText}>{recordingText}</Text>
       </SafeAreaView>
     </LinearGradient>
   );
@@ -98,6 +128,9 @@ const styles = StyleSheet.create({
     borderRadius: 75,
     justifyContent: "center",
     alignItems: "center",
+  },
+  recordingButton: {
+    backgroundColor: "#FFCDD2",
   },
   analyzingText: {
     textAlign: "center",
