@@ -21,6 +21,7 @@ const HomeScreen = ({ navigation, route }) => {
   const [recordingUri, setRecordingUri] = useState(null);
   const [durationMillis, setDurationMillis] = useState(0);
   const [recordingSize, setRecordingSize] = useState(0);
+  const [startTime, setStartTime] = useState(0);
 
   const recordingInterval = useRef(null);
 
@@ -34,8 +35,10 @@ const HomeScreen = ({ navigation, route }) => {
         const uri = recording.getURI();
         setRecordingUri(uri);
 
+        // Get status and duration
         const status = await recording.getStatusAsync();
-        const durationInMillis = status.durationMillis;
+        const durationInMillis =
+          status.durationMillis || Date.now() - startTime; // Fallback to manual calculation
         setDurationMillis(durationInMillis);
 
         // Use FileSystem to get the size of the file
@@ -72,6 +75,7 @@ const HomeScreen = ({ navigation, route }) => {
         await recording.startAsync();
 
         setRecording(recording);
+        setStartTime(Date.now()); // Record the start time
         setIsRecording(true);
 
         recordingInterval.current = setInterval(async () => {
