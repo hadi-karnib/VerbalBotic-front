@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+} from "react-native";
 import getAdvice from "./../ChatGPT_Response/advice";
 import { useDispatch, useSelector } from "react-redux";
 import { getSelf } from "../store/user/userActions";
@@ -19,7 +25,7 @@ const TestingScreen = () => {
         user.work
       }, age: ${user.age}. My bio is: "${user.bio}". My speech illness is "${
         user.illness || "none"
-      }". i have a speech impairment stuttering how can i fix it .give me advice .i dont want introductions just what can i do generally and maybe give me  homework on what to do daily.be creative.i just want what to do no here are some tips or something`;
+      }"..give me advice .i dont want introductions just what can i do generally and maybe give me  homework on what to do daily.be creative.i just want what to do no here are some tips or something.make the answers concice and small u can 3 points excluding the homework if u want but make them unique dont forget to give me a small schedule`;
       const result = await getAdvice(question);
       setAdvice(result);
       console.log(result);
@@ -28,14 +34,16 @@ const TestingScreen = () => {
 
   return (
     <View>
-      <Text style={styles.text}>{advice}</Text>
-      <TouchableOpacity
-        title="Get Advice"
-        onPress={fetchAdvice}
-        style={styles.button}
-      >
-        <Text style={styles.buttonText}>Get Advice</Text>
-      </TouchableOpacity>
+      <ScrollView>
+        <Text style={styles.text}>{advice}</Text>
+        <TouchableOpacity
+          title="Get Advice"
+          onPress={fetchAdvice}
+          style={styles.button}
+        >
+          <Text style={styles.buttonText}>Get Advice</Text>
+        </TouchableOpacity>
+      </ScrollView>
     </View>
   );
 };
