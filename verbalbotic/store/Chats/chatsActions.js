@@ -43,7 +43,10 @@ export const saveVoiceNote = (formData) => async (dispatch) => {
     });
 
     dispatch(chatsActions.saveVoiceNoteSuccess(response.data));
-    Alert.alert("Login Failed", "Please check your credentials and try again.");
+    Alert.alert(
+      "Message uploaded successfully",
+      "Please check your chats and wait for the response."
+    );
   } catch (error) {
     dispatch(
       chatsActions.saveVoiceNoteFailure(
