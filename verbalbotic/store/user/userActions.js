@@ -17,6 +17,7 @@ export const loginUser = (email, password, navigation) => async (dispatch) => {
     });
 
     const { token, success, streak } = response.data;
+    console.log(streak);
 
     if (success) {
       await AsyncStorage.setItem("token", token);
@@ -24,7 +25,7 @@ export const loginUser = (email, password, navigation) => async (dispatch) => {
 
       navigation.reset({
         index: 0,
-        routes: [{ name: "Tabs" }],
+        routes: [{ name: "Tabs", params: { streak } }],
       });
     } else {
       Alert.alert(
