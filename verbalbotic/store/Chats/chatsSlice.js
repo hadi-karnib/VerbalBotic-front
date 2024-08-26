@@ -36,6 +36,10 @@ const chatsSlice = createSlice({
       state.savingVoiceNote = false;
       state.saveVoiceNoteError = action.payload;
     },
+    clearChatErrors: (state) => {
+      state.error = null;
+      state.saveVoiceNoteError = null;
+    },
   },
 });
 
