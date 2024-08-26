@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { MaterialIcons } from "@expo/vector-icons";
+import AudioRecorderPlayer from "react-native-audio-recorder-player";
 
 const HomeScreen = ({ navigation, route }) => {
   const { streak } = route.params || {};
