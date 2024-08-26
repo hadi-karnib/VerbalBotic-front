@@ -52,12 +52,11 @@ const ChatsScreen = () => {
     }
 
     try {
-      // Set audio mode to use the speaker
       await Audio.setAudioModeAsync({
         allowsRecordingIOS: false,
         playsInSilentModeIOS: true,
         staysActiveInBackground: false,
-        playThroughEarpieceAndroid: false, // Ensures Android plays through the speaker
+        playThroughEarpieceAndroid: false,
       });
 
       const fullPath = `${API_URL}/${messagePath}`;
