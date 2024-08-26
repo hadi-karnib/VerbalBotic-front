@@ -28,6 +28,10 @@ const chatsSlice = createSlice({
       state.savingVoiceNote = true;
       state.saveVoiceNoteError = null;
     },
+    saveVoiceNoteSuccess: (state, action) => {
+      state.savingVoiceNote = false;
+      state.chats.push(action.payload);
+    },
   },
 });
 
