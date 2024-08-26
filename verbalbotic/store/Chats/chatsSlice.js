@@ -4,6 +4,8 @@ const initialState = {
   chats: [],
   loading: false,
   error: null,
+  savingVoiceNote: false,
+  saveVoiceNoteError: null,
 };
 
 const chatsSlice = createSlice({
@@ -22,8 +24,9 @@ const chatsSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
-    clearChatErrors: (state) => {
-      state.error = null;
+    saveVoiceNoteRequest: (state) => {
+      state.savingVoiceNote = true;
+      state.saveVoiceNoteError = null;
     },
   },
 });
