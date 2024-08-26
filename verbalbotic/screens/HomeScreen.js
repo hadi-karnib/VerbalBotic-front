@@ -27,7 +27,6 @@ const HomeScreen = ({ navigation, route }) => {
 
   const handleMicrophonePress = async () => {
     if (isRecording) {
-      // Stop recording
       try {
         await recording.stopAndUnloadAsync();
         clearInterval(recordingInterval.current);
@@ -35,13 +34,11 @@ const HomeScreen = ({ navigation, route }) => {
         const uri = recording.getURI();
         setRecordingUri(uri);
 
-        // Get status and duration
         const status = await recording.getStatusAsync();
         const durationInMillis =
-          status.durationMillis || Date.now() - startTime; // Fallback to manual calculation
+          status.durationMillis || Date.now() - startTime;
         setDurationMillis(durationInMillis);
 
-        // Use FileSystem to get the size of the file
         const fileInfo = await FileSystem.getInfoAsync(uri);
         const sizeInBytes = fileInfo.size;
         setRecordingSize(sizeInBytes);
@@ -58,11 +55,9 @@ const HomeScreen = ({ navigation, route }) => {
         console.error("Error stopping recording: ", error);
       }
     } else {
-      // Start recording
       try {
         await Audio.requestPermissionsAsync();
 
-        // Set the audio mode to allow recording
         await Audio.setAudioModeAsync({
           allowsRecordingIOS: true,
           playsInSilentModeIOS: true,
@@ -75,7 +70,7 @@ const HomeScreen = ({ navigation, route }) => {
         await recording.startAsync();
 
         setRecording(recording);
-        setStartTime(Date.now()); // Record the start time
+        setStartTime(Date.now());
         setIsRecording(true);
 
         recordingInterval.current = setInterval(async () => {
@@ -94,7 +89,7 @@ const HomeScreen = ({ navigation, route }) => {
   };
 
   const formatDuration = (millis) => {
-    const totalSeconds = Math.ceil(millis / 1000); // Round up to the nearest second
+    const totalSeconds = Math.ceil(millis / 1000);
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
     return `${seconds}`;
