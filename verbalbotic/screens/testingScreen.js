@@ -25,7 +25,7 @@ const TestingScreen = () => {
         user.work
       }, age: ${user.age}. My bio is: "${user.bio}". My speech illness is "${
         user.illness || "none"
-      }". i have a speech impairment stuttering how can i fix it  .give me advice .i dont want introductions just what can i do generally and maybe give me  homework on what to do daily.be creative.i just want what to do no here are   tips or something.make the answers concice and small u can 3 points excluding the homework if u want but make them unique dont forget to give me a small schedule`;
+      }". i have a speech impairment stuttering how can i fix it maybe the advice can be connected my work if and only if its applicable.give me advice .i dont want introductions just what can i do generally and maybe give me  homework on what to do daily.be creative.i just want what to do no here are   tips or something.make the answers concice and small u can 3 points excluding the homework if u want but make them unique dont forget to give me a small schedule`;
       const result = await getAdvice(question);
       setAdvice(result);
       console.log(result);
