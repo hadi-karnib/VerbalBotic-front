@@ -88,7 +88,7 @@ const Profile = ({ navigation }) => {
                 onPress={() => toggleExpand("1")}
                 style={styles.settingHeader}
               >
-                <Text style={styles.settingText}>Profile Settings</Text>
+                <Text style={styles.settingText}>My Profile</Text>
                 <MaterialIcons
                   name={expandedId === "1" ? "expand-less" : "expand-more"}
                   size={24}
@@ -177,7 +177,7 @@ const Profile = ({ navigation }) => {
                     <QRCode
                       value={user._id || ""}
                       size={120}
-                      color="#0c7076"
+                      color="#00ACC1"
                       backgroundColor="transparent"
                     />
                     <Text style={styles.qrText}>ID: {user._id}</Text>
