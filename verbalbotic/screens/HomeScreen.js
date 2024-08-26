@@ -9,7 +9,8 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { MaterialIcons } from "@expo/vector-icons";
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = ({ navigation, route }) => {
+  const { streak } = route.params || {};
   return (
     <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
