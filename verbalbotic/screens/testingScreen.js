@@ -11,7 +11,7 @@ const TestingScreen = () => {
 
   return (
     <View>
-      <Text>{advice}</Text>
+      <Text style={styles.text}>{advice}</Text>
       <TouchableOpacity
         title="Get Advice"
         onPress={fetchAdvice}
@@ -27,6 +27,12 @@ const styles = StyleSheet.create({
     margin: 10,
     marginTop: 100,
     height: "50%",
+  },
+  text: {
+    fontSize: 20,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginTop: 100,
   },
 });
 export default TestingScreen;
