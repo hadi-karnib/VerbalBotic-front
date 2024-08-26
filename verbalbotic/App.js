@@ -12,6 +12,7 @@ import BioScreen from "./screens/BioScreen";
 import Tabs from "./components/BottomTab";
 import ChatsScreen from "./screens/ChatsScreen";
 import Profile from "./screens/Profile";
+import TestingScreen from "./screens/testingScreen";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -20,7 +21,7 @@ export default function App() {
       <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={{ flex: 1 }}>
         <NavigationContainer>
           <Stack.Navigator
-            initialRouteName="Login"
+            initialRouteName="Test"
             screenOptions={{
               headerShown: false,
             }}
@@ -32,6 +33,7 @@ export default function App() {
             <Stack.Screen name="Profile" component={Profile} />
             <Stack.Screen name="Chats" component={ChatsScreen} />
             <Stack.Screen name="Bio" component={BioScreen} />
+            <Stack.Screen name="Test" component={TestingScreen} />
           </Stack.Navigator>
           <StatusBar style="auto" />
         </NavigationContainer>
