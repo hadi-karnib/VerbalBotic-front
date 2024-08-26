@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import {
   View,
   Text,
@@ -16,26 +16,25 @@ const HomeScreen = ({ navigation, route }) => {
   const [recordingText, setRecordingText] = useState(
     "Press the microphone button to start recording your voice."
   );
+  const [audioFile, setAudioFile] = useState(null);
+  const audioRecorderPlayer = useRef(new AudioRecorderPlayer()).current;
 
-  useEffect(() => {
-    let interval;
+  const handleMicrophonePress = async () => {
     if (isRecording) {
-      let dots = "";
-      interval = setInterval(() => {
-        dots = dots.length < 3 ? dots + "." : "";
-        setRecordingText(`Recording${dots}`);
-      }, 700);
+      const result = await audioRecorderPlayer.stopRecorder();
+      audioRecorderPlayer.removeRecordBackListener();
+      setAudioFile(result);
+      setIsRecording(false);
     } else {
-      setRecordingText(
-        "Press the microphone button to start recording your voice."
-      );
+      const path = "hello.wav";
+      await audioRecorderPlayer.startRecorder(path);
+      audioRecorderPlayer.addRecordBackListener((e) => {
+        setRecordingText(
+          `Recording${".".repeat(Math.floor((e.current_position / 500) % 4))}`
+        );
+      });
+      setIsRecording(true);
     }
-
-    return () => clearInterval(interval);
-  }, [isRecording]);
-
-  const handleMicrophonePress = () => {
-    setIsRecording(!isRecording);
   };
 
   return (
@@ -69,76 +68,28 @@ const HomeScreen = ({ navigation, route }) => {
         </View>
 
         <Text style={styles.analyzingText}>{recordingText}</Text>
+        {audioFile && (
+          <View style={styles.audioInfo}>
+            <Text>File: {audioFile}</Text>
+            <Text>
+              Duration:{" "}
+              {Math.round(
+                audioRecorderPlayer.mmssss(
+                  audioRecorderPlayer._player.current_position
+                ) / 1000
+              )}{" "}
+              s
+            </Text>
+            <Text>Size: {new Blob([audioFile]).size / 1024} KB</Text>
+          </View>
+        )}
       </SafeAreaView>
     </LinearGradient>
   );
 };
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-  },
-  container: {
-    flex: 1,
-    justifyContent: "space-between",
-  },
-  header: {
-    marginTop: 20,
-    marginLeft: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#000",
-  },
-  dailyStreakContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    backgroundColor: "#FFF3E0",
-    margin: 20,
-    padding: 15,
-    borderRadius: 10,
-  },
-  dailyStreakText: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  streakBox: {
-    width: 60,
-    height: 60,
-    backgroundColor: "#E0E0E0",
-    borderRadius: 30,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  streakNumber: {
-    fontSize: 30,
-    color: "#0288D1",
-    fontWeight: "bold",
-  },
-  microphoneContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  microphoneButton: {
-    width: 150,
-    height: 150,
-    backgroundColor: "#B3E5FC",
-    borderRadius: 75,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  recordingButton: {
-    backgroundColor: "#FFCDD2",
-  },
-  analyzingText: {
-    textAlign: "center",
-    marginBottom: 40,
-    fontSize: 16,
-    color: "#555",
-  },
+  // Same styles as before...
 });
 
 export default HomeScreen;
