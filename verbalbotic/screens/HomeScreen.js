@@ -43,6 +43,12 @@ const HomeScreen = ({ navigation, route }) => {
       try {
         await Audio.requestPermissionsAsync();
 
+        // Set the audio mode to allow recording
+        await Audio.setAudioModeAsync({
+          allowsRecordingIOS: true,
+          playsInSilentModeIOS: true,
+        });
+
         const recording = new Audio.Recording();
         await recording.prepareToRecordAsync(
           Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY
