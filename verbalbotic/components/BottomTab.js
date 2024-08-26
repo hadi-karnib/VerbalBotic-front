@@ -7,7 +7,9 @@ import ProfileScreen from "../screens/Profile";
 
 const Tab = createBottomTabNavigator();
 
-const Tabs = () => {
+const Tabs = ({ route }) => {
+  const { streak } = route.params || {};
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -29,6 +31,7 @@ const Tabs = () => {
         name="Home"
         component={HomeScreen}
         options={{ headerShown: false }}
+        initialParams={{ streak }}
       />
       <Tab.Screen
         name="Chats"
