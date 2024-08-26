@@ -27,3 +27,5 @@ export const getMyChats = () => async (dispatch) => {
     console.log("failure");
   }
 };
+
+export const saveVoiceNote = (formData) => async (dispatch) => {};
