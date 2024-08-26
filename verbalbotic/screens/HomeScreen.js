@@ -10,8 +10,10 @@ import { LinearGradient } from "expo-linear-gradient";
 import { MaterialIcons } from "@expo/vector-icons";
 
 const HomeScreen = ({ navigation, route }) => {
-  const { streak } = route.params || {};
-  console.log("Streak: ", streak);
+  // Destructure and set default value to avoid undefined
+  const { streak = 0 } = route.params || {};
+
+  console.log("Streak in HomeScreen:", streak);
 
   return (
     <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.container}>
@@ -23,7 +25,7 @@ const HomeScreen = ({ navigation, route }) => {
         <View style={styles.dailyStreakContainer}>
           <Text style={styles.dailyStreakText}>Daily streak</Text>
           <View style={styles.streakBox}>
-            <Text style={styles.streakNumber}>{streak || 0}</Text>
+            <Text style={styles.streakNumber}>{streak}</Text>
           </View>
         </View>
 
