@@ -32,7 +32,7 @@ const ChatsScreen = () => {
     if (chats.length > 0) {
       const initialDurations = {};
       chats.forEach((chat) => {
-        initialDurations[chat._id] = chat.voiceNoteMetadata.duration * 1000; // Convert to milliseconds
+        initialDurations[chat._id] = chat.voiceNoteMetadata.duration * 1000;
       });
       setDurations(initialDurations);
     }
