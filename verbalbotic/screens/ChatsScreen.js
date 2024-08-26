@@ -52,6 +52,14 @@ const ChatsScreen = () => {
     }
 
     try {
+      // Set audio mode to use the speaker
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: false,
+        playsInSilentModeIOS: true,
+        staysActiveInBackground: false,
+        playThroughEarpieceAndroid: false, // Ensures Android plays through the speaker
+      });
+
       const fullPath = `${API_URL}/${messagePath}`;
       console.log("Playing voice note from:", fullPath);
 
@@ -76,7 +84,6 @@ const ChatsScreen = () => {
       console.error("Error playing sound", error);
     }
   };
-
   const stopVoiceNote = async () => {
     if (currentPlaying && currentPlaying.sound) {
       await currentPlaying.sound.pauseAsync();
