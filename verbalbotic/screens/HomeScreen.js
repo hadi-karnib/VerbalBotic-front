@@ -9,6 +9,7 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Audio } from "expo-av";
+import * as FileSystem from "expo-file-system";
 
 const HomeScreen = ({ navigation, route }) => {
   const { streak } = route.params || {};
@@ -19,6 +20,7 @@ const HomeScreen = ({ navigation, route }) => {
   );
   const [recordingUri, setRecordingUri] = useState(null);
   const [durationMillis, setDurationMillis] = useState(0);
+  const [recordingSize, setRecordingSize] = useState(0);
 
   const recordingInterval = useRef(null);
 
@@ -28,13 +30,27 @@ const HomeScreen = ({ navigation, route }) => {
       try {
         await recording.stopAndUnloadAsync();
         clearInterval(recordingInterval.current);
+
         const uri = recording.getURI();
         setRecordingUri(uri);
+
+        const status = await recording.getStatusAsync();
+        const durationInMillis = status.durationMillis;
+        setDurationMillis(durationInMillis);
+
+        // Use FileSystem to get the size of the file
+        const fileInfo = await FileSystem.getInfoAsync(uri);
+        const sizeInBytes = fileInfo.size;
+        setRecordingSize(sizeInBytes);
+
         setIsRecording(false);
         setRecordingText(
           "Press the microphone button to start recording your voice."
         );
-        console.log("Recording stopped and stored at", uri);
+
+        console.log(`Recording stopped and stored at ${uri}`);
+        console.log(`Recording duration: ${durationInMillis / 1000} seconds`);
+        console.log(`Recording size: ${sizeInBytes} bytes`);
       } catch (error) {
         console.error("Error stopping recording: ", error);
       }
@@ -58,13 +74,13 @@ const HomeScreen = ({ navigation, route }) => {
         setRecording(recording);
         setIsRecording(true);
 
-        recordingInterval.current = setInterval(() => {
-          const newDurationMillis = recording
-            .getStatusAsync()
-            .then((status) => status.durationMillis);
-          setDurationMillis(newDurationMillis);
+        recordingInterval.current = setInterval(async () => {
+          const status = await recording.getStatusAsync();
+          setDurationMillis(status.durationMillis);
           setRecordingText(
-            `Recording${".".repeat(Math.floor(newDurationMillis / 1000) % 4)}`
+            `Recording${".".repeat(
+              Math.floor(status.durationMillis / 1000) % 4
+            )}`
           );
         }, 1000);
       } catch (error) {
