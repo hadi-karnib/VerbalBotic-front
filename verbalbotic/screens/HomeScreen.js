@@ -57,14 +57,13 @@ const HomeScreen = ({ navigation, route }) => {
         );
         console.log(`Recording size: ${sizeInBytes} bytes`);
 
-        // Prepare form data
         const formData = new FormData();
         formData.append("voiceNote", {
           uri,
-          name: "voiceNote.m4a", // Ensure this matches the recorded file type
+          name: "voiceNote.m4a",
           type: "audio/m4a",
         });
-        formData.append("duration", Math.ceil(durationInMillis / 1000));
+        formData.append("duration", Math.floor(durationInMillis / 1000));
         formData.append("format", "m4a");
         formData.append("size", sizeInBytes);
 
