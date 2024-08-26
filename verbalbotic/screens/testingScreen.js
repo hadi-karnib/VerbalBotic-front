@@ -1,5 +1,5 @@
-import React from "react";
-import { View, Text } from "react-native";
+import React, { useState } from "react";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import getAdvice from "./../ChatGPT_Response/advice";
 const TestingScreen = () => {
   const [advice, setAdvice] = useState("");
@@ -12,9 +12,21 @@ const TestingScreen = () => {
   return (
     <View>
       <Text>{advice}</Text>
-      <Button title="Get Advice" onPress={fetchAdvice} />
+      <TouchableOpacity
+        title="Get Advice"
+        onPress={fetchAdvice}
+        style={styles.button}
+      />
     </View>
   );
 };
-
+const styles = StyleSheet.create({
+  button: {
+    backgroundColor: "blue",
+    padding: 10,
+    margin: 10,
+    marginTop: 100,
+    height: "50%",
+  },
+});
 export default TestingScreen;
