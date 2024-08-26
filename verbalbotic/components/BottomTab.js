@@ -15,7 +15,7 @@ const Tabs = ({ route }) => {
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           if (route.name === "Home") {
-            return <MaterialIcons name="home" size={size} color={color} />;
+            return <MaterialIcons name="home" size={35} color={color} />;
           } else if (route.name === "Chats") {
             return <FontAwesome5 name="robot" size={size} color={color} />;
           } else if (route.name === "Profile") {
