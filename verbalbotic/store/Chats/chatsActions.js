@@ -35,16 +35,12 @@ export const saveVoiceNote = (formData) => async (dispatch) => {
 
     const token = await AsyncStorage.getItem("token");
 
-    const response = await axios.post(
-      `${API_URL}/api/messages/voiceNote`,
-      formData,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
+    const response = await axios.post(`${API_URL}/api/messages/`, formData, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
     dispatch(chatsActions.saveVoiceNoteSuccess(response.data));
     Alert.alert("Login Failed", "Please check your credentials and try again.");
