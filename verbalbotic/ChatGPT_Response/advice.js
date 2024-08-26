@@ -1,8 +1,9 @@
 import axios from "axios";
+import { CHATGPT_API,CHAT_MODEL } from "@env";
 
 const getAdvice = async (question) => {
-  const apiKey = process.env.CHATGPT_API;
-  const model = process.env.CHAT_MODEL || "text-davinci-003";
+  const apiKey = CHATGPT_API;
+  const model =CHAT_MODEL || "text-davinci-003";
 
   const url = "https://api.openai.com/v1/completions";
 
