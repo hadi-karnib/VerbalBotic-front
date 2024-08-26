@@ -16,7 +16,7 @@ export const loginUser = (email, password, navigation) => async (dispatch) => {
       password,
     });
 
-    const { token, success } = response.data;
+    const { token, success, streak } = response.data;
 
     if (success) {
       await AsyncStorage.setItem("token", token);
