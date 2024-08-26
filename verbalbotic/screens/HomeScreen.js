@@ -10,10 +10,12 @@ import { LinearGradient } from "expo-linear-gradient";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Audio } from "expo-av";
 import * as FileSystem from "expo-file-system";
+import { useDispatch } from "react-redux";
 import { saveVoiceNote } from "../store/Chats/chatsActions";
 
 const HomeScreen = ({ navigation, route }) => {
   const { streak } = route.params || {};
+  const dispatch = useDispatch();
   const [isRecording, setIsRecording] = useState(false);
   const [recording, setRecording] = useState(null);
   const [recordingText, setRecordingText] = useState(
@@ -50,8 +52,24 @@ const HomeScreen = ({ navigation, route }) => {
         );
 
         console.log(`Recording stopped and stored at ${uri}`);
-        console.log(`Recording duration: ${formatDuration(durationInMillis)}`);
+        console.log(
+          `Recording duration: ${formatDuration(durationInMillis)} seconds`
+        );
         console.log(`Recording size: ${sizeInBytes} bytes`);
+
+        // Prepare form data
+        const formData = new FormData();
+        formData.append("voiceNote", {
+          uri,
+          name: "voiceNote.m4a", // Ensure this matches the recorded file type
+          type: "audio/m4a",
+        });
+        formData.append("duration", Math.ceil(durationInMillis / 1000));
+        formData.append("format", "m4a");
+        formData.append("size", sizeInBytes);
+
+        // Dispatch saveVoiceNote action to save the voice note
+        dispatch(saveVoiceNote(formData));
       } catch (error) {
         console.error("Error stopping recording: ", error);
       }
@@ -93,7 +111,7 @@ const HomeScreen = ({ navigation, route }) => {
     const totalSeconds = Math.ceil(millis / 1000);
     const minutes = Math.floor(totalSeconds / 60);
     const seconds = totalSeconds % 60;
-    return `${seconds}`;
+    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
   };
 
   return (
