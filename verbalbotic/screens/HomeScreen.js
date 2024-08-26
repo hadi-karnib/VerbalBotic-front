@@ -21,7 +21,7 @@ const HomeScreen = ({ navigation, route }) => {
         <View style={styles.dailyStreakContainer}>
           <Text style={styles.dailyStreakText}>Daily streak</Text>
           <View style={styles.streakBox}>
-            <Text style={styles.streakNumber}>2</Text>
+            <Text style={styles.streakNumber}>{streak || 0}</Text>
           </View>
         </View>
 
