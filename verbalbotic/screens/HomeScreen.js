@@ -52,7 +52,7 @@ const HomeScreen = ({ navigation, route }) => {
         );
 
         console.log(`Recording stopped and stored at ${uri}`);
-        console.log(`Recording duration: ${durationInMillis / 1000} seconds`);
+        console.log(`Recording duration: ${formatDuration(durationInMillis)}`);
         console.log(`Recording size: ${sizeInBytes} bytes`);
       } catch (error) {
         console.error("Error stopping recording: ", error);
@@ -94,9 +94,10 @@ const HomeScreen = ({ navigation, route }) => {
   };
 
   const formatDuration = (millis) => {
-    const minutes = Math.floor(millis / 60000);
-    const seconds = ((millis % 60000) / 1000).toFixed(0);
-    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+    const totalSeconds = Math.ceil(millis / 1000); // Round up to the nearest second
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${seconds}`;
   };
 
   return (
