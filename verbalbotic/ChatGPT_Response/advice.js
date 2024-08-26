@@ -1,20 +1,18 @@
 import axios from "axios";
 import { CHATGPT_API, CHAT_MODEL } from "@env";
-console.log(CHATGPT_API);
-console.log(CHAT_MODEL);
 
 const getAdvice = async (question) => {
   const apiKey = CHATGPT_API;
-  const model = CHAT_MODEL;
+  const model = CHAT_MODEL || "gpt-3.5-turbo"; // Default to gpt-3.5-turbo if CHAT_MODEL isn't set
 
-  const url = "https://api.openai.com/v1/completions";
+  const url = "https://api.openai.com/v1/chat/completions";
 
   try {
     const response = await axios.post(
       url,
       {
         model: model,
-        prompt: question,
+        messages: [{ role: "user", content: question }],
         max_tokens: 100,
         temperature: 0.7,
       },
@@ -26,7 +24,7 @@ const getAdvice = async (question) => {
       }
     );
 
-    const advice = response.data.choices[0].text.trim();
+    const advice = response.data.choices[0].message.content.trim();
     return advice;
   } catch (error) {
     console.error("Error fetching advice:", error);
