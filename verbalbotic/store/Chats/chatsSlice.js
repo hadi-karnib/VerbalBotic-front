@@ -70,7 +70,10 @@ const chatsSlice = createSlice({
         state.chats[updatedMessageIndex] = action.payload;
       }
     },
-
+    updateAfterAnalysisFailure: (state, action) => {
+      state.analyzingVoiceNote = false;
+      state.analysisError = action.payload;
+    },
     clearChatErrors: (state) => {
       state.error = null;
       state.saveVoiceNoteError = null;
