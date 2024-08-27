@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,9 +6,11 @@ import {
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
+  InteractionManager,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useDispatch, useSelector } from "react-redux";
+import { useFocusEffect } from "@react-navigation/native";
 import { getMyChats } from "../store/Chats/chatsActions";
 import { Audio } from "expo-av";
 import Slider from "@react-native-community/slider";
@@ -23,6 +25,7 @@ const ChatsScreen = () => {
   const [currentPlaying, setCurrentPlaying] = useState(null);
   const [progresses, setProgresses] = useState({});
   const [durations, setDurations] = useState({});
+  const scrollViewRef = useRef(null);
 
   useEffect(() => {
     dispatch(getMyChats());
@@ -37,6 +40,16 @@ const ChatsScreen = () => {
       setDurations(initialDurations);
     }
   }, [chats]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (chats.length > 0) {
+        InteractionManager.runAfterInteractions(() => {
+          scrollViewRef.current?.scrollToEnd({ animated: true });
+        });
+      }
+    }, [chats])
+  );
 
   const playVoiceNote = async (chatId, messagePath) => {
     if (currentPlaying && currentPlaying.sound) {
@@ -83,6 +96,7 @@ const ChatsScreen = () => {
       console.error("Error playing sound", error);
     }
   };
+
   const stopVoiceNote = async () => {
     if (currentPlaying && currentPlaying.sound) {
       await currentPlaying.sound.pauseAsync();
@@ -145,7 +159,10 @@ const ChatsScreen = () => {
   return (
     <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
-        <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <ScrollView
+          contentContainerStyle={styles.scrollContainer}
+          ref={scrollViewRef}
+        >
           {loading && (
             <View style={styles.lottieContainer}>
               <LottieView
