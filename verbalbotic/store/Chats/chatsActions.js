@@ -56,3 +56,32 @@ export const saveVoiceNote = (formData) => async (dispatch) => {
     console.error("Error saving voice note: ", error);
   }
 };
+
+export const updateAfterChatGPT = (messageId) => async (dispatch) => {
+  try {
+    dispatch(chatsActions.updateChatGPTRequest());
+
+    const token = await AsyncStorage.getItem("token");
+
+    const response = await axios.patch(
+      `${API_URL}/api/messages/${messageId}/chatgpt`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    dispatch(chatsActions.updateChatGPTSuccess(response.data));
+    Alert.alert("AI Response Updated", "The response has been updated.");
+  } catch (error) {
+    dispatch(
+      chatsActions.updateChatGPTFailure(
+        error.response?.data?.message || error.message
+      )
+    );
+    console.error("Error updating AI response: ", error);
+  }
+};
