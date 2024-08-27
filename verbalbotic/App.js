@@ -14,6 +14,7 @@ import ChatsScreen from "./screens/ChatsScreen";
 import Profile from "./screens/Profile";
 import TestingScreen from "./screens/testingScreen";
 import AdminHome from "./screens/admin/adminHome";
+import AdminProfile from "./screens/admin/adminProfile";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
