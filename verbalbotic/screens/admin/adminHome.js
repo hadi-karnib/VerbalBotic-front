@@ -35,7 +35,7 @@ const AdminHome = () => {
             {error && <Text>Error: {error}</Text>}
             {!loading && children.length === 0 && (
               <Text style={styles.noChildrenText}>
-                You still haven't added a child.
+                You still haven't added a child Lets fix that.
               </Text>
             )}
             {!loading &&
