@@ -26,7 +26,7 @@ export const loginUser = (email, password, navigation) => async (dispatch) => {
       if (UserType === "parent") {
         navigation.reset({
           index: 0,
-          routes: [{ name: "AdminTabs", params: { streak } }],
+          routes: [{ name: "adminTabs", params: { streak } }],
         });
       } else if (UserType === "child") {
         navigation.reset({
