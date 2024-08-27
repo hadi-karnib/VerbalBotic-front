@@ -40,6 +40,16 @@ const chatsSlice = createSlice({
       state.updatingChatGPT = true;
       state.updateChatGPTError = null;
     },
+    updateChatGPTSuccess: (state, action) => {
+      state.updatingChatGPT = false;
+      // Find and update the specific message in the chat array
+      const updatedMessageIndex = state.chats.findIndex(
+        (chat) => chat._id === action.payload._id
+      );
+      if (updatedMessageIndex !== -1) {
+        state.chats[updatedMessageIndex] = action.payload;
+      }
+    },
 
     clearChatErrors: (state) => {
       state.error = null;
