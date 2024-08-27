@@ -29,18 +29,18 @@ const AdminTabs = ({ route }) => {
     >
       <Tab.Screen
         name="Home"
-        component={HomeScreen}
+        component={AdminHome}
         options={{ headerShown: false }}
         initialParams={{ streak }}
       />
       <Tab.Screen
-        name="Chats"
-        component={ChatsScreen}
+        name="adminChildren"
+        component={Adminchildren}
         options={{ headerShown: false }}
       />
       <Tab.Screen
-        name="Profile"
-        component={ProfileScreen}
+        name="adminProfile"
+        component={AdminProfile}
         options={{ headerShown: false }}
       />
     </Tab.Navigator>
