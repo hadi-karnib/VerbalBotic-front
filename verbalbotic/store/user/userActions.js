@@ -117,7 +117,10 @@ export const addBio = (bioData, navigation) => async (dispatch) => {
     if (success) {
       dispatch(userActions.updateUserSuccess(data));
       Alert.alert("Bio Updated", "Your bio has been successfully updated.");
-      navigation.navigate("Home");
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "Tabs", params: { streak } }],
+      });
     } else {
       Alert.alert("Update Failed", "Could not update bio, please try again.");
     }
