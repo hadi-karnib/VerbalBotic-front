@@ -77,6 +77,9 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3, // Adds shadow for Android
   },
+  lastChildItem: {
+    marginBottom: 20, // Extra margin for the last child
+  },
   childName: {
     fontSize: 18,
     color: "#0288D1",
@@ -89,7 +92,8 @@ const styles = StyleSheet.create({
     flex: 1, // Makes the info box fill the remaining space
     backgroundColor: "#F5F5F5",
     padding: 20,
-    borderRadius: 20,
+    borderTopLeftRadius: 60,
+    borderTopRightRadius: 60,
     justifyContent: "center",
     alignItems: "center",
     shadowColor: "#000",
@@ -97,10 +101,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3, // Adds shadow for Android
-    margin: 20, // Adjust margin for better spacing
   },
   infoText: {
-    fontSize: 16,
+    fontSize: 32,
     color: "#333",
     textAlign: "center",
   },
