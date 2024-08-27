@@ -42,6 +42,7 @@ export default function App() {
             <Stack.Screen name="adminHome" component={AdminHome} />
             <Stack.Screen name="adminProfile" component={AdminProfile} />
             <Stack.Screen name="adminChildren" component={Adminchildren} />
+            <Stack.Screen name="adminTabs" component={AdminTabs} />
           </Stack.Navigator>
           <StatusBar style="auto" />
         </NavigationContainer>
