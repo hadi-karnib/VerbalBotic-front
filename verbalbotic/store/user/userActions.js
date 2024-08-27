@@ -23,10 +23,19 @@ export const loginUser = (email, password, navigation) => async (dispatch) => {
       await AsyncStorage.setItem("token", token);
       dispatch(userActions.loginUserSuccess(response.data));
 
-      navigation.reset({
-        index: 0,
-        routes: [{ name: "Tabs", params: { streak } }],
-      });
+      if (UserType === "parent") {
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "AdminTabs", params: { streak } }],
+        });
+      } else if (UserType === "child") {
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "Tabs", params: { streak } }],
+        });
+      } else {
+        Alert.alert("Login Error", "Unknown UserType, please contact support.");
+      }
     } else {
       Alert.alert(
         "Login Failed",
@@ -54,12 +63,28 @@ export const signupUser = (formData, navigation) => async (dispatch) => {
     });
 
     console.log("signup response: ", response);
-    const { token, success, UserType } = response.data;
+    const { token, success, streak, UserType } = response.data;
 
     if (success) {
       await AsyncStorage.setItem("token", token);
       dispatch(userActions.signupUserSuccess(response.data));
-      navigation.navigate("Bio");
+
+      if (UserType === "parent") {
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "AdminTabs", params: { streak } }],
+        });
+      } else if (UserType === "child") {
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "Tabs", params: { streak } }],
+        });
+      } else {
+        Alert.alert(
+          "Signup Error",
+          "Unknown UserType, please contact support."
+        );
+      }
     } else {
       Alert.alert("Signup Failed", "Please try again.");
     }
@@ -72,6 +97,7 @@ export const signupUser = (formData, navigation) => async (dispatch) => {
     );
   }
 };
+
 export const logoutUser = (navigation) => async (dispatch) => {
   try {
     await AsyncStorage.removeItem("token");
