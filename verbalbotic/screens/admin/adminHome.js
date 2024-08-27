@@ -49,8 +49,10 @@ const AdminHome = () => {
                   ]}
                   onPress={handleChildPress}
                 >
-                  <Text style={styles.childName}>{child.name}</Text>
-                  <Text style={styles.childAge}>{child.age} years</Text>
+                  <View style={styles.childRow}>
+                    <Text style={styles.childName}>{child.name}</Text>
+                    <Text style={styles.childAge}>{child.age} years</Text>
+                  </View>
                   <MaterialIcons
                     name="arrow-forward-ios"
                     size={20}
@@ -107,6 +109,11 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 3, // Adds shadow for Android
   },
+  childRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    flex: 1, // Ensures that the text and icon are spaced correctly
+  },
   lastChildItem: {
     marginBottom: 20, // Extra margin for the last child
   },
@@ -119,10 +126,12 @@ const styles = StyleSheet.create({
   childName: {
     fontSize: 18,
     color: "#0288D1",
+    flex: 1,
   },
   childAge: {
     fontSize: 16,
     color: "#757575",
+    marginRight: 10, // Add margin between age and icon
   },
   infoBox: {
     flex: 1, // Makes the info box fill the remaining space
