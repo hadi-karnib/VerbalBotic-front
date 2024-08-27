@@ -14,11 +14,11 @@ const AdminTabs = ({ route }) => {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
-          if (route.name === "Home") {
+          if (route.name === "adminHome") {
             return <MaterialIcons name="home" size={35} color={color} />;
-          } else if (route.name === "Chats") {
+          } else if (route.name === "adminChildren") {
             return <FontAwesome5 name="robot" size={size} color={color} />;
-          } else if (route.name === "Profile") {
+          } else if (route.name === "adminProfile") {
             return <FontAwesome5 name="user" size={size} color={color} />;
           }
         },
