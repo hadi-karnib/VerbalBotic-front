@@ -1,11 +1,11 @@
-import { createSlice } from "@reduxjs/toolkit";
-
 const initialState = {
   chats: [],
   loading: false,
   error: null,
   savingVoiceNote: false,
   saveVoiceNoteError: null,
+  updatingChatGPT: false,
+  updateChatGPTError: null,
 };
 
 const chatsSlice = createSlice({
@@ -36,9 +36,15 @@ const chatsSlice = createSlice({
       state.savingVoiceNote = false;
       state.saveVoiceNoteError = action.payload;
     },
+    updateChatGPTRequest: (state) => {
+      state.updatingChatGPT = true;
+      state.updateChatGPTError = null;
+    },
+
     clearChatErrors: (state) => {
       state.error = null;
       state.saveVoiceNoteError = null;
+      state.updateChatGPTError = null;
     },
   },
 });
