@@ -63,28 +63,12 @@ export const signupUser = (formData, navigation) => async (dispatch) => {
     });
 
     console.log("signup response: ", response);
-    const { token, success, streak, UserType } = response.data;
+    const { token, success, UserType } = response.data;
 
     if (success) {
       await AsyncStorage.setItem("token", token);
       dispatch(userActions.signupUserSuccess(response.data));
-
-      if (UserType === "parent") {
-        navigation.reset({
-          index: 0,
-          routes: [{ name: "AdminTabs", params: { streak } }],
-        });
-      } else if (UserType === "child") {
-        navigation.reset({
-          index: 0,
-          routes: [{ name: "Tabs", params: { streak } }],
-        });
-      } else {
-        Alert.alert(
-          "Signup Error",
-          "Unknown UserType, please contact support."
-        );
-      }
+      navigation.navigate("Bio");
     } else {
       Alert.alert("Signup Failed", "Please try again.");
     }
