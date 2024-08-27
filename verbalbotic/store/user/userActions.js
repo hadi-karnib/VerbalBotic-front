@@ -16,7 +16,7 @@ export const loginUser = (email, password, navigation) => async (dispatch) => {
       password,
     });
 
-    const { token, success, streak } = response.data;
+    const { token, success, streak, UserType } = response.data;
     console.log(streak);
 
     if (success) {
@@ -54,7 +54,7 @@ export const signupUser = (formData, navigation) => async (dispatch) => {
     });
 
     console.log("signup response: ", response);
-    const { token, success } = response.data;
+    const { token, success, UserType } = response.data;
 
     if (success) {
       await AsyncStorage.setItem("token", token);
