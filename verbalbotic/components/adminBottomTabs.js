@@ -1,9 +1,9 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
-import HomeScreen from "../screens/HomeScreen";
-import ChatsScreen from "../screens/ChatsScreen";
-import ProfileScreen from "../screens/Profile";
+import AdminHome from "../screens/admin/adminHome";
+import AdminProfile from "../screens/admin/adminProfile";
+import Adminchildren from "../screens/admin/adminchildren";
 
 const Tab = createBottomTabNavigator();
 
