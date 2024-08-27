@@ -15,6 +15,7 @@ import Profile from "./screens/Profile";
 import TestingScreen from "./screens/testingScreen";
 import AdminHome from "./screens/admin/adminHome";
 import AdminProfile from "./screens/admin/adminProfile";
+import AdminTabs from "./components/adminBottomTabs";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
