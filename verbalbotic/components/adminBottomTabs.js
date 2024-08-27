@@ -14,17 +14,22 @@ const AdminTabs = ({ route }) => {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
-          if (route.name === "adminHome") {
+          if (route.name === "Home") {
             return <MaterialIcons name="home" size={35} color={color} />;
-          } else if (route.name === "adminChildren") {
+          } else if (route.name === "Children Chats") {
             return <FontAwesome5 name="robot" size={size} color={color} />;
-          } else if (route.name === "adminProfile") {
+          } else if (route.name === "Profile") {
             return <FontAwesome5 name="user" size={size} color={color} />;
           }
         },
+        tabBarLabelStyle: { marginTop: 2 },
         tabBarActiveTintColor: "#0288D1",
         tabBarInactiveTintColor: "gray",
-        tabBarStyle: { backgroundColor: "#F5F5F5", paddingTop: 10 },
+        tabBarStyle: {
+          backgroundColor: "#F5F5F5",
+          marginBottom: -10,
+          paddingTop: 7,
+        },
       })}
     >
       <Tab.Screen
@@ -34,12 +39,12 @@ const AdminTabs = ({ route }) => {
         initialParams={{ streak }}
       />
       <Tab.Screen
-        name="adminChildren"
+        name="Children Chats"
         component={Adminchildren}
         options={{ headerShown: false }}
       />
       <Tab.Screen
-        name="adminProfile"
+        name="Profile"
         component={AdminProfile}
         options={{ headerShown: false }}
       />
