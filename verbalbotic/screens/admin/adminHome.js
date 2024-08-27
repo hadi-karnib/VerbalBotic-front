@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -7,8 +7,23 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchChildren } from "../../store/children/childActions";
+import { useNavigation } from "@react-navigation/native";
 
 const AdminHome = () => {
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+  const { children, loading, error } = useSelector((state) => state.children);
+
+  useEffect(() => {
+    dispatch(fetchChildren());
+  }, [dispatch]);
+
+  const handleChildPress = () => {
+    navigation.navigate("adminProfile");
+  };
+
   return (
     <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.gradient}>
       <SafeAreaView style={styles.safeArea}>
@@ -16,24 +31,33 @@ const AdminHome = () => {
           <View style={styles.childrenList}>
             <Text style={styles.title}>Children</Text>
 
-            <TouchableOpacity style={styles.childItem}>
-              <Text style={styles.childName}>Child 1</Text>
-              <Text style={styles.childAge}>8 years</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.childItem}>
-              <Text style={styles.childName}>Child 2</Text>
-              <Text style={styles.childAge}>8 years</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.childItem}>
-              <Text style={styles.childName}>Child 3</Text>
-              <Text style={styles.childAge}>8 years</Text>
-            </TouchableOpacity>
+            {loading && <Text>Loading...</Text>}
+            {error && <Text>Error: {error}</Text>}
+            {!loading && children.length === 0 && (
+              <Text style={styles.noChildrenText}>
+                You still haven't added a child.
+              </Text>
+            )}
+            {!loading &&
+              children.map((child, index) => (
+                <TouchableOpacity
+                  key={child._id}
+                  style={[
+                    styles.childItem,
+                    index === children.length - 1 && styles.lastChildItem, // Apply extra margin to the last child
+                  ]}
+                  onPress={handleChildPress}
+                >
+                  <Text style={styles.childName}>{child.name}</Text>
+                  <Text style={styles.childAge}>{child.age} years</Text>
+                </TouchableOpacity>
+              ))}
           </View>
 
           <View style={styles.infoBox}>
             <Text style={styles.infoText}>
               Here you can monitor what your child talks with our AI and what
-              his tasks are to perform better.
+              their tasks are to perform better.
             </Text>
           </View>
         </View>
@@ -51,7 +75,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    justifyContent: "space-between", // Ensure the children and info box are spaced correctly
+    justifyContent: "space-between",
   },
   title: {
     fontSize: 24,
@@ -79,6 +103,12 @@ const styles = StyleSheet.create({
   },
   lastChildItem: {
     marginBottom: 20, // Extra margin for the last child
+  },
+  noChildrenText: {
+    fontSize: 18,
+    color: "#757575",
+    textAlign: "center",
+    marginTop: 20,
   },
   childName: {
     fontSize: 18,
