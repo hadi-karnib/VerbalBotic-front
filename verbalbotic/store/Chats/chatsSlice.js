@@ -50,7 +50,10 @@ const chatsSlice = createSlice({
         state.chats[updatedMessageIndex] = action.payload;
       }
     },
-
+    updateChatGPTFailure: (state, action) => {
+      state.updatingChatGPT = false;
+      state.updateChatGPTError = action.payload;
+    },
     clearChatErrors: (state) => {
       state.error = null;
       state.saveVoiceNoteError = null;
