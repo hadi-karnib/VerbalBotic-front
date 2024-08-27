@@ -42,7 +42,6 @@ const chatsSlice = createSlice({
     },
     updateChatGPTSuccess: (state, action) => {
       state.updatingChatGPT = false;
-      // Find and update the specific message in the chat array
       const updatedMessageIndex = state.chats.findIndex(
         (chat) => chat._id === action.payload._id
       );
