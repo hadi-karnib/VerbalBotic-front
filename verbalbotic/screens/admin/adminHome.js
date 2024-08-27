@@ -10,6 +10,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchChildren } from "../../store/children/childActions";
 import { useNavigation } from "@react-navigation/native";
+import { MaterialIcons } from "@expo/vector-icons"; // Import MaterialIcons
 
 const AdminHome = () => {
   const dispatch = useDispatch();
@@ -35,7 +36,7 @@ const AdminHome = () => {
             {error && <Text>Error: {error}</Text>}
             {!loading && children.length === 0 && (
               <Text style={styles.noChildrenText}>
-                You still haven't added a child Lets fix that.
+                You still haven't added a child. Let's fix that.
               </Text>
             )}
             {!loading &&
@@ -50,6 +51,11 @@ const AdminHome = () => {
                 >
                   <Text style={styles.childName}>{child.name}</Text>
                   <Text style={styles.childAge}>{child.age} years</Text>
+                  <MaterialIcons
+                    name="arrow-forward-ios"
+                    size={20}
+                    color="#0288D1"
+                  />
                 </TouchableOpacity>
               ))}
           </View>
