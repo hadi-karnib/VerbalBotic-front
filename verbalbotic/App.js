@@ -16,6 +16,8 @@ import TestingScreen from "./screens/testingScreen";
 import AdminHome from "./screens/admin/adminHome";
 import AdminProfile from "./screens/admin/adminProfile";
 import AdminTabs from "./components/adminBottomTabs";
+import Adminchildren from "./screens/admin/adminchildren";
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -37,6 +39,9 @@ export default function App() {
             <Stack.Screen name="Chats" component={ChatsScreen} />
             <Stack.Screen name="Bio" component={BioScreen} />
             <Stack.Screen name="Test" component={TestingScreen} />
+            <Stack.Screen name="adminHome" component={AdminHome} />
+            <Stack.Screen name="adminProfile" component={AdminProfile} />
+            <Stack.Screen name="adminChildren" component={Adminchildren} />
           </Stack.Navigator>
           <StatusBar style="auto" />
         </NavigationContainer>
