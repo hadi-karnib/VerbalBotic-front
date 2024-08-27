@@ -1,5 +1,5 @@
 import axios from "axios";
-import { childrenActions } from "./childrenSlice";
+import { childrenActions } from "./childSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_URL } from "@env";
 
