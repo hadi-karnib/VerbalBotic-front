@@ -8,6 +8,8 @@ const initialState = {
   saveVoiceNoteError: null,
   updatingChatGPT: false,
   updateChatGPTError: null,
+  analyzingVoiceNote: false,
+  analysisError: null,
 };
 
 const chatsSlice = createSlice({
@@ -55,10 +57,16 @@ const chatsSlice = createSlice({
       state.updatingChatGPT = false;
       state.updateChatGPTError = action.payload;
     },
+    updateAfterAnalysisRequest: (state) => {
+      state.analyzingVoiceNote = true;
+      state.analysisError = null;
+    },
+
     clearChatErrors: (state) => {
       state.error = null;
       state.saveVoiceNoteError = null;
       state.updateChatGPTError = null;
+      state.analysisError = null;
     },
   },
 });

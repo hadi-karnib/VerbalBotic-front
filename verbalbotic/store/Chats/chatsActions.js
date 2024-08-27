@@ -45,8 +45,12 @@ export const saveVoiceNote = (formData) => async (dispatch) => {
     dispatch(chatsActions.saveVoiceNoteSuccess(response.data));
     Alert.alert(
       "Message uploaded successfully",
-      "Please check your chats and wait for the response."
+      "Your voice note is being analyzed. You can continue using the app."
     );
+    console.log(response.data);
+
+    // Trigger the analysis and ChatGPT process in the background
+    dispatch(analyzeVoiceNoteInBackground(response.data._id));
   } catch (error) {
     dispatch(
       chatsActions.saveVoiceNoteFailure(
@@ -57,6 +61,35 @@ export const saveVoiceNote = (formData) => async (dispatch) => {
   }
 };
 
+// Analyze Voice Note in Background
+export const analyzeVoiceNoteInBackground = (messageId) => async (dispatch) => {
+  try {
+    const token = await AsyncStorage.getItem("token");
+
+    const response = await axios.patch(
+      `${API_URL}/api/messages/${messageId}/analysis`,
+      { diagnosis: "stuttering" }, // Placeholder for real analysis
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    dispatch(chatsActions.updateAfterAnalysisSuccess(response.data));
+
+    if (response.data.diagnosis === "stuttering") {
+      // Proceed to ChatGPT interaction if stuttering is detected
+      dispatch(updateAfterChatGPT(response.data._id));
+    }
+  } catch (error) {
+    console.error("Error during analysis: ", error);
+    // Handle error
+  }
+};
+
+// Update After ChatGPT
 export const updateAfterChatGPT = (messageId) => async (dispatch) => {
   try {
     dispatch(chatsActions.updateChatGPTRequest());
@@ -75,7 +108,11 @@ export const updateAfterChatGPT = (messageId) => async (dispatch) => {
     );
 
     dispatch(chatsActions.updateChatGPTSuccess(response.data));
-    Alert.alert("AI Response Updated", "The response has been updated.");
+    Alert.alert(
+      "AI Response Updated",
+      "The AI has finished processing your request."
+    );
+    dispatch(getMyChats());
   } catch (error) {
     dispatch(
       chatsActions.updateChatGPTFailure(
