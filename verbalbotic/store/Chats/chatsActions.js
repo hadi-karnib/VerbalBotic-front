@@ -1,9 +1,10 @@
 import axios from "axios";
 import { chatsActions } from "./chatsSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { API_URL } from "@env";
+import { API_URL, ML_URL } from "@env";
 import { Alert } from "react-native";
 
+// Fetching Chats
 export const getMyChats = () => async (dispatch) => {
   try {
     console.log("getting chats");
@@ -16,7 +17,7 @@ export const getMyChats = () => async (dispatch) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log("successfull");
+    console.log("successful");
 
     dispatch(chatsActions.getChatsSuccess(response.data));
   } catch (error) {
@@ -29,7 +30,8 @@ export const getMyChats = () => async (dispatch) => {
   }
 };
 
-export const saveVoiceNote = (formData) => async (dispatch) => {
+// Saving Voice Note
+export const saveVoiceNote = (formData, uri) => async (dispatch) => {
   try {
     dispatch(chatsActions.saveVoiceNoteRequest());
 
@@ -50,7 +52,7 @@ export const saveVoiceNote = (formData) => async (dispatch) => {
     console.log(response.data);
 
     // Trigger the analysis and ChatGPT process in the background
-    dispatch(analyzeVoiceNoteInBackground(response.data._id));
+    dispatch(analyzeVoiceNoteInBackground(response.data._id, uri));
   } catch (error) {
     dispatch(
       chatsActions.saveVoiceNoteFailure(
@@ -61,14 +63,45 @@ export const saveVoiceNote = (formData) => async (dispatch) => {
   }
 };
 
-// Analyze Voice Note in Background
-export const analyzeVoiceNoteInBackground = (messageId) => async (dispatch) => {
+export const analyzeVoiceNoteInBackground =
+  (messageId, fileUri) => async (dispatch) => {
+    console.log(`sending to ai and sending it to ${ML_URL}/transcribe/ `);
+
+    try {
+      const formData = new FormData();
+      formData.append("file", {
+        uri: fileUri,
+        name: "voiceNote.m4a",
+        type: "audio/m4a",
+      });
+
+      // Sending the voice note to the ML model for transcription and analysis
+      const response = await axios.post(`${ML_URL}/transcribe/`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        timeout: 60000, // timeout set to 60 seconds
+      });
+
+      // Extracting the analysis result from the ML model's response
+      const { analysis } = response.data;
+
+      // Updating the diagnosis of the voice note using the analysis result
+      await dispatch(updateDiagnosis(messageId, analysis));
+    } catch (error) {
+      console.error("Error during analysis: ", error);
+      // Handle error if necessary
+    }
+  };
+
+// Function to update the diagnosis after analysis
+export const updateDiagnosis = (messageId, diagnosis) => async (dispatch) => {
   try {
     const token = await AsyncStorage.getItem("token");
 
     const response = await axios.patch(
       `${API_URL}/api/messages/${messageId}/analysis`,
-      { diagnosis: "stuttering" }, // Placeholder for real analysis
+      { diagnosis },
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -78,14 +111,9 @@ export const analyzeVoiceNoteInBackground = (messageId) => async (dispatch) => {
     );
 
     dispatch(chatsActions.updateAfterAnalysisSuccess(response.data));
-
-    if (response.data.diagnosis === "stuttering") {
-      // Proceed to ChatGPT interaction if stuttering is detected
-      dispatch(updateAfterChatGPT(response.data._id));
-    }
   } catch (error) {
-    console.error("Error during analysis: ", error);
-    // Handle error
+    console.error("Error updating diagnosis: ", error);
+    // Handle error if necessary
   }
 };
 
