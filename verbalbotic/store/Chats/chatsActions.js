@@ -29,6 +29,7 @@ export const getMyChats = () => async (dispatch) => {
   }
 };
 
+// Saving Voice Note
 export const saveVoiceNote = (formData, uri) => async (dispatch) => {
   try {
     dispatch(chatsActions.saveVoiceNoteRequest());
@@ -82,6 +83,8 @@ export const analyzeVoiceNoteInBackground =
       const { analysis } = response.data;
 
       await dispatch(updateDiagnosis(messageId, analysis));
+
+      dispatch(updateAfterChatGPT(messageId));
     } catch (error) {
       console.error("Error during analysis: ", error);
     }
