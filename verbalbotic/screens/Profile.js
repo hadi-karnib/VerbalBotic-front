@@ -186,7 +186,6 @@ const Profile = ({ navigation }) => {
               )}
             </Animatable.View>
 
-            {/* Logout Button */}
             <Animatable.View
               animation="fadeInUp"
               duration={800}
