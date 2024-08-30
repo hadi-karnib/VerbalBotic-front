@@ -143,3 +143,30 @@ export const updateAfterChatGPT = (messageId) => async (dispatch) => {
     console.error("Error updating AI response: ", error);
   }
 };
+export const transcribeAudioGoogle =
+  (language, messageId) => async (dispatch) => {
+    try {
+      dispatch(chatsActions.transcribeAudioGoogleRequest());
+
+      const token = await AsyncStorage.getItem("token");
+
+      const response = await axios.post(
+        `${API_URL}/api/messages/transcribeGoogle`,
+        { language, messageId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      dispatch(chatsActions.transcribeAudioGoogleSuccess(response.data));
+    } catch (error) {
+      dispatch(
+        chatsActions.transcribeAudioGoogleFailure(
+          error.response?.data?.message || error.message
+        )
+      );
+    }
+  };
