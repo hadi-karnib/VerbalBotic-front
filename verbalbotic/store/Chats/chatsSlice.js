@@ -86,12 +86,7 @@ const chatsSlice = createSlice({
     },
     transcribeAudioGoogleSuccess: (state, action) => {
       state.loading = false;
-      const updatedMessageIndex = state.chats.findIndex(
-        (chat) => chat._id === action.payload._id
-      );
-      if (updatedMessageIndex !== -1) {
-        state.chats[updatedMessageIndex] = action.payload;
-      }
+      state.lastTranscriptionResult = action.payload;
     },
     transcribeAudioGoogleFailure: (state, action) => {
       state.loading = false;
