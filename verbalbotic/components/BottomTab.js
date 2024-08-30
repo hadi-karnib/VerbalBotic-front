@@ -18,7 +18,7 @@ const Tabs = ({ route }) => {
 
           if (route.name === "Home") {
             iconName = "home";
-          } else if (route.name === "Chats") {
+          } else if (route.name === "AI Chats") {
             iconName = "robot-outline";
           } else if (route.name === "Profile") {
             iconName = "account-outline";
@@ -48,7 +48,7 @@ const Tabs = ({ route }) => {
         initialParams={{ streak }}
       />
       <Tab.Screen
-        name="Chats"
+        name="AI Chats"
         component={ChatsScreen}
         options={{ headerShown: false }}
       />
