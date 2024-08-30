@@ -80,6 +80,10 @@ const chatsSlice = createSlice({
       state.updateChatGPTError = null;
       state.analysisError = null;
     },
+    transcribeAudioGoogleRequest: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
   },
 });
 
