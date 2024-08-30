@@ -93,6 +93,10 @@ const chatsSlice = createSlice({
         state.chats[updatedMessageIndex] = action.payload;
       }
     },
+    transcribeAudioGoogleFailure: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
   },
 });
 
