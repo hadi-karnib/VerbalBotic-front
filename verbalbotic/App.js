@@ -38,7 +38,6 @@ export default function App() {
             <Stack.Screen name="Profile" component={Profile} />
             <Stack.Screen name="Chats" component={ChatsScreen} />
             <Stack.Screen name="Bio" component={BioScreen} />
-            <Stack.Screen name="Test" component={TestingScreen} />
             <Stack.Screen name="adminHome" component={AdminHome} />
             <Stack.Screen name="adminProfile" component={AdminProfile} />
             <Stack.Screen name="adminChildren" component={Adminchildren} />
