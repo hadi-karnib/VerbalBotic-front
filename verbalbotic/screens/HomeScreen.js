@@ -193,12 +193,16 @@ const HomeScreen = ({ navigation, route }) => {
               inputSearchStyle={styles.inputSearchStyle}
               iconStyle={styles.iconStyle}
               data={languages}
+              search // Enable search functionality
               maxHeight={300}
               labelField="label"
               valueField="value"
               placeholder="Select language"
+              searchPlaceholder="Search..." // Add search placeholder
+              searchIconComponent={() => (
+                <Ionicons name="ios-search" size={20} color="#000" />
+              )} // Add search icon
               value={selectedLanguage}
-              search // Enable search functionality
               onChange={(item) => {
                 setSelectedLanguage(item.value);
               }}
