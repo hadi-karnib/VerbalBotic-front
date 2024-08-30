@@ -18,7 +18,7 @@ const Tabs = ({ route }) => {
             return (
               <MaterialCommunityIcons name="home" size={35} color={color} />
             );
-          } else if (route.name === "Chats") {
+          } else if (route.name === "AI Chats") {
             return (
               <MaterialCommunityIcons
                 name="robot-outline"
@@ -49,7 +49,7 @@ const Tabs = ({ route }) => {
         initialParams={{ streak }}
       />
       <Tab.Screen
-        name="Chats"
+        name="AI Chats"
         component={ChatsScreen}
         options={{ headerShown: false }}
       />
