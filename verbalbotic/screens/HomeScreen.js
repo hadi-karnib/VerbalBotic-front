@@ -14,6 +14,7 @@ import { useDispatch } from "react-redux";
 import { saveVoiceNote } from "../store/Chats/chatsActions";
 import SwitchToggle from "react-native-switch-toggle";
 import { Dropdown } from "react-native-element-dropdown";
+import { Ionicons } from "@expo/vector-icons";
 
 const HomeScreen = ({ navigation, route }) => {
   const { streak } = route.params || {};
@@ -160,14 +161,12 @@ const HomeScreen = ({ navigation, route }) => {
         <View style={styles.header}>
           <Text style={styles.title}>Home</Text>
         </View>
-
         <View style={styles.dailyStreakContainer}>
           <Text style={styles.dailyStreakText}>Daily streak</Text>
           <View style={styles.streakBox}>
             <Text style={styles.streakNumber}>{streak || 0}</Text>
           </View>
         </View>
-
         <View style={styles.toggleContainer}>
           <Text style={styles.toggleLabel}>
             {toggleOn ? "Multilingual Model" : "Base Model"}
@@ -183,7 +182,6 @@ const HomeScreen = ({ navigation, route }) => {
             circleStyle={styles.toggleCircle}
           />
         </View>
-
         {toggleOn && (
           <View style={styles.dropdownContainer}>
             <Dropdown
@@ -200,7 +198,7 @@ const HomeScreen = ({ navigation, route }) => {
               placeholder="Select language"
               searchPlaceholder="Search..." // Add search placeholder
               searchIconComponent={() => (
-                <Ionicons name="ios-search" size={20} color="#000" />
+                <Ionicons name="search" size={20} color="#000" />
               )} // Add search icon
               value={selectedLanguage}
               onChange={(item) => {
@@ -209,7 +207,6 @@ const HomeScreen = ({ navigation, route }) => {
             />
           </View>
         )}
-
         <View style={styles.microphoneContainer}>
           <TouchableOpacity
             style={[
@@ -225,7 +222,6 @@ const HomeScreen = ({ navigation, route }) => {
             />
           </TouchableOpacity>
         </View>
-
         <Text style={styles.analyzingText}>
           {isRecording
             ? `Recording... ${formatDuration(durationMillis)}`
