@@ -34,11 +34,11 @@ const HomeScreen = ({ navigation, route }) => {
   const recordingInterval = useRef(null);
 
   const languages = [
-    { label: "English", value: "en" },
-    { label: "French", value: "fr" },
-    { label: "Spanish", value: "es" },
-    { label: "German", value: "de" },
-    { label: "Italian", value: "it" },
+    { label: "English (United States)", value: "en-US" },
+    { label: "English (Australia)", value: "	en-AU" },
+    { label: "English (Canada)", value: "en-CA" },
+    { label: "English (United Kingdom)", value: "en-GB" },
+    { label: "Arabic (Lebanese)", value: "ar-lb" },
     { label: "Portuguese", value: "pt" },
     { label: "Russian", value: "ru" },
     { label: "Chinese (Mandarin)", value: "zh" },
