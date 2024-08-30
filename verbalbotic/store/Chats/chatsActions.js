@@ -30,7 +30,7 @@ export const getMyChats = () => async (dispatch) => {
 };
 
 // Saving Voice Note
-export const saveVoiceNote = (formData, uri) => async (dispatch) => {
+export const saveVoiceNote = (formData, uri, toggleOn) => async (dispatch) => {
   try {
     dispatch(chatsActions.saveVoiceNoteRequest());
 
@@ -50,7 +50,13 @@ export const saveVoiceNote = (formData, uri) => async (dispatch) => {
     );
     console.log(response.data);
 
-    dispatch(analyzeVoiceNoteInBackground(response.data._id, uri));
+    if (toggleOn) {
+      // If the toggle is on, use the Multilingual Model with Google API
+      dispatch(transcribeAudioGoogle("en", response.data._id));
+    } else {
+      // If the toggle is off, use the base model (analyzeVoiceNoteInBackground)
+      dispatch(analyzeVoiceNoteInBackground(response.data._id, uri));
+    }
   } catch (error) {
     dispatch(
       chatsActions.saveVoiceNoteFailure(
