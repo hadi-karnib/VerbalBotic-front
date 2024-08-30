@@ -12,6 +12,7 @@ import { Audio } from "expo-av";
 import * as FileSystem from "expo-file-system";
 import { useDispatch } from "react-redux";
 import { saveVoiceNote } from "../store/Chats/chatsActions";
+import SwitchToggle from "react-native-switch-toggle";
 
 const HomeScreen = ({ navigation, route }) => {
   const { streak } = route.params || {};
@@ -25,9 +26,12 @@ const HomeScreen = ({ navigation, route }) => {
   const [durationMillis, setDurationMillis] = useState(0);
   const [recordingSize, setRecordingSize] = useState(0);
   const [startTime, setStartTime] = useState(0);
+  const [toggleOn, setToggleOn] = useState(false);
 
   const recordingInterval = useRef(null);
-
+  const handleToggle = () => {
+    setToggleOn(!toggleOn);
+  };
   const handleMicrophonePress = async () => {
     if (isRecording) {
       try {
@@ -125,7 +129,21 @@ const HomeScreen = ({ navigation, route }) => {
             <Text style={styles.streakNumber}>{streak || 0}</Text>
           </View>
         </View>
-
+        <View style={styles.toggleContainer}>
+          <Text style={styles.toggleLabel}>
+            {toggleOn ? "Multilingual Model" : "Base Model"}
+          </Text>
+          <SwitchToggle
+            switchOn={toggleOn}
+            onPress={handleToggle}
+            circleColorOff="#FFCDD2"
+            circleColorOn="#B3E5FC"
+            backgroundColorOn="#0288D1"
+            backgroundColorOff="#FF3B30"
+            containerStyle={styles.toggleSwitch}
+            circleStyle={styles.toggleCircle}
+          />
+        </View>
         <View style={styles.microphoneContainer}>
           <TouchableOpacity
             style={[
@@ -217,6 +235,28 @@ const styles = StyleSheet.create({
     marginBottom: 40,
     fontSize: 16,
     color: "#555",
+  },
+  toggleContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 40,
+  },
+  toggleLabel: {
+    fontSize: 18,
+    marginRight: 10,
+    fontWeight: "bold",
+  },
+  toggleSwitch: {
+    width: 60,
+    height: 30,
+    borderRadius: 25,
+    padding: 5,
+  },
+  toggleCircle: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
   },
 });
 
