@@ -136,10 +136,10 @@ const HomeScreen = ({ navigation, route }) => {
           <SwitchToggle
             switchOn={toggleOn}
             onPress={handleToggle}
-            circleColorOff="#FFCDD2"
-            circleColorOn="#B3E5FC"
+            circleColorOff="#B3E5FC"
+            circleColorOn="#FFCDD2"
             backgroundColorOn="#0288D1"
-            backgroundColorOff="#FF3B30"
+            backgroundColorOff="#ffc0cc"
             containerStyle={styles.toggleSwitch}
             circleStyle={styles.toggleCircle}
           />
