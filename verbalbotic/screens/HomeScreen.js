@@ -53,19 +53,8 @@ const HomeScreen = ({ navigation, route }) => {
     { label: "Chinese (Simplified, Hong Kong)", value: "cmn-Hans-HK" },
     { label: "German (Germany)", value: "de-DE" },
     { label: "German (Austria)", value: "de-AT" },
-    { label: "Vietnamese", value: "vi" },
-    { label: "Swedish", value: "sv" },
-    { label: "Danish", value: "da" },
-    { label: "Finnish", value: "fi" },
-    { label: "Norwegian", value: "no" },
-    { label: "Polish", value: "pl" },
-    { label: "Hungarian", value: "hu" },
-    { label: "Czech", value: "cs" },
-    { label: "Slovak", value: "sk" },
-    { label: "Romanian", value: "ro" },
-    { label: "Malay", value: "ms" },
-    { label: "Indonesian", value: "id" },
-    { label: "Filipino", value: "fil" },
+    { label: "German (Switzerland)", value: "de-CH" },
+    { label: "Italian (Italy)", value: "it-IT" },
   ];
 
   const handleToggle = () => {
