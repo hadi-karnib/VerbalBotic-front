@@ -196,10 +196,7 @@ const HomeScreen = ({ navigation, route }) => {
               labelField="label"
               valueField="value"
               placeholder="Select language"
-              searchPlaceholder="Search..." // Add search placeholder
-              searchIconComponent={() => (
-                <Ionicons name="search" size={20} color="#000" />
-              )} // Add search icon
+              searchPlaceholder="Search..."
               value={selectedLanguage}
               onChange={(item) => {
                 setSelectedLanguage(item.value);
