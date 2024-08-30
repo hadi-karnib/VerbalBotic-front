@@ -143,13 +143,17 @@ export const updateAfterChatGPT = (messageId) => async (dispatch) => {
     console.error("Error updating AI response: ", error);
   }
 };
+
 export const transcribeAudioGoogle =
   (language, messageId) => async (dispatch) => {
     try {
+      // Dispatch the request action to start loading state
       dispatch(chatsActions.transcribeAudioGoogleRequest());
 
+      // Retrieve the token from AsyncStorage
       const token = await AsyncStorage.getItem("token");
 
+      // Make the API call to transcribe the audio
       const response = await axios.post(
         `${API_URL}/api/messages/transcribeGoogle`,
         { language, messageId },
@@ -161,8 +165,19 @@ export const transcribeAudioGoogle =
         }
       );
 
+      // Destructure the analysis from the response data
+      const { analysis } = response.data;
+
+      // Dispatch the action to update the diagnosis with the analysis result
+      await dispatch(updateDiagnosis(messageId, analysis));
+
+      // Dispatch the action to update the ChatGPT response
+      await dispatch(updateAfterChatGPT(messageId));
+
+      // Dispatch the success action with the response data
       dispatch(chatsActions.transcribeAudioGoogleSuccess(response.data));
     } catch (error) {
+      // Dispatch the failure action in case of an error
       dispatch(
         chatsActions.transcribeAudioGoogleFailure(
           error.response?.data?.message || error.message
