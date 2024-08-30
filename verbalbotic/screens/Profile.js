@@ -180,7 +180,6 @@ const Profile = ({ navigation }) => {
                       color="#00ACC1"
                       backgroundColor="transparent"
                     />
-                    <Text style={styles.qrText}>ID: {user._id}</Text>
                   </View>
                 </Animatable.View>
               )}
@@ -299,7 +298,8 @@ const styles = StyleSheet.create({
   },
   qrContainer: {
     alignItems: "center",
-    marginTop: 20,
+    justifyContent: "center",
+    margin: 20,
   },
   qrText: {
     fontSize: 16,
