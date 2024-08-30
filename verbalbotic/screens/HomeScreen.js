@@ -35,11 +35,43 @@ const HomeScreen = ({ navigation, route }) => {
   const languages = [
     { label: "English", value: "en" },
     { label: "French", value: "fr" },
-    // Add more languages as needed
+    { label: "Spanish", value: "es" },
+    { label: "German", value: "de" },
+    { label: "Italian", value: "it" },
+    { label: "Portuguese", value: "pt" },
+    { label: "Russian", value: "ru" },
+    { label: "Chinese (Mandarin)", value: "zh" },
+    { label: "Japanese", value: "ja" },
+    { label: "Korean", value: "ko" },
+    { label: "Arabic", value: "ar" },
+    { label: "Hindi", value: "hi" },
+    { label: "Bengali", value: "bn" },
+    { label: "Urdu", value: "ur" },
+    { label: "Turkish", value: "tr" },
+    { label: "Dutch", value: "nl" },
+    { label: "Greek", value: "el" },
+    { label: "Hebrew", value: "he" },
+    { label: "Thai", value: "th" },
+    { label: "Vietnamese", value: "vi" },
+    { label: "Swedish", value: "sv" },
+    { label: "Danish", value: "da" },
+    { label: "Finnish", value: "fi" },
+    { label: "Norwegian", value: "no" },
+    { label: "Polish", value: "pl" },
+    { label: "Hungarian", value: "hu" },
+    { label: "Czech", value: "cs" },
+    { label: "Slovak", value: "sk" },
+    { label: "Romanian", value: "ro" },
+    { label: "Malay", value: "ms" },
+    { label: "Indonesian", value: "id" },
+    { label: "Filipino", value: "fil" },
   ];
 
   const handleToggle = () => {
     setToggleOn(!toggleOn);
+    if (!toggleOn) {
+      setSelectedLanguage(null); // Reset the selected language if toggled off
+    }
   };
 
   const handleMicrophonePress = async () => {
@@ -166,6 +198,7 @@ const HomeScreen = ({ navigation, route }) => {
               valueField="value"
               placeholder="Select language"
               value={selectedLanguage}
+              search // Enable search functionality
               onChange={(item) => {
                 setSelectedLanguage(item.value);
               }}
