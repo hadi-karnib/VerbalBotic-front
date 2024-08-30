@@ -71,7 +71,7 @@ const HomeScreen = ({ navigation, route }) => {
   const handleToggle = () => {
     setToggleOn(!toggleOn);
     if (!toggleOn) {
-      setSelectedLanguage(null); // Reset the selected language if toggled off
+      setSelectedLanguage(null);
     }
   };
 
@@ -191,7 +191,7 @@ const HomeScreen = ({ navigation, route }) => {
               inputSearchStyle={styles.inputSearchStyle}
               iconStyle={styles.iconStyle}
               data={languages}
-              search // Enable search functionality
+              search
               maxHeight={300}
               labelField="label"
               valueField="value"
