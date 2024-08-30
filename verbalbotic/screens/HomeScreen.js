@@ -212,6 +212,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFCDD2",
   },
   analyzingText: {
+    padding: 10,
     textAlign: "center",
     marginBottom: 40,
     fontSize: 16,
