@@ -13,6 +13,7 @@ import * as FileSystem from "expo-file-system";
 import { useDispatch } from "react-redux";
 import { saveVoiceNote } from "../store/Chats/chatsActions";
 import SwitchToggle from "react-native-switch-toggle";
+import { Dropdown } from "react-native-element-dropdown";
 
 const HomeScreen = ({ navigation, route }) => {
   const { streak } = route.params || {};
@@ -27,11 +28,20 @@ const HomeScreen = ({ navigation, route }) => {
   const [recordingSize, setRecordingSize] = useState(0);
   const [startTime, setStartTime] = useState(0);
   const [toggleOn, setToggleOn] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState(null);
 
   const recordingInterval = useRef(null);
+
+  const languages = [
+    { label: "English", value: "en" },
+    { label: "French", value: "fr" },
+    // Add more languages as needed
+  ];
+
   const handleToggle = () => {
     setToggleOn(!toggleOn);
   };
+
   const handleMicrophonePress = async () => {
     if (isRecording) {
       try {
@@ -55,12 +65,6 @@ const HomeScreen = ({ navigation, route }) => {
           "Press the microphone button to start recording your voice."
         );
 
-        console.log(`Recording stopped and stored at ${uri}`);
-        console.log(
-          `Recording duration: ${formatDuration(durationInMillis)} seconds`
-        );
-        console.log(`Recording size: ${sizeInBytes} bytes`);
-
         const formData = new FormData();
         formData.append("voiceNote", {
           uri,
@@ -71,7 +75,9 @@ const HomeScreen = ({ navigation, route }) => {
         formData.append("format", "m4a");
         formData.append("size", sizeInBytes);
 
-        dispatch(saveVoiceNote(formData, uri, toggleOn));
+        dispatch(
+          saveVoiceNote(formData, uri, toggleOn ? selectedLanguage : null)
+        );
       } catch (error) {
         console.error("Error stopping recording: ", error);
       }
@@ -129,6 +135,7 @@ const HomeScreen = ({ navigation, route }) => {
             <Text style={styles.streakNumber}>{streak || 0}</Text>
           </View>
         </View>
+
         <View style={styles.toggleContainer}>
           <Text style={styles.toggleLabel}>
             {toggleOn ? "Multilingual Model" : "Base Model"}
@@ -144,6 +151,28 @@ const HomeScreen = ({ navigation, route }) => {
             circleStyle={styles.toggleCircle}
           />
         </View>
+
+        {toggleOn && (
+          <View style={styles.dropdownContainer}>
+            <Dropdown
+              style={styles.dropdown}
+              placeholderStyle={styles.placeholderStyle}
+              selectedTextStyle={styles.selectedTextStyle}
+              inputSearchStyle={styles.inputSearchStyle}
+              iconStyle={styles.iconStyle}
+              data={languages}
+              maxHeight={300}
+              labelField="label"
+              valueField="value"
+              placeholder="Select language"
+              value={selectedLanguage}
+              onChange={(item) => {
+                setSelectedLanguage(item.value);
+              }}
+            />
+          </View>
+        )}
+
         <View style={styles.microphoneContainer}>
           <TouchableOpacity
             style={[
@@ -169,7 +198,6 @@ const HomeScreen = ({ navigation, route }) => {
     </LinearGradient>
   );
 };
-
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
@@ -213,6 +241,60 @@ const styles = StyleSheet.create({
     color: "#0288D1",
     fontWeight: "bold",
   },
+  toggleContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 40,
+  },
+  toggleLabel: {
+    fontSize: 18,
+    marginRight: 10,
+    fontWeight: "bold",
+  },
+  toggleSwitch: {
+    width: 60,
+    height: 30,
+    borderRadius: 25,
+    padding: 5,
+  },
+  toggleCircle: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+  },
+  dropdownContainer: {
+    marginHorizontal: 20,
+    marginTop: 10,
+  },
+  dropdown: {
+    height: 50,
+    backgroundColor: "#FFF",
+    borderRadius: 12,
+    padding: 12,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+    elevation: 2,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
   microphoneContainer: {
     flex: 1,
     justifyContent: "center",
@@ -235,28 +317,6 @@ const styles = StyleSheet.create({
     marginBottom: 40,
     fontSize: 16,
     color: "#555",
-  },
-  toggleContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 40,
-  },
-  toggleLabel: {
-    fontSize: 18,
-    marginRight: 10,
-    fontWeight: "bold",
-  },
-  toggleSwitch: {
-    width: 60,
-    height: 30,
-    borderRadius: 25,
-    padding: 5,
-  },
-  toggleCircle: {
-    width: 20,
-    height: 20,
-    borderRadius: 10,
   },
 });
 
