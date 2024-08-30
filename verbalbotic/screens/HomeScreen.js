@@ -71,7 +71,7 @@ const HomeScreen = ({ navigation, route }) => {
         formData.append("format", "m4a");
         formData.append("size", sizeInBytes);
 
-        dispatch(saveVoiceNote(formData, uri));
+        dispatch(saveVoiceNote(formData, uri, toggleOn)); // Pass toggleOn state here
       } catch (error) {
         console.error("Error stopping recording: ", error);
       }
