@@ -1,6 +1,6 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import AdminHome from "../screens/admin/adminHome";
 import AdminProfile from "../screens/admin/adminProfile";
 import Adminchildren from "../screens/admin/adminchildren";
@@ -14,22 +14,39 @@ const AdminTabs = ({ route }) => {
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
+          let iconName;
+
           if (route.name === "Home") {
-            return <MaterialIcons name="home" size={35} color={color} />;
+            iconName = focused ? "home-outline" : "home-outline";
           } else if (route.name === "Children Chats") {
-            return <FontAwesome5 name="robot" size={size} color={color} />;
+            iconName = "robot-outline";
           } else if (route.name === "Profile") {
-            return <FontAwesome5 name="user" size={size} color={color} />;
+            iconName = "account-outline";
           }
+
+          return (
+            <MaterialCommunityIcons
+              name={iconName}
+              size={35} // Keep consistent icon size
+              color={color}
+              style={{
+                transform: [{ translateY: focused ? -5 : 0 }],
+              }}
+            />
+          );
         },
-        tabBarLabelStyle: { marginTop: 2 },
-        tabBarActiveTintColor: "#0288D1",
-        tabBarInactiveTintColor: "gray",
+        tabBarActiveTintColor: "#0288D1", // Active color consistent with Tabs component
+        tabBarInactiveTintColor: "gray", // Inactive color consistent with Tabs component
         tabBarStyle: {
-          backgroundColor: "#F5F5F5",
-          marginBottom: -10,
-          paddingTop: 7,
+          backgroundColor: "#F5F5F5", // Consistent background color
+          paddingTop: 10, // Consistent padding top
+          elevation: 5, // Elevation for Android
+          shadowOffset: { width: 0, height: 2 }, // Shadow for iOS
+          shadowOpacity: 0.2, // Shadow opacity for iOS
+          shadowRadius: 3.84, // Shadow radius for iOS
+          shadowColor: "#000", // Shadow color for iOS
         },
+        tabBarLabelStyle: { marginBottom: -7 }, // Consistent label style
       })}
     >
       <Tab.Screen
