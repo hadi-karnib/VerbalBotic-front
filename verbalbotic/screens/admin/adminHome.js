@@ -18,6 +18,7 @@ const AdminHome = () => {
   const navigation = useNavigation();
   const { children, loading, error } = useSelector((state) => state.children);
 
+  console.log("Children data in component:", children);
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const translateAnim = useRef(new Animated.Value(10)).current;
 
@@ -77,12 +78,12 @@ const AdminHome = () => {
               </TouchableOpacity>
             )}
             {!loading &&
-              children.map((child, index) => (
+              children.length > 0 &&
+              children.map((child) => (
                 <Animated.View
                   key={child._id}
                   style={[
                     styles.childItem,
-                    index === children.length - 1 && styles.lastChildItem,
                     {
                       opacity: fadeAnim,
                       transform: [{ translateY: translateAnim }],
@@ -91,8 +92,17 @@ const AdminHome = () => {
                 >
                   <TouchableOpacity onPress={handleChildPress}>
                     <View style={styles.childRow}>
-                      <Text style={styles.childName}>{child.name}</Text>
-                      <Text style={styles.childAge}>{child.age} years</Text>
+                      <View style={styles.avatarPlaceholder}>
+                        <Text style={styles.avatarText}>
+                          {child.name.charAt(0)}
+                        </Text>
+                      </View>
+                      <View style={styles.childInfo}>
+                        <Text style={styles.childName}>{child.name}</Text>
+                        <Text style={styles.childAge}>
+                          {child.age} years old
+                        </Text>
+                      </View>
                     </View>
                   </TouchableOpacity>
                 </Animated.View>
@@ -138,26 +148,50 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   childItem: {
-    backgroundColor: "#F5F5F5",
-    padding: 15,
-    borderRadius: 10,
+    backgroundColor: "#FFFFFF",
+    padding: 20,
+    borderRadius: 15,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 10,
+    marginBottom: 15,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.15,
+    shadowRadius: 10,
+    elevation: 6,
   },
   childRow: {
     flexDirection: "row",
     alignItems: "center",
     flex: 1,
   },
-  lastChildItem: {
-    marginBottom: 20,
+  avatarPlaceholder: {
+    backgroundColor: "#0288D1",
+    borderRadius: 25,
+    height: 50,
+    width: 50,
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 15,
+  },
+  avatarText: {
+    color: "#FFFFFF",
+    fontSize: 24,
+    fontWeight: "bold",
+  },
+  childInfo: {
+    flex: 1,
+  },
+  childName: {
+    fontSize: 20,
+    color: "#333",
+    fontWeight: "600",
+  },
+  childAge: {
+    fontSize: 16,
+    color: "#757575",
+    marginTop: 4,
   },
   noChildrenText: {
     fontSize: 18,
@@ -165,32 +199,22 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 20,
   },
-  childName: {
-    fontSize: 18,
-    color: "#0288D1",
-    flex: 1,
-  },
-  childAge: {
-    fontSize: 16,
-    color: "#757575",
-    marginRight: 10,
-  },
   infoBox: {
     flex: 1,
     backgroundColor: "#F5F5F5",
-    padding: 20,
+    padding: 25,
     borderTopLeftRadius: 60,
     borderTopRightRadius: 60,
     justifyContent: "center",
     alignItems: "center",
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowRadius: 10,
+    elevation: 6,
   },
   infoText: {
-    fontSize: 32,
+    fontSize: 28,
     color: "#333",
     textAlign: "center",
   },
