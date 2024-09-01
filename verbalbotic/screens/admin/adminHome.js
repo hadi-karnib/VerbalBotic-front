@@ -40,11 +40,11 @@ const AdminHome = () => {
   }, [dispatch]);
 
   const handleChildPress = () => {
-    navigation.navigate("adminProfile");
+    navigation.navigate("adminTabs", { screen: "Profile" });
   };
 
   const handleNoChildrenPress = () => {
-    navigation.navigate("adminProfile");
+    navigation.navigate("adminTabs", { screen: "Profile" });
   };
 
   return (
