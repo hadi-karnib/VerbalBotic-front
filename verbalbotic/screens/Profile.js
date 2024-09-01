@@ -219,14 +219,13 @@ const styles = StyleSheet.create({
   },
   header: {
     padding: 20,
-    backgroundColor: "#00ACC1",
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
     alignItems: "center",
   },
   headerText: {
     color: "#FFF",
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: "bold",
   },
   settingContainer: {
