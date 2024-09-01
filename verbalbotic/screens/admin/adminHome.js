@@ -41,11 +41,27 @@ const AdminHome = () => {
 
   const handleChildPress = () => {
     navigation.navigate("adminTabs", { screen: "Children Chats" });
-    console.log("child navigation fired");
   };
 
   const handleNoChildrenPress = () => {
     navigation.navigate("adminTabs", { screen: "Profile" });
+  };
+
+  const scaleAnim = new Animated.Value(1);
+
+  const animatePressIn = () => {
+    Animated.spring(scaleAnim, {
+      toValue: 0.95,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const animatePressOut = () => {
+    Animated.spring(scaleAnim, {
+      toValue: 1,
+      friction: 3,
+      useNativeDriver: true,
+    }).start();
   };
 
   return (
@@ -94,11 +110,22 @@ const AdminHome = () => {
                   },
                 ]}
               >
-                <TouchableOpacity onPress={handleChildPress}>
-                  <View style={styles.childRow}>
-                    <Text style={styles.childName}>{child.name}</Text>
-                    <Text style={styles.childAge}>{child.age} years</Text>
-                  </View>
+                <TouchableOpacity
+                  onPressIn={animatePressIn}
+                  onPressOut={animatePressOut}
+                  onPress={handleChildPress}
+                  activeOpacity={0.8}
+                >
+                  <Animated.View
+                    style={{
+                      transform: [{ scale: scaleAnim }],
+                    }}
+                  >
+                    <View style={styles.childRow}>
+                      <Text style={styles.childName}>{child.name}</Text>
+                      <Text style={styles.childAge}>{child.age} years</Text>
+                    </View>
+                  </Animated.View>
                 </TouchableOpacity>
               </Animated.View>
             ))}
@@ -175,10 +202,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 15,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 5,
     marginHorizontal: 20,
   },
   childRow: {
