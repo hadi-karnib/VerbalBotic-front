@@ -90,7 +90,7 @@ export const analyzeVoiceNoteInBackground =
 
       await dispatch(updateDiagnosis(messageId, analysis));
 
-      dispatch(updateAfterChatGPT(messageId));
+      dispatch(updateAfterChatGPT(messageId, analysis));
     } catch (error) {
       console.error("Error during analysis: ", error);
     }
@@ -117,38 +117,39 @@ export const updateDiagnosis = (messageId, diagnosis) => async (dispatch) => {
   }
 };
 
-export const updateAfterChatGPT = (messageId) => async (dispatch) => {
-  try {
-    dispatch(chatsActions.updateChatGPTRequest());
+export const updateAfterChatGPT =
+  (messageId, diagnosis) => async (dispatch) => {
+    try {
+      dispatch(chatsActions.updateChatGPTRequest());
 
-    const token = await AsyncStorage.getItem("token");
+      const token = await AsyncStorage.getItem("token");
 
-    const response = await axios.patch(
-      `${API_URL}/api/messages/${messageId}/chatgpt`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+      const response = await axios.patch(
+        `${API_URL}/api/messages/${messageId}/chatgpt`,
+        { diagnosis },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-    dispatch(chatsActions.updateChatGPTSuccess(response.data));
-    Alert.alert(
-      "AI Response Updated",
-      "The AI has finished processing your request."
-    );
-    dispatch(getMyChats());
-  } catch (error) {
-    dispatch(
-      chatsActions.updateChatGPTFailure(
-        error.response?.data?.message || error.message
-      )
-    );
-    console.error("Error updating AI response: ", error);
-  }
-};
+      dispatch(chatsActions.updateChatGPTSuccess(response.data));
+      Alert.alert(
+        "AI Response Updated",
+        "The AI has finished processing your request."
+      );
+      dispatch(getMyChats());
+    } catch (error) {
+      dispatch(
+        chatsActions.updateChatGPTFailure(
+          error.response?.data?.message || error.message
+        )
+      );
+      console.error("Error updating AI response: ", error);
+    }
+  };
 
 export const transcribeAudioGoogle =
   (language, messageId) => async (dispatch) => {
@@ -172,7 +173,7 @@ export const transcribeAudioGoogle =
 
       await dispatch(updateDiagnosis(messageId, analysis));
 
-      await dispatch(updateAfterChatGPT(messageId));
+      await dispatch(updateAfterChatGPT(messageId, analysis));
 
       dispatch(chatsActions.transcribeAudioGoogleSuccess(response.data));
     } catch (error) {
@@ -181,5 +182,6 @@ export const transcribeAudioGoogle =
           error.response?.data?.message || error.message
         )
       );
+      Alert.alert("Error in transcribing", "Please use the selected language");
     }
   };
