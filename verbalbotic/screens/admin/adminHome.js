@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import {
   StyleSheet,
   Text,
   View,
   SafeAreaView,
   TouchableOpacity,
+  Animated,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,11 +18,32 @@ const AdminHome = () => {
   const navigation = useNavigation();
   const { children, loading, error } = useSelector((state) => state.children);
 
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const translateAnim = useRef(new Animated.Value(10)).current;
+
   useEffect(() => {
     dispatch(fetchChildren());
+
+    // Animation effect
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 800,
+      useNativeDriver: true,
+    }).start();
+
+    Animated.spring(translateAnim, {
+      toValue: 0,
+      speed: 1,
+      bounciness: 20,
+      useNativeDriver: true,
+    }).start();
   }, [dispatch]);
 
   const handleChildPress = () => {
+    navigation.navigate("adminProfile");
+  };
+
+  const handleNoChildrenPress = () => {
     navigation.navigate("adminProfile");
   };
 
@@ -35,41 +57,60 @@ const AdminHome = () => {
             {loading && <Text>Loading...</Text>}
             {error && <Text>Error: {error}</Text>}
             {!loading && children.length === 0 && (
-              <Text style={styles.noChildrenText}>
-                You still haven't added a child. Let's fix that.
-                <View style={styles.arrowIcon}>
-                  <MaterialIcons
-                    name="arrow-forward-ios"
-                    size={15}
-                    color="#757575"
-                  />
-                </View>
-              </Text>
+              <TouchableOpacity onPress={handleNoChildrenPress}>
+                <Animated.View
+                  style={{
+                    opacity: fadeAnim,
+                    transform: [{ translateY: translateAnim }],
+                  }}
+                >
+                  <Text style={styles.noChildrenText}>
+                    You still haven't added a child. Let's fix that.
+                    <View style={styles.arrowIcon}>
+                      <MaterialIcons
+                        name="arrow-forward-ios"
+                        size={15}
+                        color="#757575"
+                      />
+                    </View>
+                  </Text>
+                </Animated.View>
+              </TouchableOpacity>
             )}
             {!loading &&
               children.map((child, index) => (
-                <TouchableOpacity
+                <Animated.View
                   key={child._id}
                   style={[
                     styles.childItem,
                     index === children.length - 1 && styles.lastChildItem,
+                    {
+                      opacity: fadeAnim,
+                      transform: [{ translateY: translateAnim }],
+                    },
                   ]}
-                  onPress={handleChildPress}
                 >
-                  <View style={styles.childRow}>
-                    <Text style={styles.childName}>{child.name}</Text>
-                    <Text style={styles.childAge}>{child.age} years</Text>
-                  </View>
-                </TouchableOpacity>
+                  <TouchableOpacity onPress={handleChildPress}>
+                    <View style={styles.childRow}>
+                      <Text style={styles.childName}>{child.name}</Text>
+                      <Text style={styles.childAge}>{child.age} years</Text>
+                    </View>
+                  </TouchableOpacity>
+                </Animated.View>
               ))}
           </View>
 
-          <View style={styles.infoBox}>
+          <Animated.View
+            style={[
+              styles.infoBox,
+              { opacity: fadeAnim, transform: [{ translateY: translateAnim }] },
+            ]}
+          >
             <Text style={styles.infoText}>
               Here you can monitor what your child talks with our AI and what
               their tasks are to perform better.
             </Text>
-          </View>
+          </Animated.View>
         </View>
       </SafeAreaView>
     </LinearGradient>
@@ -155,7 +196,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   arrowIcon: {
-    paddingLeft: 5,
+    alignItems: "center",
     paddingTop: 10,
   },
 });
