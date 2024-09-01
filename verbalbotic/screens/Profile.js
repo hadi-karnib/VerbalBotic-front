@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     padding: 18,
-    backgroundColor: "#00ACC1",
+    backgroundColor: "#FFF3E0",
     alignItems: "center",
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
@@ -252,7 +252,7 @@ const styles = StyleSheet.create({
   settingText: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#ffffff",
+    color: "#00ACC1",
   },
   optionsContainer: {
     padding: 20,
