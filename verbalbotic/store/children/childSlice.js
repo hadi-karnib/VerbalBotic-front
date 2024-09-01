@@ -17,6 +17,7 @@ const childrenSlice = createSlice({
     getChildrenSuccess: (state, action) => {
       state.loading = false;
       state.children = action.payload;
+      console.log("Children data stored in state:", state.children);
     },
     getChildrenFailure: (state, action) => {
       state.loading = false;
