@@ -53,7 +53,6 @@ const AdminHome = () => {
         <View style={styles.container}>
           <View style={styles.childrenList}>
             <Text style={styles.title}>Children</Text>
-
             {loading && <Text>Loading...</Text>}
             {error && <Text>Error: {error}</Text>}
             {!loading && children.length === 0 && (
