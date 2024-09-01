@@ -128,10 +128,10 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    paddingHorizontal: 20,
     paddingTop: 20,
   },
   title: {
+    paddingHorizontal: 20,
     fontSize: 24,
     fontWeight: "bold",
     color: "#0288D1",
@@ -179,6 +179,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
+    marginHorizontal: 20,
   },
   childRow: {
     flexDirection: "row",
