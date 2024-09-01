@@ -17,7 +17,7 @@ const Tabs = ({ route }) => {
           let iconName;
 
           if (route.name === "Home") {
-            iconName = "home";
+            iconName = focused ? "home" : "home-outline";
           } else if (route.name === "AI Chats") {
             iconName = "robot-outline";
           } else if (route.name === "Profile") {
