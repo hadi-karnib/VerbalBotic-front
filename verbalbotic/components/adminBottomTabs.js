@@ -27,7 +27,7 @@ const AdminTabs = ({ route }) => {
           return (
             <MaterialCommunityIcons
               name={iconName}
-              size={35} // Keep consistent icon size
+              size={35}
               color={color}
               style={{
                 transform: [{ translateY: focused ? -5 : 0 }],
@@ -35,18 +35,18 @@ const AdminTabs = ({ route }) => {
             />
           );
         },
-        tabBarActiveTintColor: "#0288D1", // Active color consistent with Tabs component
-        tabBarInactiveTintColor: "gray", // Inactive color consistent with Tabs component
+        tabBarActiveTintColor: "#0288D1",
+        tabBarInactiveTintColor: "gray",
         tabBarStyle: {
-          backgroundColor: "#F5F5F5", // Consistent background color
-          paddingTop: 10, // Consistent padding top
-          elevation: 5, // Elevation for Android
-          shadowOffset: { width: 0, height: 2 }, // Shadow for iOS
-          shadowOpacity: 0.2, // Shadow opacity for iOS
-          shadowRadius: 3.84, // Shadow radius for iOS
-          shadowColor: "#000", // Shadow color for iOS
+          backgroundColor: "#F5F5F5",
+          paddingTop: 10,
+          elevation: 5,
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.2,
+          shadowRadius: 3.84,
+          shadowColor: "#000",
         },
-        tabBarLabelStyle: { marginBottom: -7 }, // Consistent label style
+        tabBarLabelStyle: { marginBottom: -7 },
       })}
     >
       <Tab.Screen
