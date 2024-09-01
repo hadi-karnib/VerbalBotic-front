@@ -10,7 +10,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchChildren } from "../../store/children/childActions";
 import { useNavigation } from "@react-navigation/native";
-import { MaterialIcons } from "@expo/vector-icons"; // Import MaterialIcons
+import { MaterialIcons } from "@expo/vector-icons";
 
 const AdminHome = () => {
   const dispatch = useDispatch();
@@ -37,6 +37,13 @@ const AdminHome = () => {
             {!loading && children.length === 0 && (
               <Text style={styles.noChildrenText}>
                 You still haven't added a child. Let's fix that.
+                <View style={styles.arrowIcon}>
+                  <MaterialIcons
+                    name="arrow-forward-ios"
+                    size={15}
+                    color="#757575"
+                  />
+                </View>
               </Text>
             )}
             {!loading &&
@@ -45,7 +52,7 @@ const AdminHome = () => {
                   key={child._id}
                   style={[
                     styles.childItem,
-                    index === children.length - 1 && styles.lastChildItem, // Apply extra margin to the last child
+                    index === children.length - 1 && styles.lastChildItem,
                   ]}
                   onPress={handleChildPress}
                 >
@@ -53,11 +60,6 @@ const AdminHome = () => {
                     <Text style={styles.childName}>{child.name}</Text>
                     <Text style={styles.childAge}>{child.age} years</Text>
                   </View>
-                  <MaterialIcons
-                    name="arrow-forward-ios"
-                    size={20}
-                    color="#0288D1"
-                  />
                 </TouchableOpacity>
               ))}
           </View>
@@ -107,15 +109,15 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3, // Adds shadow for Android
+    elevation: 3,
   },
   childRow: {
     flexDirection: "row",
     alignItems: "center",
-    flex: 1, // Ensures that the text and icon are spaced correctly
+    flex: 1,
   },
   lastChildItem: {
-    marginBottom: 20, // Extra margin for the last child
+    marginBottom: 20,
   },
   noChildrenText: {
     fontSize: 18,
@@ -131,10 +133,10 @@ const styles = StyleSheet.create({
   childAge: {
     fontSize: 16,
     color: "#757575",
-    marginRight: 10, // Add margin between age and icon
+    marginRight: 10,
   },
   infoBox: {
-    flex: 1, // Makes the info box fill the remaining space
+    flex: 1,
     backgroundColor: "#F5F5F5",
     padding: 20,
     borderTopLeftRadius: 60,
@@ -145,12 +147,16 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3, // Adds shadow for Android
+    elevation: 3,
   },
   infoText: {
     fontSize: 32,
     color: "#333",
     textAlign: "center",
+  },
+  arrowIcon: {
+    paddingLeft: 5,
+    paddingTop: 10,
   },
 });
 
