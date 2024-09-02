@@ -15,8 +15,9 @@ const Adminchildren = () => {
   const dispatch = useDispatch();
   const { children, loading, error } = useSelector((state) => state.children);
 
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const translateAnim = useRef(new Animated.Value(10)).current;
+  // Animation values
+  const fadeAnim = useRef(new Animated.Value(1)).current; // Set initial opacity to 1
+  const translateAnim = useRef(new Animated.Value(0)).current; // Set initial translation to 0
 
   useEffect(() => {
     dispatch(fetchChildren());
