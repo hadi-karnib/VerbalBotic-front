@@ -15,7 +15,6 @@ const Adminchildren = () => {
   const dispatch = useDispatch();
   const { children, loading, error } = useSelector((state) => state.children);
 
-  // Animation values
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const translateAnim = useRef(new Animated.Value(0)).current;
 
