@@ -195,6 +195,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginVertical: 15,
+    marginHorizontal: 20,
   },
   noChildrenText: {
     fontSize: 18,
