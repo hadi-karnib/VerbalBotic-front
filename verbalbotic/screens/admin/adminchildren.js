@@ -1,14 +1,167 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useRef } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+  TouchableOpacity,
+  Animated,
+} from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchChildren } from "../../store/children/childActions";
+import { LinearGradient } from "expo-linear-gradient";
 
 const Adminchildren = () => {
+  const dispatch = useDispatch();
+  const { children, loading, error } = useSelector((state) => state.children);
+
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const translateAnim = useRef(new Animated.Value(10)).current;
+
+  useEffect(() => {
+    dispatch(fetchChildren());
+
+    // Start animations
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 800,
+      useNativeDriver: true,
+    }).start();
+
+    Animated.spring(translateAnim, {
+      toValue: 0,
+      speed: 1,
+      bounciness: 20,
+      useNativeDriver: true,
+    }).start();
+  }, [dispatch]);
+
+  const getColorForIndex = (index) => {
+    // Generate different colors for different children
+    const colors = ["#ff9999", "#66b3ff", "#99ff99", "#ffcc99", "#c2c2f0"];
+    return colors[index % colors.length];
+  };
+
   return (
-    <View>
-      <Text>Admin children</Text>
-    </View>
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        <Text style={styles.title}>Children</Text>
+        {loading && <Text style={styles.loadingText}>Loading...</Text>}
+        {error && <Text style={styles.errorText}>Error: {error}</Text>}
+        {!loading && children.length > 0 && (
+          <View style={styles.childrenList}>
+            {children.map((child, index) => (
+              <Animated.View
+                key={child._id}
+                style={[
+                  styles.childItem,
+                  {
+                    opacity: fadeAnim,
+                    transform: [{ translateY: translateAnim }],
+                  },
+                ]}
+              >
+                <View
+                  style={[
+                    styles.avatarPlaceholder,
+                    { backgroundColor: getColorForIndex(index) },
+                  ]}
+                >
+                  <Text style={styles.avatarText}>{child.name.charAt(0)}</Text>
+                </View>
+                <View style={styles.childInfo}>
+                  <Text style={styles.childName}>{child.name}</Text>
+                  <Text style={styles.childAge}>{child.age} years old</Text>
+                </View>
+              </Animated.View>
+            ))}
+          </View>
+        )}
+        {!loading && children.length === 0 && (
+          <Text style={styles.noChildrenText}>No children added yet.</Text>
+        )}
+      </View>
+    </SafeAreaView>
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  safeArea: {
+    flex: 1,
+    backgroundColor: "#f3f3f3",
+  },
+  container: {
+    flex: 1,
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#0288D1",
+    marginBottom: 20,
+    textAlign: "center",
+  },
+  loadingText: {
+    fontSize: 18,
+    color: "#757575",
+    textAlign: "center",
+    marginVertical: 10,
+  },
+  errorText: {
+    fontSize: 18,
+    color: "red",
+    textAlign: "center",
+    marginVertical: 10,
+  },
+  noChildrenText: {
+    fontSize: 18,
+    color: "#757575",
+    textAlign: "center",
+    marginTop: 20,
+  },
+  childrenList: {
+    flex: 1,
+  },
+  childItem: {
+    backgroundColor: "#FFFFFF",
+    padding: 20,
+    borderRadius: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 15,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  avatarPlaceholder: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 15,
+  },
+  avatarText: {
+    color: "#FFFFFF",
+    fontSize: 24,
+    fontWeight: "bold",
+  },
+  childInfo: {
+    flex: 1,
+  },
+  childName: {
+    fontSize: 18,
+    color: "#333",
+    fontWeight: "600",
+  },
+  childAge: {
+    fontSize: 16,
+    color: "#757575",
+    marginTop: 4,
+  },
+});
 
 export default Adminchildren;
