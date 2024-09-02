@@ -17,7 +17,6 @@ export const loginUser = (email, password, navigation) => async (dispatch) => {
     });
 
     const { token, success, streak, UserType } = response.data;
-    console.log(streak);
 
     if (success) {
       await AsyncStorage.setItem("token", token);
