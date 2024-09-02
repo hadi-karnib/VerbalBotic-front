@@ -25,7 +25,6 @@ const AdminHome = () => {
   useEffect(() => {
     dispatch(fetchChildren());
 
-    // Animation effect
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 800,
