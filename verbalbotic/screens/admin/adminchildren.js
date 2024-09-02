@@ -1,15 +1,9 @@
 import React, { useEffect, useRef } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  SafeAreaView,
-  TouchableOpacity,
-  Animated,
-} from "react-native";
+import { StyleSheet, Text, View, SafeAreaView, Animated } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchChildren } from "../../store/children/childActions";
 import { LinearGradient } from "expo-linear-gradient";
+import LottieView from "lottie-react-native";
 
 const Adminchildren = () => {
   const dispatch = useDispatch();
@@ -45,7 +39,16 @@ const Adminchildren = () => {
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.container}>
           <Text style={styles.title}>Children</Text>
-          {loading && <Text style={styles.loadingText}>Loading...</Text>}
+          {loading && (
+            <View style={styles.loadingContainer}>
+              <LottieView
+                source={require("../../assets/loading.json")}
+                autoPlay
+                loop
+                style={styles.loadingAnimation}
+              />
+            </View>
+          )}
           {error && <Text style={styles.errorText}>Error: {error}</Text>}
           {!loading && children.length > 0 && (
             <View style={styles.childrenList}>
@@ -104,11 +107,14 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: "center",
   },
-  loadingText: {
-    fontSize: 18,
-    color: "#757575",
-    textAlign: "center",
-    marginVertical: 10,
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  loadingAnimation: {
+    width: 150,
+    height: 150,
   },
   errorText: {
     fontSize: 18,
