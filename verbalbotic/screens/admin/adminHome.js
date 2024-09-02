@@ -167,6 +167,7 @@ const styles = StyleSheet.create({
   loadingAnimation: {
     width: 150,
     height: 150,
+    alignSelf: "center",
   },
   title: {
     paddingHorizontal: 20,
