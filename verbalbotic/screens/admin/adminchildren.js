@@ -105,7 +105,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#0288D1",
     marginBottom: 20,
-    textAlign: "center",
+    textAlign: "start",
+    paddingLeft: 4,
   },
   loadingContainer: {
     flex: 1,
