@@ -96,6 +96,10 @@ const chatsSlice = createSlice({
       state.loading = true;
       state.error = null;
     },
+    getChildChatsSuccess: (state, action) => {
+      state.loading = false;
+      state.chats = action.payload;
+    },
   },
 });
 
