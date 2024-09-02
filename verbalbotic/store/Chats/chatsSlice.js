@@ -100,6 +100,10 @@ const chatsSlice = createSlice({
       state.loading = false;
       state.chats = action.payload;
     },
+    getChildChatsFailure: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
   },
 });
 
