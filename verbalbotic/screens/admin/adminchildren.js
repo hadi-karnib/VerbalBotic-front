@@ -43,52 +43,56 @@ const Adminchildren = () => {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.container}>
-        <Text style={styles.title}>Children</Text>
-        {loading && <Text style={styles.loadingText}>Loading...</Text>}
-        {error && <Text style={styles.errorText}>Error: {error}</Text>}
-        {!loading && children.length > 0 && (
-          <View style={styles.childrenList}>
-            {children.map((child, index) => (
-              <Animated.View
-                key={child._id}
-                style={[
-                  styles.childItem,
-                  {
-                    opacity: fadeAnim,
-                    transform: [{ translateY: translateAnim }],
-                  },
-                ]}
-              >
-                <View
+    <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.gradient}>
+      <SafeAreaView style={styles.safeArea}>
+        <View style={styles.container}>
+          <Text style={styles.title}>Children</Text>
+          {loading && <Text style={styles.loadingText}>Loading...</Text>}
+          {error && <Text style={styles.errorText}>Error: {error}</Text>}
+          {!loading && children.length > 0 && (
+            <View style={styles.childrenList}>
+              {children.map((child, index) => (
+                <Animated.View
+                  key={child._id}
                   style={[
-                    styles.avatarPlaceholder,
-                    { backgroundColor: getColorForIndex(index) },
+                    styles.childItem,
+                    {
+                      opacity: fadeAnim,
+                      transform: [{ translateY: translateAnim }],
+                    },
                   ]}
                 >
-                  <Text style={styles.avatarText}>{child.name.charAt(0)}</Text>
-                </View>
-                <View style={styles.childInfo}>
-                  <Text style={styles.childName}>{child.name}</Text>
-                  <Text style={styles.childAge}>{child.age} years old</Text>
-                </View>
-              </Animated.View>
-            ))}
-          </View>
-        )}
-        {!loading && children.length === 0 && (
-          <Text style={styles.noChildrenText}>No children added yet.</Text>
-        )}
-      </View>
-    </SafeAreaView>
+                  <View
+                    style={[
+                      styles.avatarPlaceholder,
+                      { backgroundColor: getColorForIndex(index) },
+                    ]}
+                  >
+                    <Text style={styles.avatarText}>
+                      {child.name.charAt(0)}
+                    </Text>
+                  </View>
+                  <View style={styles.childInfo}>
+                    <Text style={styles.childName}>{child.name}</Text>
+                    <Text style={styles.childAge}>{child.age} years old</Text>
+                  </View>
+                </Animated.View>
+              ))}
+            </View>
+          )}
+          {!loading && children.length === 0 && (
+            <Text style={styles.noChildrenText}>No children added yet.</Text>
+          )}
+        </View>
+      </SafeAreaView>
+    </LinearGradient>
   );
 };
 
 const styles = StyleSheet.create({
+  gradient: { flex: 1 },
   safeArea: {
     flex: 1,
-    backgroundColor: "#f3f3f3",
   },
   container: {
     flex: 1,
