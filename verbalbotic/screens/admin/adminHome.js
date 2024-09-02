@@ -12,6 +12,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchChildren } from "../../store/children/childActions";
 import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
+import LottieView from "lottie-react-native";
 
 const AdminHome = () => {
   const dispatch = useDispatch();
@@ -69,10 +70,17 @@ const AdminHome = () => {
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.container}>
           <Text style={styles.title}>Children</Text>
-
-          {loading && <Text style={styles.loadingText}>Loading...</Text>}
+          {loading && (
+            <View style={styles.loadingContainer}>
+              <LottieView
+                source={require("../../assets/loading.json")}
+                autoPlay
+                loop
+                style={styles.loadingAnimation}
+              />
+            </View>
+          )}
           {error && <Text style={styles.errorText}>Error: {error}</Text>}
-
           {!loading && children.length === 0 && (
             <TouchableOpacity onPress={handleNoChildrenPress}>
               <Animated.View
@@ -96,7 +104,6 @@ const AdminHome = () => {
               </Animated.View>
             </TouchableOpacity>
           )}
-
           {!loading &&
             children.length > 0 &&
             children.map((child) => (
@@ -156,6 +163,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: 20,
+  },
+  loadingAnimation: {
+    width: 150,
+    height: 150,
   },
   title: {
     paddingHorizontal: 20,
