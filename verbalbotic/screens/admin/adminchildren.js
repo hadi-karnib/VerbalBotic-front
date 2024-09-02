@@ -16,13 +16,12 @@ const Adminchildren = () => {
   const { children, loading, error } = useSelector((state) => state.children);
 
   // Animation values
-  const fadeAnim = useRef(new Animated.Value(1)).current; // Set initial opacity to 1
-  const translateAnim = useRef(new Animated.Value(0)).current; // Set initial translation to 0
+  const fadeAnim = useRef(new Animated.Value(1)).current;
+  const translateAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     dispatch(fetchChildren());
 
-    // Start animations
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 800,
@@ -38,7 +37,6 @@ const Adminchildren = () => {
   }, [dispatch]);
 
   const getColorForIndex = (index) => {
-    // Generate different colors for different children
     const colors = ["#ff9999", "#66b3ff", "#99ff99", "#ffcc99", "#c2c2f0"];
     return colors[index % colors.length];
   };
