@@ -21,6 +21,7 @@
     "dotenv": "^16.4.5",
     "expo": "~51.0.28",
     "expo-av": "~14.0.7",
+    "expo-barcode-scanner": "^13.0.1",
     "expo-file-system": "~17.0.1",
     "expo-linear-gradient": "~13.0.2",
     "expo-status-bar": "~1.12.1",
