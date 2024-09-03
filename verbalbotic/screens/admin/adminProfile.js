@@ -77,16 +77,22 @@ const AdminProfile = ({ navigation }) => {
     setExpandedId(expandedId === settingId ? null : settingId);
   };
 
-  const handleBarCodeScanned = ({ type, data }) => {
+  const handleBarCodeScanned = async ({ type, data }) => {
     if (!isScanning) {
       setIsScanning(true);
       setScannedData(data);
-      setScannerModalVisible(false);
-      Alert.alert("QR Code Scanned", `Scanned Data: ${data}`);
+      setScannerModalVisible(false); // Close scanner modal after scanning
 
-      setTimeout(() => {
-        setIsScanning(false);
-      }, 2000);
+      try {
+        // Dispatch the addChild action
+        await dispatch(addChild(data));
+      } catch (error) {
+        // Any additional handling can be done here
+      } finally {
+        setTimeout(() => {
+          setIsScanning(false);
+        }, 2000);
+      }
     }
   };
 
