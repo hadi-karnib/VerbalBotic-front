@@ -104,6 +104,9 @@ const chatsSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    clearChats: (state) => {
+      state.chats = []; // Clear the chats array
+    },
   },
 });
 
