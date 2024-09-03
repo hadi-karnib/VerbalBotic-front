@@ -16,7 +16,6 @@ import AdminHome from "./screens/admin/adminHome";
 import AdminProfile from "./screens/admin/adminProfile";
 import AdminTabs from "./components/adminBottomTabs";
 import Adminchildren from "./screens/admin/adminchildren";
-
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -41,6 +40,7 @@ export default function App() {
             <Stack.Screen name="adminProfile" component={AdminProfile} />
             <Stack.Screen name="adminChildren" component={Adminchildren} />
             <Stack.Screen name="adminTabs" component={AdminTabs} />
+            <Stack.Screen name="ChildChats" component={ChildChats} />
           </Stack.Navigator>
           <StatusBar style="auto" />
         </NavigationContainer>
