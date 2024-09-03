@@ -18,6 +18,7 @@ import { API_URL } from "@env";
 import { MaterialIcons } from "@expo/vector-icons";
 import LottieView from "lottie-react-native";
 import loadingAnimation from "../../assets/loading.json";
+import NoChatsAnimation from "../../assets/NoChats.json";
 
 const ChildChats = () => {
   const dispatch = useDispatch();
@@ -177,7 +178,19 @@ const ChildChats = () => {
               />
             </View>
           )}
-          {error && <Text>No chats for this child yet!</Text>}
+          {error && (
+            <View style={styles.noChatsContainer}>
+              <LottieView
+                source={NoChatsAnimation}
+                autoPlay
+                loop
+                style={styles.noChatsLottie}
+              />
+              <Text style={styles.noChatsText}>
+                No chats for this child yet!
+              </Text>
+            </View>
+          )}
           {!loading &&
             chats.map((chat) => (
               <View key={chat._id} style={styles.messageContainer}>
@@ -329,6 +342,22 @@ const styles = StyleSheet.create({
   lottie: {
     width: 200,
     height: 200,
+  },
+  noChatsContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    height: 400,
+  },
+  noChatsLottie: {
+    width: 250,
+    height: 250,
+  },
+  noChatsText: {
+    fontSize: 18,
+    color: "#757575",
+    marginTop: 20,
+    textAlign: "center",
   },
 });
 
