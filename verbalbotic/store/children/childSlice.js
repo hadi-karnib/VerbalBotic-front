@@ -26,6 +26,10 @@ const childrenSlice = createSlice({
       state.loading = true;
       state.error = null;
     },
+    addChildSuccess: (state, action) => {
+      state.loading = false;
+      state.children.push(action.payload); // Add the new child to the state
+    },
 
     clearChildrenErrors: (state) => {
       state.error = null;
