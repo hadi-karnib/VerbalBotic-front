@@ -23,7 +23,7 @@ const ChildChats = () => {
   const dispatch = useDispatch();
   const route = useRoute();
   const { id: childId } = route.params;
-  const { chats, loading, error } = useSelector((state) => state.chats || {});
+  const { chats = [], loading, error } = useSelector((state) => state.chats); // Default to empty array
   const [currentPlaying, setCurrentPlaying] = useState(null);
   const [progresses, setProgresses] = useState({});
   const [durations, setDurations] = useState({});
@@ -36,7 +36,7 @@ const ChildChats = () => {
   }, [dispatch, childId]);
 
   useEffect(() => {
-    if (chats && chats.length > 0) {
+    if (chats.length > 0) {
       const initialDurations = {};
       chats.forEach((chat) => {
         initialDurations[chat._id] = chat.voiceNoteMetadata.duration * 1000;
@@ -47,7 +47,7 @@ const ChildChats = () => {
 
   useFocusEffect(
     React.useCallback(() => {
-      if (chats && chats.length > 0) {
+      if (chats.length > 0) {
         InteractionManager.runAfterInteractions(() => {
           scrollViewRef.current?.scrollToEnd({ animated: true });
         });
@@ -177,12 +177,8 @@ const ChildChats = () => {
               />
             </View>
           )}
-          {error && <Text>Error: {error}</Text>}
-          {!loading && chats && chats.length === 0 && (
-            <Text>No chats for this child yet!</Text>
-          )}
+          {error && <Text>No chats for this child yet!</Text>}
           {!loading &&
-            chats &&
             chats.map((chat) => (
               <View key={chat._id} style={styles.messageContainer}>
                 <View style={styles.messageBubble}>
