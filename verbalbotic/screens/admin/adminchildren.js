@@ -45,7 +45,7 @@ const Adminchildren = () => {
   };
 
   const handlePress = (childId) => {
-    navigation.navigate("ChildChats", { id: childId }); // Navigate to ChildChats with childId
+    navigation.navigate("ChildChats", { id: childId });
   };
 
   return (
