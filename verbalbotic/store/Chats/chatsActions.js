@@ -185,7 +185,8 @@ export const transcribeAudioGoogle =
 
 export const fetchChildChats = (childId) => async (dispatch) => {
   try {
-    dispatch(chatsActions.clearChats()); // Clear previous chats
+    console.log("Fetching chats for child ID:", childId); // Add this line
+    dispatch(chatsActions.clearChats());
     dispatch(chatsActions.getChildChatsRequest());
 
     const token = await AsyncStorage.getItem("token");
@@ -199,13 +200,14 @@ export const fetchChildChats = (childId) => async (dispatch) => {
       }
     );
 
+    console.log("Fetched chats data:", response.data); // Add this line
     dispatch(chatsActions.getChildChatsSuccess(response.data));
   } catch (error) {
+    console.error("Error fetching child chats:", error); // Modify this line
     dispatch(
       chatsActions.getChildChatsFailure(
         error.response?.data?.message || error.message
       )
     );
-    console.error("Error fetching child chats: ", error);
   }
 };
