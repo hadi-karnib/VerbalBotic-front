@@ -10,6 +10,7 @@ import {
   Alert,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
+import { addChild } from "../../store/children/childActions";
 import { getSelf, updateUser, logoutUser } from "../../store/user/userActions";
 import * as Animatable from "react-native-animatable";
 import { LinearGradient } from "expo-linear-gradient";
