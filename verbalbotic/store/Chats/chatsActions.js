@@ -188,7 +188,7 @@ export const fetchChildChats = (childId) => async (dispatch) => {
     dispatch(chatsActions.getChildChatsRequest());
 
     const token = await AsyncStorage.getItem("token");
-    const response = await axios.get(
+    const response = await axios.post(
       `${API_URL}/api/messages/child-chats`,
       { childId },
       {
