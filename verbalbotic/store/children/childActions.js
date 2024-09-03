@@ -39,7 +39,7 @@ export const addChild = (childId) => async (dispatch) => {
       }
     );
 
-    dispatch(childrenActions.addChildSuccess(response.data.child)); // Update with the actual data from the response
+    dispatch(childrenActions.addChildSuccess(response.data.child));
   } catch (error) {
     dispatch(
       childrenActions.addChildFailure(
