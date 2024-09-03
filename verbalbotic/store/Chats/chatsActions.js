@@ -185,6 +185,7 @@ export const transcribeAudioGoogle =
 
 export const fetchChildChats = (childId) => async (dispatch) => {
   try {
+    dispatch(chatsActions.clearChats()); // Clear previous chats
     dispatch(chatsActions.getChildChatsRequest());
 
     const token = await AsyncStorage.getItem("token");
