@@ -6,6 +6,8 @@ import {
   TextInput,
   TouchableOpacity,
   SafeAreaView,
+  Modal,
+  Alert,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { getSelf, updateUser, logoutUser } from "../../store/user/userActions";
@@ -13,6 +15,7 @@ import * as Animatable from "react-native-animatable";
 import { LinearGradient } from "expo-linear-gradient";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { MaterialIcons } from "@expo/vector-icons";
+import { BarCodeScanner } from "expo-barcode-scanner";
 
 const AdminProfile = ({ navigation }) => {
   const { user } = useSelector((state) => state.user);
@@ -28,6 +31,10 @@ const AdminProfile = ({ navigation }) => {
   });
 
   const [expandedId, setExpandedId] = useState(null);
+  const [scannerModalVisible, setScannerModalVisible] = useState(false);
+  const [hasPermission, setHasPermission] = useState(null);
+  const [scannedData, setScannedData] = useState("");
+  const [isScanning, setIsScanning] = useState(false);
 
   useEffect(() => {
     dispatch(getSelf());
@@ -46,6 +53,13 @@ const AdminProfile = ({ navigation }) => {
     }
   }, [user]);
 
+  useEffect(() => {
+    (async () => {
+      const { status } = await BarCodeScanner.requestPermissionsAsync();
+      setHasPermission(status === "granted");
+    })();
+  }, []);
+
   const handleInputChange = (field, value) => {
     setFormData({ ...formData, [field]: value });
   };
@@ -61,6 +75,26 @@ const AdminProfile = ({ navigation }) => {
   const toggleExpand = (settingId) => {
     setExpandedId(expandedId === settingId ? null : settingId);
   };
+
+  const handleBarCodeScanned = ({ type, data }) => {
+    if (!isScanning) {
+      setIsScanning(true);
+      setScannedData(data);
+      setScannerModalVisible(false);
+      Alert.alert("QR Code Scanned", `Scanned Data: ${data}`);
+
+      setTimeout(() => {
+        setIsScanning(false);
+      }, 2000);
+    }
+  };
+
+  if (hasPermission === null) {
+    return <Text>Requesting for camera permission</Text>;
+  }
+  if (hasPermission === false) {
+    return <Text>No access to camera</Text>;
+  }
 
   return (
     <LinearGradient
@@ -174,11 +208,9 @@ const AdminProfile = ({ navigation }) => {
                 >
                   <TouchableOpacity
                     style={styles.addChildButton}
-                    onPress={() => {
-                      // Define what happens when the "Add a Child" button is pressed
-                    }}
+                    onPress={() => setScannerModalVisible(true)}
                   >
-                    <Text style={styles.addChildButtonText}>Add a Child</Text>
+                    <Text style={styles.addChildButtonText}>Scan QR Code</Text>
                     <MaterialIcons
                       name="arrow-forward-ios"
                       size={20}
@@ -203,6 +235,25 @@ const AdminProfile = ({ navigation }) => {
               </TouchableOpacity>
             </Animatable.View>
           </View>
+
+          <Modal
+            animationType="slide"
+            transparent={false}
+            visible={scannerModalVisible}
+            onRequestClose={() => setScannerModalVisible(false)}
+          >
+            <BarCodeScanner
+              onBarCodeScanned={handleBarCodeScanned}
+              style={StyleSheet.absoluteFillObject}
+            >
+              <TouchableOpacity
+                style={styles.modalCloseButton}
+                onPress={() => setScannerModalVisible(false)}
+              >
+                <Text style={styles.modalCloseButtonText}>Close Scanner</Text>
+              </TouchableOpacity>
+            </BarCodeScanner>
+          </Modal>
         </KeyboardAwareScrollView>
       </SafeAreaView>
     </LinearGradient>
@@ -270,6 +321,22 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     elevation: 5,
   },
+  addChildButton: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    backgroundColor: "#FFF3E0",
+    padding: 15,
+    borderRadius: 10,
+  },
+  addChildButtonText: {
+    color: "#00ACC1",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  arrowIcon: {
+    marginLeft: 10,
+  },
   input: {
     borderWidth: 1,
     borderColor: "#B2EBF2",
@@ -277,11 +344,6 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 15,
     backgroundColor: "#FFF",
-  },
-  label: {
-    fontSize: 16,
-    color: "#00796B",
-    marginBottom: 5,
   },
   button: {
     backgroundColor: "#00ACC1",
@@ -300,21 +362,20 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
   },
-  addChildButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    backgroundColor: "#FFF3E0",
-    padding: 15,
-    borderRadius: 10,
+  modalCloseButton: {
+    marginTop: 30,
+    alignSelf: "center",
+    backgroundColor: "#00ACC1",
+    padding: 10,
+    borderRadius: 5,
   },
-  addChildButtonText: {
-    color: "#00ACC1",
+  modalCloseButtonText: {
+    color: "#fff",
     fontSize: 18,
-    fontWeight: "bold",
   },
-  arrowIcon: {
-    marginLeft: 10,
+  logoutButtonContainer: {
+    width: "98%",
+    marginTop: 20,
   },
   dropdownMargin: {
     display: "flex",
@@ -322,10 +383,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingLeft: 7,
     marginTop: 15,
-  },
-  logoutButtonContainer: {
-    width: "98%",
-    marginTop: 20,
   },
 });
 
