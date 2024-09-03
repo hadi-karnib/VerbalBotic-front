@@ -189,7 +189,8 @@ export const fetchChildChats = (childId) => async (dispatch) => {
 
     const token = await AsyncStorage.getItem("token");
     const response = await axios.get(
-      `${API_URL}/api/messages/child/${childId}`,
+      `${API_URL}/api/messages/child-chats`,
+      { childId },
       {
         headers: {
           Authorization: `Bearer ${token}`,
