@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchChildren } from "../../store/children/childActions";
 import { LinearGradient } from "expo-linear-gradient";
 import LottieView from "lottie-react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 
 const Adminchildren = () => {
   const dispatch = useDispatch();
@@ -79,6 +79,13 @@ const Adminchildren = () => {
                       <Text style={styles.childName}>{child.name}</Text>
                       <Text style={styles.childAge}>{child.age} years old</Text>
                     </View>
+                    <View style={styles.arrowIcon}>
+                      <MaterialIcons
+                        name="arrow-forward-ios"
+                        size={15}
+                        color="#757575"
+                      />
+                    </View>
                   </View>
                 </Animated.View>
               ))}
@@ -98,6 +105,12 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
   },
+  rowView: {
+    display: "flex",
+    flexDirection: "row",
+    maxWidth: "80%",
+  },
+  arrow
   container: {
     flex: 1,
     paddingHorizontal: 20,
