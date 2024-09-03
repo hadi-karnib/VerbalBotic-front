@@ -97,7 +97,7 @@ const chatsSlice = createSlice({
       state.error = null;
     },
     getChildChatsSuccess: (state, action) => {
-      console.log("Reducer updating chats with data:", action.payload); // Add this line
+      console.log("Reducer updating chats with data:", action.payload);
       state.loading = false;
       state.chats = Array.isArray(action.payload) ? action.payload : [];
     },
@@ -106,7 +106,7 @@ const chatsSlice = createSlice({
       state.error = action.payload;
     },
     clearChats: (state) => {
-      state.chats = []; // Clear the chats array
+      state.chats = [];
     },
   },
 });
