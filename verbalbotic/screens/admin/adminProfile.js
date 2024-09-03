@@ -188,7 +188,7 @@ const AdminProfile = ({ navigation }) => {
               style={styles.addChildButton}
               onPress={() => setScannerModalVisible(true)}
             >
-              <Text style={styles.addChildButtonText}>Scan QR Code</Text>
+              <Text style={styles.addChildButtonText}>Add Child Using QR</Text>
               <MaterialIcons
                 name="arrow-forward-ios"
                 size={20}
@@ -303,11 +303,13 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF3E0",
     padding: 15,
     borderRadius: 10,
+    width: "98%",
   },
   addChildButtonText: {
     color: "#00ACC1",
     fontSize: 18,
     fontWeight: "bold",
+    paddingVertical: 5,
   },
   arrowIcon: {
     marginLeft: 10,
