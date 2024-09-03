@@ -9,6 +9,8 @@ import { useRoute } from "@react-navigation/native";
 
 const Adminchildren = () => {
   const dispatch = useDispatch();
+  const route = useRoute();
+
   const { children, loading, error } = useSelector((state) => state.children);
 
   const fadeAnim = useRef(new Animated.Value(1)).current;
