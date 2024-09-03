@@ -182,3 +182,28 @@ export const transcribeAudioGoogle =
       Alert.alert("Error in transcribing", "Please use the selected language");
     }
   };
+
+export const fetchChildChats = (childId) => async (dispatch) => {
+  try {
+    dispatch(chatsActions.getChildChatsRequest());
+
+    const token = await AsyncStorage.getItem("token");
+    const response = await axios.get(
+      `${API_URL}/api/messages/child/${childId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    dispatch(chatsActions.getChildChatsSuccess(response.data));
+  } catch (error) {
+    dispatch(
+      chatsActions.getChildChatsFailure(
+        error.response?.data?.message || error.message
+      )
+    );
+    console.error("Error fetching child chats: ", error);
+  }
+};
