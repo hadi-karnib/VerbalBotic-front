@@ -69,7 +69,9 @@ const Adminchildren = () => {
               {children.map((child, index) => (
                 <TouchableOpacity
                   key={child._id}
-                  onPress={() => handlePress(child._id, child.name)}
+                  onPress={() =>
+                    handlePress(child._id, child.name, getColorForIndex(index))
+                  }
                 >
                   <Animated.View
                     style={[
