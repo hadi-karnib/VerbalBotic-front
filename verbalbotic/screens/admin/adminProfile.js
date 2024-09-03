@@ -13,7 +13,6 @@ import * as Animatable from "react-native-animatable";
 import { LinearGradient } from "expo-linear-gradient";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { MaterialIcons } from "@expo/vector-icons";
-import QRCode from "react-native-qrcode-svg";
 
 const AdminProfile = ({ navigation }) => {
   const { user } = useSelector((state) => state.user);
@@ -160,7 +159,7 @@ const AdminProfile = ({ navigation }) => {
                 onPress={() => toggleExpand("2")}
                 style={styles.settingHeader}
               >
-                <Text style={styles.settingText}>QR Code</Text>
+                <Text style={styles.settingText}>Add a Child</Text>
                 <MaterialIcons
                   name={expandedId === "2" ? "expand-less" : "expand-more"}
                   size={24}
@@ -173,14 +172,20 @@ const AdminProfile = ({ navigation }) => {
                   duration={800}
                   style={styles.optionsContainer}
                 >
-                  <View style={styles.qrContainer}>
-                    <QRCode
-                      value={user._id || ""}
-                      size={120}
+                  <TouchableOpacity
+                    style={styles.addChildButton}
+                    onPress={() => {
+                      // Define what happens when the "Add a Child" button is pressed
+                    }}
+                  >
+                    <Text style={styles.addChildButtonText}>Add a Child</Text>
+                    <MaterialIcons
+                      name="arrow-forward-ios"
+                      size={20}
                       color="#00ACC1"
-                      backgroundColor="transparent"
+                      style={styles.arrowIcon}
                     />
-                  </View>
+                  </TouchableOpacity>
                 </Animatable.View>
               )}
             </Animatable.View>
@@ -295,15 +300,21 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
   },
-  qrContainer: {
+  addChildButton: {
+    flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
-    margin: 20,
+    justifyContent: "space-between",
+    backgroundColor: "#FFF3E0",
+    padding: 15,
+    borderRadius: 10,
   },
-  qrText: {
-    fontSize: 16,
-    color: "#05161a",
-    marginTop: 10,
+  addChildButtonText: {
+    color: "#00ACC1",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  arrowIcon: {
+    marginLeft: 10,
   },
   dropdownMargin: {
     display: "flex",
