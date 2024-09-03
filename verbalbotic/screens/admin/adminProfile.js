@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { getSelf, updateUser, logoutUser } from "../store/user/userActions"; // Import the necessary actions
+import { getSelf, updateUser, logoutUser } from "../../store/user/userActions"; // Import the necessary actions
 import * as Animatable from "react-native-animatable";
 import { LinearGradient } from "expo-linear-gradient";
 import { MaterialIcons } from "@expo/vector-icons";
