@@ -11,6 +11,7 @@ import { getSelf, updateUser, logoutUser } from "../../store/user/userActions"; 
 import * as Animatable from "react-native-animatable";
 import { LinearGradient } from "expo-linear-gradient";
 import { MaterialIcons } from "@expo/vector-icons";
+import { TextInput } from "react-native-paper";
 
 const AdminProfile = ({ navigation }) => {
   const dispatch = useDispatch();
