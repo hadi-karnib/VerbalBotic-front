@@ -13,10 +13,11 @@ import { LinearGradient } from "expo-linear-gradient";
 import LottieView from "lottie-react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
+import NoChildrenAnimation from "../../assets/NoChildren.json"; // Assuming the animation is located here
 
 const Adminchildren = () => {
   const dispatch = useDispatch();
-  const navigation = useNavigation(); // Access navigation
+  const navigation = useNavigation();
   const { children, loading, error } = useSelector((state) => state.children);
 
   const fadeAnim = useRef(new Animated.Value(1)).current;
@@ -113,7 +114,15 @@ const Adminchildren = () => {
             </View>
           )}
           {!loading && children.length === 0 && (
-            <Text style={styles.noChildrenText}>No children added yet.</Text>
+            <View style={styles.noChildrenContainer}>
+              <LottieView
+                source={NoChildrenAnimation}
+                autoPlay
+                loop
+                style={styles.noChildrenLottie}
+              />
+              <Text style={styles.noChildrenText}>No children added yet.</Text>
+            </View>
           )}
         </View>
       </SafeAreaView>
@@ -161,11 +170,20 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginVertical: 10,
   },
+  noChildrenContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  noChildrenLottie: {
+    width: 200,
+    height: 200,
+  },
   noChildrenText: {
     fontSize: 18,
     color: "#757575",
-    textAlign: "center",
     marginTop: 20,
+    textAlign: "center",
   },
   childrenList: {
     flex: 1,
