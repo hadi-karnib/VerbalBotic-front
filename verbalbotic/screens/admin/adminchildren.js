@@ -5,6 +5,7 @@ import { fetchChildren } from "../../store/children/childActions";
 import { LinearGradient } from "expo-linear-gradient";
 import LottieView from "lottie-react-native";
 import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import { useRoute } from "@react-navigation/native";
 
 const Adminchildren = () => {
   const dispatch = useDispatch();
