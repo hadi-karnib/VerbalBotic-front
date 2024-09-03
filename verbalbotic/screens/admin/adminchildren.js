@@ -110,7 +110,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     maxWidth: "80%",
   },
-  arrow
+  arrowIcon: {
+    paddingTop: 10,
+  },
   container: {
     flex: 1,
     paddingHorizontal: 20,
