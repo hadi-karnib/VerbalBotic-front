@@ -69,7 +69,7 @@ const Adminchildren = () => {
               {children.map((child, index) => (
                 <TouchableOpacity
                   key={child._id}
-                  onPress={() => handlePress(child._id)}
+                  onPress={() => handlePress(child._id, child.name)}
                 >
                   <Animated.View
                     style={[
