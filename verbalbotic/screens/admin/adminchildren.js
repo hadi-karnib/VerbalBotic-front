@@ -1,16 +1,22 @@
 import React, { useEffect, useRef } from "react";
-import { StyleSheet, Text, View, SafeAreaView, Animated } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+  Animated,
+  TouchableOpacity,
+} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchChildren } from "../../store/children/childActions";
 import { LinearGradient } from "expo-linear-gradient";
 import LottieView from "lottie-react-native";
-import { MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import { useRoute } from "@react-navigation/native";
+import { MaterialIcons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
 const Adminchildren = () => {
   const dispatch = useDispatch();
-  const route = useRoute();
-
+  const navigation = useNavigation(); // Access navigation
   const { children, loading, error } = useSelector((state) => state.children);
 
   const fadeAnim = useRef(new Animated.Value(1)).current;
@@ -38,6 +44,10 @@ const Adminchildren = () => {
     return colors[index % colors.length];
   };
 
+  const handlePress = (childId) => {
+    navigation.navigate("ChildChats", { id: childId }); // Navigate to ChildChats with childId
+  };
+
   return (
     <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.gradient}>
       <SafeAreaView style={styles.safeArea}>
@@ -57,40 +67,46 @@ const Adminchildren = () => {
           {!loading && children.length > 0 && (
             <View style={styles.childrenList}>
               {children.map((child, index) => (
-                <Animated.View
+                <TouchableOpacity
                   key={child._id}
-                  style={[
-                    styles.childItem,
-                    {
-                      opacity: fadeAnim,
-                      transform: [{ translateY: translateAnim }],
-                    },
-                  ]}
+                  onPress={() => handlePress(child._id)}
                 >
-                  <View
+                  <Animated.View
                     style={[
-                      styles.avatarPlaceholder,
-                      { backgroundColor: getColorForIndex(index) },
+                      styles.childItem,
+                      {
+                        opacity: fadeAnim,
+                        transform: [{ translateY: translateAnim }],
+                      },
                     ]}
                   >
-                    <Text style={styles.avatarText}>
-                      {child.name.charAt(0)}
-                    </Text>
-                  </View>
-                  <View style={styles.rowView}>
-                    <View style={styles.childInfo}>
-                      <Text style={styles.childName}>{child.name}</Text>
-                      <Text style={styles.childAge}>{child.age} years old</Text>
+                    <View
+                      style={[
+                        styles.avatarPlaceholder,
+                        { backgroundColor: getColorForIndex(index) },
+                      ]}
+                    >
+                      <Text style={styles.avatarText}>
+                        {child.name.charAt(0)}
+                      </Text>
                     </View>
-                    <View style={styles.arrowIcon}>
-                      <MaterialIcons
-                        name="arrow-forward-ios"
-                        size={15}
-                        color="#757575"
-                      />
+                    <View style={styles.rowView}>
+                      <View style={styles.childInfo}>
+                        <Text style={styles.childName}>{child.name}</Text>
+                        <Text style={styles.childAge}>
+                          {child.age} years old
+                        </Text>
+                      </View>
+                      <View style={styles.arrowIcon}>
+                        <MaterialIcons
+                          name="arrow-forward-ios"
+                          size={15}
+                          color="#757575"
+                        />
+                      </View>
                     </View>
-                  </View>
-                </Animated.View>
+                  </Animated.View>
+                </TouchableOpacity>
               ))}
             </View>
           )}
