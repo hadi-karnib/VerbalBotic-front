@@ -22,6 +22,11 @@ const childrenSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    addChildRequest: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+
     clearChildrenErrors: (state) => {
       state.error = null;
     },
