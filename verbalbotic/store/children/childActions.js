@@ -40,11 +40,18 @@ export const addChild = (childId) => async (dispatch) => {
     );
 
     dispatch(childrenActions.addChildSuccess(response.data.child));
+
+    // Dispatch success alert
+    Alert.alert(
+      "Success",
+      `Added ${response.data.child.name} successfully to your children`
+    );
   } catch (error) {
     dispatch(
       childrenActions.addChildFailure(
         error.response?.data?.message || error.message
       )
     );
+    Alert.alert("Error", "Failed to add child. Please try again.");
   }
 };
