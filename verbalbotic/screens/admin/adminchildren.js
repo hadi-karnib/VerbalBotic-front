@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchChildren } from "../../store/children/childActions";
 import { LinearGradient } from "expo-linear-gradient";
 import LottieView from "lottie-react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const Adminchildren = () => {
   const dispatch = useDispatch();
@@ -73,9 +74,11 @@ const Adminchildren = () => {
                       {child.name.charAt(0)}
                     </Text>
                   </View>
-                  <View style={styles.childInfo}>
-                    <Text style={styles.childName}>{child.name}</Text>
-                    <Text style={styles.childAge}>{child.age} years old</Text>
+                  <View style={styles.rowView}>
+                    <View style={styles.childInfo}>
+                      <Text style={styles.childName}>{child.name}</Text>
+                      <Text style={styles.childAge}>{child.age} years old</Text>
+                    </View>
                   </View>
                 </Animated.View>
               ))}
