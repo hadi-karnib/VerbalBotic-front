@@ -184,43 +184,18 @@ const AdminProfile = ({ navigation }) => {
               )}
             </Animatable.View>
 
-            <Animatable.View
-              animation="fadeInUp"
-              duration={800}
-              style={styles.settingContainer}
+            <TouchableOpacity
+              style={styles.addChildButton}
+              onPress={() => setScannerModalVisible(true)}
             >
-              <TouchableOpacity
-                onPress={() => toggleExpand("2")}
-                style={styles.settingHeader}
-              >
-                <Text style={styles.settingText}>Add a Child</Text>
-                <MaterialIcons
-                  name={expandedId === "2" ? "expand-less" : "expand-more"}
-                  size={24}
-                  color="#00ACC1"
-                />
-              </TouchableOpacity>
-              {expandedId === "2" && (
-                <Animatable.View
-                  animation="fadeInUp"
-                  duration={800}
-                  style={styles.optionsContainer}
-                >
-                  <TouchableOpacity
-                    style={styles.addChildButton}
-                    onPress={() => setScannerModalVisible(true)}
-                  >
-                    <Text style={styles.addChildButtonText}>Scan QR Code</Text>
-                    <MaterialIcons
-                      name="arrow-forward-ios"
-                      size={20}
-                      color="#00ACC1"
-                      style={styles.arrowIcon}
-                    />
-                  </TouchableOpacity>
-                </Animatable.View>
-              )}
-            </Animatable.View>
+              <Text style={styles.addChildButtonText}>Scan QR Code</Text>
+              <MaterialIcons
+                name="arrow-forward-ios"
+                size={20}
+                color="#00ACC1"
+                style={styles.arrowIcon}
+              />
+            </TouchableOpacity>
 
             <Animatable.View
               animation="fadeInUp"
