@@ -3,19 +3,21 @@ import {
   StyleSheet,
   Text,
   View,
-  SafeAreaView,
+  TextInput,
   TouchableOpacity,
+  SafeAreaView,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { getSelf, updateUser, logoutUser } from "../../store/user/userActions"; // Import the necessary actions
+import { getSelf, updateUser, logoutUser } from "../store/user/userActions"; // Import the logoutUser action
 import * as Animatable from "react-native-animatable";
 import { LinearGradient } from "expo-linear-gradient";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { MaterialIcons } from "@expo/vector-icons";
-import { TextInput } from "react-native-paper";
+import QRCode from "react-native-qrcode-svg";
 
 const AdminProfile = ({ navigation }) => {
-  const dispatch = useDispatch();
   const { user } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -67,11 +69,15 @@ const AdminProfile = ({ navigation }) => {
       style={styles.gradientContainer}
     >
       <SafeAreaView style={styles.safeArea}>
-        <View style={styles.container}>
+        <KeyboardAwareScrollView
+          style={styles.container}
+          resetScrollToCoords={{ x: 0, y: 0 }}
+          contentContainerStyle={styles.scrollContent}
+          scrollEnabled={true}
+        >
           <Animatable.View animation="fadeInUp" style={styles.header}>
-            <Text style={styles.headerText}>Admin Profile</Text>
+            <Text style={styles.headerText}>Hello, {formData.name}</Text>
           </Animatable.View>
-
           <View style={styles.dropdownMargin}>
             <Animatable.View
               animation="fadeInUp"
@@ -82,7 +88,7 @@ const AdminProfile = ({ navigation }) => {
                 onPress={() => toggleExpand("1")}
                 style={styles.settingHeader}
               >
-                <Text style={styles.settingText}>Profile Settings</Text>
+                <Text style={styles.settingText}>My Profile</Text>
                 <MaterialIcons
                   name={expandedId === "1" ? "expand-less" : "expand-more"}
                   size={24}
@@ -148,6 +154,40 @@ const AdminProfile = ({ navigation }) => {
             <Animatable.View
               animation="fadeInUp"
               duration={800}
+              style={styles.settingContainer}
+            >
+              <TouchableOpacity
+                onPress={() => toggleExpand("2")}
+                style={styles.settingHeader}
+              >
+                <Text style={styles.settingText}>QR Code</Text>
+                <MaterialIcons
+                  name={expandedId === "2" ? "expand-less" : "expand-more"}
+                  size={24}
+                  color="#00ACC1"
+                />
+              </TouchableOpacity>
+              {expandedId === "2" && (
+                <Animatable.View
+                  animation="fadeInUp"
+                  duration={800}
+                  style={styles.optionsContainer}
+                >
+                  <View style={styles.qrContainer}>
+                    <QRCode
+                      value={user._id || ""}
+                      size={120}
+                      color="#00ACC1"
+                      backgroundColor="transparent"
+                    />
+                  </View>
+                </Animatable.View>
+              )}
+            </Animatable.View>
+
+            <Animatable.View
+              animation="fadeInUp"
+              duration={800}
               style={styles.logoutButtonContainer}
             >
               <TouchableOpacity
@@ -158,7 +198,7 @@ const AdminProfile = ({ navigation }) => {
               </TouchableOpacity>
             </Animatable.View>
           </View>
-        </View>
+        </KeyboardAwareScrollView>
       </SafeAreaView>
     </LinearGradient>
   );
@@ -173,10 +213,12 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    padding: 20,
+  },
+  scrollContent: {
+    flexGrow: 1,
   },
   header: {
-    paddingBottom: 20,
+    padding: 20,
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
     alignItems: "center",
@@ -252,6 +294,16 @@ const styles = StyleSheet.create({
     color: "#FFF",
     fontSize: 18,
     fontWeight: "bold",
+  },
+  qrContainer: {
+    alignItems: "center",
+    justifyContent: "center",
+    margin: 20,
+  },
+  qrText: {
+    fontSize: 16,
+    color: "#05161a",
+    marginTop: 10,
   },
   dropdownMargin: {
     display: "flex",
