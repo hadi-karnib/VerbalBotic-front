@@ -17,7 +17,7 @@ import Slider from "@react-native-community/slider";
 import { API_URL } from "@env";
 import { MaterialIcons } from "@expo/vector-icons";
 import LottieView from "lottie-react-native";
-import loadingAnimation from "../assets/loading.json";
+import loadingAnimation from "../../assets/loading.json";
 
 const ChildChats = () => {
   const dispatch = useDispatch();
