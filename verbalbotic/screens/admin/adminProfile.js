@@ -183,18 +183,44 @@ const AdminProfile = ({ navigation }) => {
                 </Animatable.View>
               )}
             </Animatable.View>
-            <TouchableOpacity
-              style={styles.addChildButton}
-              onPress={() => setScannerModalVisible(true)}
+
+            <Animatable.View
+              animation="fadeInUp"
+              duration={800}
+              style={styles.settingContainer}
             >
-              <Text style={styles.addChildButtonText}>Add a Child </Text>
-              <MaterialIcons
-                name="arrow-forward-ios"
-                size={20}
-                color="#00ACC1"
-                style={styles.arrowIcon}
-              />
-            </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => toggleExpand("2")}
+                style={styles.settingHeader}
+              >
+                <Text style={styles.settingText}>Add a Child</Text>
+                <MaterialIcons
+                  name={expandedId === "2" ? "expand-less" : "expand-more"}
+                  size={24}
+                  color="#00ACC1"
+                />
+              </TouchableOpacity>
+              {expandedId === "2" && (
+                <Animatable.View
+                  animation="fadeInUp"
+                  duration={800}
+                  style={styles.optionsContainer}
+                >
+                  <TouchableOpacity
+                    style={styles.addChildButton}
+                    onPress={() => setScannerModalVisible(true)}
+                  >
+                    <Text style={styles.addChildButtonText}>Scan QR Code</Text>
+                    <MaterialIcons
+                      name="arrow-forward-ios"
+                      size={20}
+                      color="#00ACC1"
+                      style={styles.arrowIcon}
+                    />
+                  </TouchableOpacity>
+                </Animatable.View>
+              )}
+            </Animatable.View>
 
             <Animatable.View
               animation="fadeInUp"
@@ -224,7 +250,7 @@ const AdminProfile = ({ navigation }) => {
                 style={styles.modalCloseButton}
                 onPress={() => setScannerModalVisible(false)}
               >
-                <Text style={styles.modalCloseButtonText}>Close Scanner</Text>
+                <MaterialIcons name="close" size={24} color="#fff" />
               </TouchableOpacity>
             </BarCodeScanner>
           </Modal>
@@ -337,15 +363,18 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   modalCloseButton: {
-    marginTop: 30,
-    alignSelf: "center",
+    position: "absolute",
+    top: 40,
+    right: 20,
     backgroundColor: "#00ACC1",
+    borderRadius: 25,
     padding: 10,
-    borderRadius: 5,
-  },
-  modalCloseButtonText: {
-    color: "#fff",
-    fontSize: 18,
+    zIndex: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.8,
+    shadowRadius: 2,
+    elevation: 5,
   },
   logoutButtonContainer: {
     width: "98%",
