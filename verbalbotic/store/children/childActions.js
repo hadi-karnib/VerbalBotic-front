@@ -23,10 +23,28 @@ export const fetchChildren = () => async (dispatch) => {
     );
   }
 };
-export const addChild =()=>async (dispatch)=>{
+export const addChild = (childId) => async (dispatch) => {
   try {
-    
+    dispatch(childrenActions.addChildRequest());
+
+    const token = await AsyncStorage.getItem("token");
+
+    const response = await axios.post(
+      `${API_URL}/api/children/add`,
+      { childId },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    dispatch(childrenActions.addChildSuccess(response.data.child)); // Update with the actual data from the response
   } catch (error) {
-    
+    dispatch(
+      childrenActions.addChildFailure(
+        error.response?.data?.message || error.message
+      )
+    );
   }
-}
+};
