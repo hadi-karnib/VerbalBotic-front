@@ -81,13 +81,11 @@ const AdminProfile = ({ navigation }) => {
     if (!isScanning) {
       setIsScanning(true);
       setScannedData(data);
-      setScannerModalVisible(false); // Close scanner modal after scanning
+      setScannerModalVisible(false);
 
       try {
-        // Dispatch the addChild action
         await dispatch(addChild(data));
       } catch (error) {
-        // Any additional handling can be done here
       } finally {
         setTimeout(() => {
           setIsScanning(false);
