@@ -21,8 +21,8 @@ import loadingAnimation from "../../assets/loading.json";
 
 const ChildChats = () => {
   const dispatch = useDispatch();
-  const route = useRoute(); // Access route parameters
-  const { id: childId } = route.params; // Assuming childId is passed in route params
+  const route = useRoute();
+  const { id: childId } = route.params;
   const { chats, loading, error } = useSelector((state) => state.chats);
   const [currentPlaying, setCurrentPlaying] = useState(null);
   const [progresses, setProgresses] = useState({});
@@ -31,7 +31,7 @@ const ChildChats = () => {
 
   useEffect(() => {
     if (childId) {
-      dispatch(fetchChildChats(childId)); // Dispatch with childId
+      dispatch(fetchChildChats(childId));
     }
   }, [dispatch, childId]);
 
