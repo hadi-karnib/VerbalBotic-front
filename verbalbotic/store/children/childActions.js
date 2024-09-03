@@ -2,6 +2,7 @@ import axios from "axios";
 import { childrenActions } from "./childSlice";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { API_URL } from "@env";
+import { Alert } from "react-native";
 
 export const fetchChildren = () => async (dispatch) => {
   try {
@@ -25,6 +26,8 @@ export const fetchChildren = () => async (dispatch) => {
 };
 export const addChild = (childId) => async (dispatch) => {
   try {
+    console.log(childId);
+
     dispatch(childrenActions.addChildRequest());
 
     const token = await AsyncStorage.getItem("token");
@@ -52,6 +55,6 @@ export const addChild = (childId) => async (dispatch) => {
         error.response?.data?.message || error.message
       )
     );
-    Alert.alert("Error", "Failed to add child. Please try again.");
+    Alert.alert("Error", error.response?.data?.message);
   }
 };
