@@ -44,7 +44,6 @@ export const addChild = (childId) => async (dispatch) => {
 
     dispatch(childrenActions.addChildSuccess(response.data.child));
 
-    // Dispatch success alert
     Alert.alert(
       "Success",
       `Added ${response.data.child.name} successfully to your children`
