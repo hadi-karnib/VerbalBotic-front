@@ -177,7 +177,7 @@ const ChildChats = () => {
               />
             </View>
           )}
-          {error && <Text>Error: {error}</Text>}
+          {error && <Text>No chats for this child yet!</Text>}
           {!loading &&
             chats.map((chat) => (
               <View key={chat._id} style={styles.messageContainer}>
