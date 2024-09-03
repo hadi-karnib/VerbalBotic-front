@@ -8,7 +8,7 @@ import {
   SafeAreaView,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { getSelf, updateUser, logoutUser } from "../store/user/userActions"; // Import the logoutUser action
+import { getSelf, updateUser, logoutUser } from "../../store/user/userActions"; // Import the logoutUser action
 import * as Animatable from "react-native-animatable";
 import { LinearGradient } from "expo-linear-gradient";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
