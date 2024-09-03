@@ -23,7 +23,7 @@ import NoChatsAnimation from "../../assets/NoChats.json";
 const ChildChats = () => {
   const dispatch = useDispatch();
   const route = useRoute();
-  const { id: childId } = route.params;
+  const { id: childId, name: childName } = route.params; // Get name from params
   const { chats = [], loading, error } = useSelector((state) => state.chats);
   const [currentPlaying, setCurrentPlaying] = useState(null);
   const [progresses, setProgresses] = useState({});
@@ -164,6 +164,12 @@ const ChildChats = () => {
   return (
     <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
+        <View style={styles.headerContainer}>
+          <View style={styles.avatarPlaceholder}>
+            <Text style={styles.avatarText}>{childName.charAt(0)}</Text>
+          </View>
+          <Text style={styles.headerText}>Chats of: {childName}</Text>
+        </View>
         <ScrollView
           contentContainerStyle={styles.scrollContainer}
           ref={scrollViewRef}
@@ -272,6 +278,32 @@ const styles = StyleSheet.create({
   },
   safeArea: {
     flex: 1,
+  },
+  headerContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: "#f3cfd6",
+  },
+  avatarPlaceholder: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "#0288D1",
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 10,
+  },
+  avatarText: {
+    color: "#FFFFFF",
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  headerText: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#333",
   },
   scrollContainer: {
     padding: 20,
