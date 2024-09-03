@@ -11,7 +11,7 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { useDispatch, useSelector } from "react-redux";
 import { useFocusEffect, useRoute } from "@react-navigation/native";
-import { fetchChildChats } from "../store/Chats/chatsActions";
+import { fetchChildChats } from "../../store/Chats/chatsActions";
 import { Audio } from "expo-av";
 import Slider from "@react-native-community/slider";
 import { API_URL } from "@env";
