@@ -23,7 +23,7 @@ const ChildChats = () => {
   const dispatch = useDispatch();
   const route = useRoute();
   const { id: childId } = route.params;
-  const { chats = [], loading, error } = useSelector((state) => state.chats); // Default to empty array
+  const { chats = [], loading, error } = useSelector((state) => state.chats);
   const [currentPlaying, setCurrentPlaying] = useState(null);
   const [progresses, setProgresses] = useState({});
   const [durations, setDurations] = useState({});
