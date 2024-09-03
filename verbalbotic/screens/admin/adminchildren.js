@@ -44,8 +44,8 @@ const Adminchildren = () => {
     return colors[index % colors.length];
   };
 
-  const handlePress = (childId) => {
-    navigation.navigate("ChildChats", { id: childId });
+  const handlePress = (childId, childName) => {
+    navigation.navigate("ChildChats", { id: childId, name: childName });
   };
 
   return (
