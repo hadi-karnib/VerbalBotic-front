@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     maxWidth: "80%",
   },
   arrowIcon: {
-    paddingTop: 10,
+    paddingTop: 15,
   },
   container: {
     flex: 1,
