@@ -23,3 +23,10 @@ export const fetchChildren = () => async (dispatch) => {
     );
   }
 };
+export const addChild =()=>async (dispatch)=>{
+  try {
+    
+  } catch (error) {
+    
+  }
+}
