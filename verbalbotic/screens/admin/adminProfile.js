@@ -86,6 +86,7 @@ const AdminProfile = ({ navigation }) => {
       try {
         await dispatch(addChild(data));
       } catch (error) {
+        // Handle error if necessary
       } finally {
         setTimeout(() => {
           setIsScanning(false);
@@ -189,18 +190,27 @@ const AdminProfile = ({ navigation }) => {
               )}
             </Animatable.View>
 
-            <TouchableOpacity
-              style={styles.addChildButton}
-              onPress={() => setScannerModalVisible(true)}
+            {/* Animatable Add Child Button */}
+            <Animatable.View
+              animation="fadeInUp"
+              duration={800}
+              style={styles.addChildButtonContainer}
             >
-              <Text style={styles.addChildButtonText}>Add Child Using QR</Text>
-              <MaterialIcons
-                name="arrow-forward-ios"
-                size={20}
-                color="#00ACC1"
-                style={styles.arrowIcon}
-              />
-            </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.addChildButton}
+                onPress={() => setScannerModalVisible(true)}
+              >
+                <Text style={styles.addChildButtonText}>
+                  Add Child Using QR
+                </Text>
+                <MaterialIcons
+                  name="arrow-forward-ios"
+                  size={20}
+                  color="#00ACC1"
+                  style={styles.arrowIcon}
+                />
+              </TouchableOpacity>
+            </Animatable.View>
 
             <Animatable.View
               animation="fadeInUp"
@@ -301,6 +311,10 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     elevation: 5,
   },
+  addChildButtonContainer: {
+    marginVertical: 15,
+    maxWidth: "98%",
+  },
   addChildButton: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -308,7 +322,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFF3E0",
     padding: 15,
     borderRadius: 10,
-    width: "98%",
   },
   addChildButtonText: {
     color: "#00ACC1",
