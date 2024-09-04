@@ -18,7 +18,7 @@ import { API_URL } from "@env";
 import { MaterialIcons } from "@expo/vector-icons";
 import LottieView from "lottie-react-native";
 import loadingAnimation from "../assets/loading.json";
-import noChatsAnimation from "../assets/NoChats.json"; // Importing noChats animation
+import noChatsAnimation from "../assets/NoChats.json";
 
 const ChatsScreen = () => {
   const dispatch = useDispatch();
@@ -177,7 +177,7 @@ const ChatsScreen = () => {
           {!loading && chats.length === 0 && (
             <View style={styles.lottieContainer}>
               <LottieView
-                source={noChatsAnimation} // Display noChats.json if there are no chats
+                source={noChatsAnimation}
                 autoPlay
                 loop
                 style={styles.lottie}
