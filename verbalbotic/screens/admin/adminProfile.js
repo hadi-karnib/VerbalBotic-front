@@ -312,7 +312,7 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   addChildButtonContainer: {
-    marginVertical: 15,
+    marginVertical: 10,
     maxWidth: "98%",
   },
   addChildButton: {
