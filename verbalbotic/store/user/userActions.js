@@ -116,10 +116,24 @@ export const addBio = (bioData, navigation) => async (dispatch) => {
     if (success) {
       dispatch(userActions.updateUserSuccess(data));
       Alert.alert("Bio Updated", "Your bio has been successfully updated.");
-      navigation.reset({
-        index: 0,
-        routes: [{ name: "Tabs" }],
-      });
+
+      // Check the UserType and navigate accordingly
+      if (data.UserType === "parent") {
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "adminTabs" }],
+        });
+      } else if (data.UserType === "child") {
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "Tabs" }],
+        });
+      } else {
+        Alert.alert(
+          "Navigation Error",
+          "Unknown UserType, please contact support."
+        );
+      }
     } else {
       Alert.alert("Update Failed", "Could not update bio, please try again.");
     }
