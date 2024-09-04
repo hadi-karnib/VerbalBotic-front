@@ -23,7 +23,7 @@ import NoChatsAnimation from "../../assets/NoChats.json";
 const ChildChats = () => {
   const dispatch = useDispatch();
   const route = useRoute();
-  const { id: childId, name: childName, color } = route.params; // Get color from params
+  const { id: childId, name: childName, color } = route.params;
   const { chats = [], loading, error } = useSelector((state) => state.chats);
   const [currentPlaying, setCurrentPlaying] = useState(null);
   const [progresses, setProgresses] = useState({});
@@ -43,6 +43,13 @@ const ChildChats = () => {
         initialDurations[chat._id] = chat.voiceNoteMetadata.duration * 1000;
       });
       setDurations(initialDurations);
+    }
+  }, [chats]);
+
+  // Scroll to bottom when chats change (e.g., new chats loaded)
+  useEffect(() => {
+    if (scrollViewRef.current && chats.length > 0) {
+      scrollViewRef.current.scrollToEnd({ animated: true });
     }
   }, [chats]);
 
@@ -165,9 +172,7 @@ const ChildChats = () => {
     <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.headerContainer}>
-          <View
-            style={[styles.avatarPlaceholder, { backgroundColor: color }]} // Use the passed color
-          >
+          <View style={[styles.avatarPlaceholder, { backgroundColor: color }]}>
             <Text style={styles.avatarText}>{childName.charAt(0)}</Text>
           </View>
           <Text style={styles.headerText}>Chats of: {childName}</Text>
