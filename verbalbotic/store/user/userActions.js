@@ -117,7 +117,6 @@ export const addBio = (bioData, navigation) => async (dispatch) => {
       dispatch(userActions.updateUserSuccess(data));
       Alert.alert("Bio Updated", "Your bio has been successfully updated.");
 
-      // Check the UserType and navigate accordingly
       if (data.UserType === "parent") {
         navigation.reset({
           index: 0,
