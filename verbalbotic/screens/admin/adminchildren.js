@@ -64,7 +64,6 @@ const Adminchildren = () => {
               />
             </View>
           )}
-          {error && <Text style={styles.errorText}>Error: {error}</Text>}
           {!loading && children.length > 0 && (
             <View style={styles.childrenList}>
               {children.map((child, index) => (
