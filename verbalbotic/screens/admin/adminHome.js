@@ -93,13 +93,6 @@ const AdminHome = () => {
               >
                 <Text style={styles.noChildrenText}>
                   You still haven't added a child. Let's fix that.
-                  <View style={styles.arrowIcon}>
-                    <MaterialIcons
-                      name="arrow-forward-ios"
-                      size={15}
-                      color="#757575"
-                    />
-                  </View>
                 </Text>
               </Animated.View>
             </TouchableOpacity>
