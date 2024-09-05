@@ -298,7 +298,7 @@ const styles = StyleSheet.create({
   settingText: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#00ACC1",
+    color: "#000",
   },
   optionsContainer: {
     padding: 20,
