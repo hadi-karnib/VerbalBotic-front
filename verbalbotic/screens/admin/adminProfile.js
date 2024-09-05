@@ -190,7 +190,6 @@ const AdminProfile = ({ navigation }) => {
               )}
             </Animatable.View>
 
-            {/* Animatable Add Child Button */}
             <Animatable.View
               animation="fadeInUp"
               duration={800}
