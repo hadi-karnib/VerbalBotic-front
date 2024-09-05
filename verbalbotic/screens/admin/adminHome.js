@@ -196,10 +196,6 @@ const styles = StyleSheet.create({
     color: "#757575",
     textAlign: "center",
   },
-  arrowIcon: {
-    marginLeft: 5,
-    paddingTop: 5,
-  },
   childItem: {
     backgroundColor: "#FFF",
     padding: 20,
