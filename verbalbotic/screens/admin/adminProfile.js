@@ -206,7 +206,7 @@ const AdminProfile = ({ navigation }) => {
                 <MaterialIcons
                   name="arrow-forward-ios"
                   size={20}
-                  color="#00ACC1"
+                  color="#000"
                   style={styles.arrowIcon}
                 />
               </TouchableOpacity>
