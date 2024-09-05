@@ -324,7 +324,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   addChildButtonText: {
-    color: "#00ACC1",
+    color: "#000",
     fontSize: 18,
     fontWeight: "bold",
     paddingVertical: 5,
