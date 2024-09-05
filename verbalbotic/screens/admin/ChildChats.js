@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useDispatch, useSelector } from "react-redux";
-import { useRoute } from "@react-navigation/native";
+import { useFocusEffect, useRoute } from "@react-navigation/native";
 import { fetchChildChats } from "../../store/Chats/chatsActions";
 import { Audio } from "expo-av";
 import Slider from "@react-native-community/slider";
@@ -22,7 +22,7 @@ import NoChatsAnimation from "../../assets/NoChats.json";
 const ChildChats = () => {
   const dispatch = useDispatch();
   const route = useRoute();
-  const { id: childId, name: childName, color } = route.params; // Get color from params
+  const { id: childId, name: childName, color } = route.params;
   const { chats = [], loading, error } = useSelector((state) => state.chats);
   const [currentPlaying, setCurrentPlaying] = useState(null);
   const [progresses, setProgresses] = useState({});
@@ -45,12 +45,13 @@ const ChildChats = () => {
     }
   }, [chats]);
 
-  // Scroll to the end once the chats are loaded
-  useEffect(() => {
-    if (chats.length > 0 && scrollViewRef.current) {
-      scrollViewRef.current.scrollToEnd({ animated: true });
-    }
-  }, [chats]);
+  useFocusEffect(
+    React.useCallback(() => {
+      setTimeout(() => {
+        scrollViewRef.current?.scrollToEnd({ animated: true });
+      }, 0); // Scroll to the bottom after chats load
+    }, [chats])
+  );
 
   const playVoiceNote = async (chatId, messagePath) => {
     if (currentPlaying && currentPlaying.sound) {
@@ -161,9 +162,7 @@ const ChildChats = () => {
     <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.headerContainer}>
-          <View
-            style={[styles.avatarPlaceholder, { backgroundColor: color }]} // Use the passed color
-          >
+          <View style={[styles.avatarPlaceholder, { backgroundColor: color }]}>
             <Text style={styles.avatarText}>{childName.charAt(0)}</Text>
           </View>
           <Text style={styles.headerText}>Chats of: {childName}</Text>
@@ -196,74 +195,83 @@ const ChildChats = () => {
             </View>
           )}
           {!loading &&
-            chats.map((chat) => (
-              <View key={chat._id} style={styles.messageContainer}>
-                <View style={styles.messageBubble}>
-                  <View style={styles.voiceNoteContainer}>
-                    <TouchableOpacity
-                      onPress={() => togglePlayPause(chat._id, chat.message)}
-                      style={styles.iconButton}
-                    >
-                      <MaterialIcons
-                        name={
-                          currentPlaying &&
-                          currentPlaying.chatId === chat._id &&
-                          currentPlaying.isPlaying
-                            ? "pause"
-                            : "play-arrow"
-                        }
-                        size={24}
-                        color="#0288D1"
+            chats
+              .slice()
+              .reverse()
+              .map((chat) => (
+                <View key={chat._id} style={styles.messageContainer}>
+                  <View style={styles.messageBubble}>
+                    <View style={styles.voiceNoteContainer}>
+                      <TouchableOpacity
+                        onPress={() => togglePlayPause(chat._id, chat.message)}
+                        style={styles.iconButton}
+                      >
+                        <MaterialIcons
+                          name={
+                            currentPlaying &&
+                            currentPlaying.chatId === chat._id &&
+                            currentPlaying.isPlaying
+                              ? "pause"
+                              : "play-arrow"
+                          }
+                          size={24}
+                          color="#0288D1"
+                        />
+                      </TouchableOpacity>
+                      <Slider
+                        style={styles.progressBar}
+                        value={progresses[chat._id] || 0}
+                        minimumValue={0}
+                        maximumValue={1}
+                        minimumTrackTintColor="#0288D1"
+                        maximumTrackTintColor="#ccc"
+                        thumbTintColor="white"
+                        onSlidingComplete={async (value) => {
+                          if (
+                            currentPlaying &&
+                            currentPlaying.sound &&
+                            currentPlaying.chatId === chat._id
+                          ) {
+                            const position = value * durations[chat._id];
+                            await currentPlaying.sound.setPositionAsync(
+                              position
+                            );
+                            setProgresses((prev) => ({
+                              ...prev,
+                              [chat._id]: value,
+                            }));
+                          }
+                        }}
                       />
-                    </TouchableOpacity>
-                    <Slider
-                      style={styles.progressBar}
-                      value={progresses[chat._id] || 0}
-                      minimumValue={0}
-                      maximumValue={1}
-                      minimumTrackTintColor="#0288D1"
-                      maximumTrackTintColor="#ccc"
-                      thumbTintColor="white"
-                      onSlidingComplete={async (value) => {
-                        if (
-                          currentPlaying &&
-                          currentPlaying.sound &&
-                          currentPlaying.chatId === chat._id
-                        ) {
-                          const position = value * durations[chat._id];
-                          await currentPlaying.sound.setPositionAsync(position);
-                          setProgresses((prev) => ({
-                            ...prev,
-                            [chat._id]: value,
-                          }));
-                        }
-                      }}
-                    />
-                    <Text style={styles.durationText}>
-                      {`${formatTime(
-                        ((progresses[chat._id] || 0) * durations[chat._id]) /
-                          1000
-                      )}s / ${formatTime((durations[chat._id] || 0) / 1000)}s`}
-                    </Text>
-                  </View>
-                  <Text style={styles.timeText}>
-                    {new Date(
-                      chat.voiceNoteMetadata.uploadDate
-                    ).toLocaleTimeString()}
-                  </Text>
-                </View>
-                {chat.AI_response && (
-                  <View style={[styles.messageBubble, styles.aiResponseBubble]}>
-                    <Text style={styles.chatText}>{chat.AI_response}</Text>
+                      <Text style={styles.durationText}>
+                        {`${formatTime(
+                          ((progresses[chat._id] || 0) * durations[chat._id]) /
+                            1000
+                        )}s / ${formatTime(
+                          (durations[chat._id] || 0) / 1000
+                        )}s`}
+                      </Text>
+                    </View>
                     <Text style={styles.timeText}>
                       {new Date(
                         chat.voiceNoteMetadata.uploadDate
                       ).toLocaleTimeString()}
                     </Text>
                   </View>
-                )}
-              </View>
-            ))}
+                  {chat.AI_response && (
+                    <View
+                      style={[styles.messageBubble, styles.aiResponseBubble]}
+                    >
+                      <Text style={styles.chatText}>{chat.AI_response}</Text>
+                      <Text style={styles.timeText}>
+                        {new Date(
+                          chat.voiceNoteMetadata.uploadDate
+                        ).toLocaleTimeString()}
+                      </Text>
+                    </View>
+                  )}
+                </View>
+              ))}
         </ScrollView>
       </SafeAreaView>
     </LinearGradient>
