@@ -6,11 +6,10 @@ import {
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
-  InteractionManager,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useDispatch, useSelector } from "react-redux";
-import { useFocusEffect, useRoute } from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
 import { fetchChildChats } from "../../store/Chats/chatsActions";
 import { Audio } from "expo-av";
 import Slider from "@react-native-community/slider";
@@ -23,7 +22,7 @@ import NoChatsAnimation from "../../assets/NoChats.json";
 const ChildChats = () => {
   const dispatch = useDispatch();
   const route = useRoute();
-  const { id: childId, name: childName, color } = route.params;
+  const { id: childId, name: childName, color } = route.params; // Get color from params
   const { chats = [], loading, error } = useSelector((state) => state.chats);
   const [currentPlaying, setCurrentPlaying] = useState(null);
   const [progresses, setProgresses] = useState({});
@@ -46,22 +45,12 @@ const ChildChats = () => {
     }
   }, [chats]);
 
-  // Scroll to bottom when chats change (e.g., new chats loaded)
+  // Scroll to the end once the chats are loaded
   useEffect(() => {
-    if (scrollViewRef.current && chats.length > 0) {
+    if (chats.length > 0 && scrollViewRef.current) {
       scrollViewRef.current.scrollToEnd({ animated: true });
     }
   }, [chats]);
-
-  useFocusEffect(
-    React.useCallback(() => {
-      if (chats.length > 0) {
-        InteractionManager.runAfterInteractions(() => {
-          scrollViewRef.current?.scrollToEnd({ animated: true });
-        });
-      }
-    }, [chats])
-  );
 
   const playVoiceNote = async (chatId, messagePath) => {
     if (currentPlaying && currentPlaying.sound) {
@@ -172,7 +161,9 @@ const ChildChats = () => {
     <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.headerContainer}>
-          <View style={[styles.avatarPlaceholder, { backgroundColor: color }]}>
+          <View
+            style={[styles.avatarPlaceholder, { backgroundColor: color }]} // Use the passed color
+          >
             <Text style={styles.avatarText}>{childName.charAt(0)}</Text>
           </View>
           <Text style={styles.headerText}>Chats of: {childName}</Text>
@@ -315,7 +306,6 @@ const styles = StyleSheet.create({
   scrollContainer: {
     padding: 20,
     flexGrow: 1,
-    justifyContent: "center",
   },
   messageContainer: {
     marginBottom: 20,
@@ -394,7 +384,7 @@ const styles = StyleSheet.create({
   },
   noChatsText: {
     fontSize: 18,
-    color: "#000",
+    color: "#757575",
     marginTop: 20,
     textAlign: "center",
   },
