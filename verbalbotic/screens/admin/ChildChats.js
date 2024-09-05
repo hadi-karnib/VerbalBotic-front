@@ -195,83 +195,74 @@ const ChildChats = () => {
             </View>
           )}
           {!loading &&
-            chats
-              .slice()
-              .reverse()
-              .map((chat) => (
-                <View key={chat._id} style={styles.messageContainer}>
-                  <View style={styles.messageBubble}>
-                    <View style={styles.voiceNoteContainer}>
-                      <TouchableOpacity
-                        onPress={() => togglePlayPause(chat._id, chat.message)}
-                        style={styles.iconButton}
-                      >
-                        <MaterialIcons
-                          name={
-                            currentPlaying &&
-                            currentPlaying.chatId === chat._id &&
-                            currentPlaying.isPlaying
-                              ? "pause"
-                              : "play-arrow"
-                          }
-                          size={24}
-                          color="#0288D1"
-                        />
-                      </TouchableOpacity>
-                      <Slider
-                        style={styles.progressBar}
-                        value={progresses[chat._id] || 0}
-                        minimumValue={0}
-                        maximumValue={1}
-                        minimumTrackTintColor="#0288D1"
-                        maximumTrackTintColor="#ccc"
-                        thumbTintColor="white"
-                        onSlidingComplete={async (value) => {
-                          if (
-                            currentPlaying &&
-                            currentPlaying.sound &&
-                            currentPlaying.chatId === chat._id
-                          ) {
-                            const position = value * durations[chat._id];
-                            await currentPlaying.sound.setPositionAsync(
-                              position
-                            );
-                            setProgresses((prev) => ({
-                              ...prev,
-                              [chat._id]: value,
-                            }));
-                          }
-                        }}
+            chats.map((chat) => (
+              <View key={chat._id} style={styles.messageContainer}>
+                <View style={styles.messageBubble}>
+                  <View style={styles.voiceNoteContainer}>
+                    <TouchableOpacity
+                      onPress={() => togglePlayPause(chat._id, chat.message)}
+                      style={styles.iconButton}
+                    >
+                      <MaterialIcons
+                        name={
+                          currentPlaying &&
+                          currentPlaying.chatId === chat._id &&
+                          currentPlaying.isPlaying
+                            ? "pause"
+                            : "play-arrow"
+                        }
+                        size={24}
+                        color="#0288D1"
                       />
-                      <Text style={styles.durationText}>
-                        {`${formatTime(
-                          ((progresses[chat._id] || 0) * durations[chat._id]) /
-                            1000
-                        )}s / ${formatTime(
-                          (durations[chat._id] || 0) / 1000
-                        )}s`}
-                      </Text>
-                    </View>
+                    </TouchableOpacity>
+                    <Slider
+                      style={styles.progressBar}
+                      value={progresses[chat._id] || 0}
+                      minimumValue={0}
+                      maximumValue={1}
+                      minimumTrackTintColor="#0288D1"
+                      maximumTrackTintColor="#ccc"
+                      thumbTintColor="white"
+                      onSlidingComplete={async (value) => {
+                        if (
+                          currentPlaying &&
+                          currentPlaying.sound &&
+                          currentPlaying.chatId === chat._id
+                        ) {
+                          const position = value * durations[chat._id];
+                          await currentPlaying.sound.setPositionAsync(position);
+                          setProgresses((prev) => ({
+                            ...prev,
+                            [chat._id]: value,
+                          }));
+                        }
+                      }}
+                    />
+                    <Text style={styles.durationText}>
+                      {`${formatTime(
+                        ((progresses[chat._id] || 0) * durations[chat._id]) /
+                          1000
+                      )}s / ${formatTime((durations[chat._id] || 0) / 1000)}s`}
+                    </Text>
+                  </View>
+                  <Text style={styles.timeText}>
+                    {new Date(
+                      chat.voiceNoteMetadata.uploadDate
+                    ).toLocaleTimeString()}
+                  </Text>
+                </View>
+                {chat.AI_response && (
+                  <View style={[styles.messageBubble, styles.aiResponseBubble]}>
+                    <Text style={styles.chatText}>{chat.AI_response}</Text>
                     <Text style={styles.timeText}>
                       {new Date(
                         chat.voiceNoteMetadata.uploadDate
                       ).toLocaleTimeString()}
                     </Text>
                   </View>
-                  {chat.AI_response && (
-                    <View
-                      style={[styles.messageBubble, styles.aiResponseBubble]}
-                    >
-                      <Text style={styles.chatText}>{chat.AI_response}</Text>
-                      <Text style={styles.timeText}>
-                        {new Date(
-                          chat.voiceNoteMetadata.uploadDate
-                        ).toLocaleTimeString()}
-                      </Text>
-                    </View>
-                  )}
-                </View>
-              ))}
+                )}
+              </View>
+            ))}
         </ScrollView>
       </SafeAreaView>
     </LinearGradient>
