@@ -20,6 +20,7 @@ const Adminchildren = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const { children, loading, error } = useSelector((state) => state.children);
+  const { user } = useSelector((state) => state.user);
 
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const translateAnim = useRef(new Animated.Value(0)).current;
