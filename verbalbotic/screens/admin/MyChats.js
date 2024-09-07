@@ -13,7 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { LinearGradient } from "expo-linear-gradient";
 import { MaterialIcons } from "@expo/vector-icons";
 import LottieView from "lottie-react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"; // Importing KeyboardAwareScrollView
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { getMyChats } from "../../store/Chats/chatsActions";
 
 const MyChats = () => {
@@ -82,14 +82,23 @@ const MyChats = () => {
                 </Text>
               </View>
             ) : (
-              chats.map((chat, index) => (
-                <View key={index} style={styles.messageBubble}>
-                  <Text style={styles.messageText}>{chat.message}</Text>
-                  <Text style={styles.timeText}>
-                    {new Date(chat.timestamp).toLocaleTimeString()}
-                  </Text>
-                </View>
-              ))
+              chats.map((chat, index) => {
+                // Debugging: Log the createdAt field
+                console.log("Chat Created At:", chat.createdAt);
+
+                return (
+                  <View key={index} style={styles.messageBubble}>
+                    <Text style={styles.messageText}>{chat.message}</Text>
+                    <Text style={styles.timeText}>
+                      {new Date(chat.createdAt).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true,
+                      })}
+                    </Text>
+                  </View>
+                );
+              })
             )}
           </KeyboardAwareScrollView>
 
@@ -124,6 +133,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 20,
+    marginBottom: 20,
     paddingVertical: 10,
     backgroundColor: "#f3cfd6",
   },
@@ -155,7 +165,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 20,
     marginBottom: 10,
-    alignSelf: "flex-start",
+    alignSelf: "flex-end",
   },
   messageText: {
     fontSize: 16,
