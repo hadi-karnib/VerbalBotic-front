@@ -143,7 +143,7 @@ const Adminchildren = () => {
               <View style={styles.selfInfo}>
                 <Text style={styles.selfName}>{user?.name}</Text>
               </View>
-              <View style={styles.arrowIcon}>
+              <View style={styles.SelfarrowIcon}>
                 <MaterialIcons
                   name="arrow-forward-ios"
                   size={15}
@@ -170,6 +170,9 @@ const styles = StyleSheet.create({
   },
   arrowIcon: {
     paddingTop: 15,
+  },
+  SelfarrowIcon: {
+    paddingTop: 4,
   },
   container: {
     flex: 1,
