@@ -14,6 +14,7 @@ import LottieView from "lottie-react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import NoChildrenAnimation from "../../assets/NoChildren.json";
+import { getSelf } from "../../store/user/userActions";
 
 const Adminchildren = () => {
   const dispatch = useDispatch();
