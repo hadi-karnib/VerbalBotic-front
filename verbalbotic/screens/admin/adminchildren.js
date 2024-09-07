@@ -53,6 +53,7 @@ const Adminchildren = () => {
     <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.gradient}>
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.container}>
+          {/* Title for Children */}
           <Text style={styles.title}>Children</Text>
           {loading && (
             <View style={styles.loadingContainer}>
@@ -123,6 +124,9 @@ const Adminchildren = () => {
               <Text style={styles.noChildrenText}>No children added yet.</Text>
             </View>
           )}
+
+          {/* Title for My Chats */}
+          <Text style={styles.title}>My Chats</Text>
         </View>
       </SafeAreaView>
     </LinearGradient>
