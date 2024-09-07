@@ -1,72 +1,71 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import {
-  View,
+  StyleSheet,
   Text,
+  View,
+  SafeAreaView,
+  ScrollView,
   TextInput,
   TouchableOpacity,
-  ScrollView,
-  SafeAreaView,
-  StyleSheet,
-  Animated,
 } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { LinearGradient } from "expo-linear-gradient";
+import { MaterialIcons } from "@expo/vector-icons";
+import { getMyChats } from "../../store/Chats/chatsActions"; // Assuming getMyChats is the correct action for fetching user chats
 
 const MyChats = () => {
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.user);
-  const { messages, loading } = useSelector((state) => state.messages);
-  const [messageInput, setMessageInput] = useState("");
   const scrollViewRef = useRef(null);
 
-  useEffect(() => {
-    dispatch(fetchMessages(user._id));
-  }, [dispatch]);
+  const { user } = useSelector((state) => state.user);
+  const { chats = [], loading, error } = useSelector((state) => state.chats);
 
-  const handleSend = () => {
-    if (messageInput.trim() !== "") {
-      dispatch(sendMessage({ userId: user._id, message: messageInput }));
-      setMessageInput("");
+  const [messageInput, setMessageInput] = useState("");
+
+  useEffect(() => {
+    if (user) {
+      dispatch(getMyChats());
     }
-  };
+  }, [dispatch, user]);
 
   useEffect(() => {
-    // Scroll to the bottom whenever new messages arrive
     if (scrollViewRef.current) {
       scrollViewRef.current.scrollToEnd({ animated: true });
     }
-  }, [messages]);
+  }, [chats]);
+
+  const handleSend = () => {
+    // Function to send new message (implementation depends on your message sending setup)
+  };
 
   return (
     <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.gradient}>
       <SafeAreaView style={styles.safeArea}>
-        {/* Header with User Initials and Name */}
         <View style={styles.headerContainer}>
           <View style={styles.avatarPlaceholder}>
             <Text style={styles.avatarText}>{user?.name?.charAt(0)}</Text>
           </View>
-          <Text style={styles.headerText}>{user?.name}</Text>
+          <Text style={styles.headerText}>My Chats</Text>
         </View>
 
-        {/* Messages ScrollView */}
         <ScrollView
           ref={scrollViewRef}
           contentContainerStyle={styles.scrollContainer}
         >
           {loading ? (
-            <Text style={styles.loadingText}>Loading messages...</Text>
+            <Text style={styles.loadingText}>Loading chats...</Text>
           ) : (
-            messages.map((msg, index) => (
+            chats.map((chat, index) => (
               <View key={index} style={styles.messageBubble}>
-                <Text style={styles.messageText}>{msg.content}</Text>
-                <Text style={styles.timeText}>{msg.timestamp}</Text>
+                <Text style={styles.messageText}>{chat.message}</Text>
+                <Text style={styles.timeText}>
+                  {new Date(chat.timestamp).toLocaleTimeString()}
+                </Text>
               </View>
             ))
           )}
         </ScrollView>
 
-        {/* Message Input Section */}
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
