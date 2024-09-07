@@ -20,7 +20,7 @@ const Adminchildren = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const { children, loading } = useSelector((state) => state.children);
-  const { user } = useSelector((state) => state.user); // Fetch self data
+  const { user, loading: userLoading } = useSelector((state) => state.user); // Fetch self data and check loading
 
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const translateAnim = useRef(new Animated.Value(0)).current;
@@ -51,12 +51,14 @@ const Adminchildren = () => {
     navigation.navigate("ChildChats", { id: childId, name: childName, color });
   };
 
+  const handleSelfPress = () => {
+    // Add functionality for navigating to chats
+  };
+
   return (
     <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.gradient}>
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.container}>
-          {/* Title for Self */}
-
           {/* Title for Children */}
           <Text style={styles.title}>Children</Text>
           <View style={styles.childrenList}>
@@ -133,25 +135,49 @@ const Adminchildren = () => {
 
           {/* Title for My Chats */}
           <Text style={styles.title}>My Chats</Text>
-          <View style={styles.selfCard}>
-            <View
-              style={[styles.avatarPlaceholder, { backgroundColor: "#66b3ff" }]}
+          <TouchableOpacity onPress={handleSelfPress} style={styles.selfCard}>
+            <Animated.View
+              style={[
+                styles.childItem,
+                {
+                  opacity: fadeAnim,
+                  transform: [{ translateY: translateAnim }],
+                },
+              ]}
             >
-              <Text style={styles.avatarText}>{user?.name.charAt(0)}</Text>
-            </View>
-            <View style={styles.rowView}>
-              <View style={styles.selfInfo}>
-                <Text style={styles.selfName}>{user?.name}</Text>
+              <View
+                style={[
+                  styles.avatarPlaceholder,
+                  { backgroundColor: "#66b3ff" },
+                ]}
+              >
+                <Text style={styles.avatarText}>{user?.name?.charAt(0)}</Text>
               </View>
-              <View style={styles.SelfarrowIcon}>
-                <MaterialIcons
-                  name="arrow-forward-ios"
-                  size={15}
-                  color="#757575"
+              <View style={styles.rowView}>
+                <View style={styles.selfInfo}>
+                  <Text style={styles.selfName}>{user?.name}</Text>
+                  <Text style={styles.childAge}>Take advice from our AI</Text>
+                </View>
+                <View style={styles.SelfarrowIcon}>
+                  <MaterialIcons
+                    name="arrow-forward-ios"
+                    size={15}
+                    color="#757575"
+                  />
+                </View>
+              </View>
+            </Animated.View>
+            {userLoading && (
+              <View style={styles.loadingContainer}>
+                <LottieView
+                  source={require("../../assets/loading.json")}
+                  autoPlay
+                  loop
+                  style={styles.loadingAnimation}
                 />
               </View>
-            </View>
-          </View>
+            )}
+          </TouchableOpacity>
         </View>
       </SafeAreaView>
     </LinearGradient>
@@ -252,8 +278,6 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   selfCard: {
-    backgroundColor: "#FFFFFF",
-    padding: 20,
     borderRadius: 12,
     flexDirection: "row",
     alignItems: "center",
@@ -271,11 +295,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "#333",
     fontWeight: "600",
-  },
-  selfDetails: {
-    fontSize: 16,
-    color: "#757575",
-    marginTop: 4,
   },
 });
 
