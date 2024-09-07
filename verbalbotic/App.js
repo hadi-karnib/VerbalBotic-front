@@ -17,7 +17,7 @@ import AdminProfile from "./screens/admin/adminProfile";
 import AdminTabs from "./components/adminBottomTabs";
 import Adminchildren from "./screens/admin/adminchildren";
 import ChildChats from "./screens/admin/ChildChats";
-
+import MyChats from "./screens/admin/MyChats";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
