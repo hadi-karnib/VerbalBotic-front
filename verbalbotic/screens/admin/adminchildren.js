@@ -19,8 +19,8 @@ import { getSelf } from "../../store/user/userActions";
 const Adminchildren = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const { children, loading, error } = useSelector((state) => state.children);
-  const { user } = useSelector((state) => state.user);
+  const { children, loading } = useSelector((state) => state.children);
+  const { user } = useSelector((state) => state.user); // Fetch self data
 
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const translateAnim = useRef(new Animated.Value(0)).current;
@@ -55,8 +55,10 @@ const Adminchildren = () => {
     <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.gradient}>
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.container}>
+          {/* Title for Self */}
+
           {/* Title for Children */}
-          <Text style={styles.title}>Children Chats</Text>
+          <Text style={styles.title}>Children</Text>
           <View style={styles.childrenList}>
             {loading && (
               <View style={styles.loadingContainer}>
@@ -131,6 +133,18 @@ const Adminchildren = () => {
 
           {/* Title for My Chats */}
           <Text style={styles.title}>My Chats</Text>
+          <View style={styles.selfCard}>
+            <View
+              style={[styles.avatarPlaceholder, { backgroundColor: "#66b3ff" }]}
+            >
+              <Text style={styles.avatarText}>{user?.name.charAt(0)}</Text>
+            </View>
+            <View style={styles.rowView}>
+              <View style={styles.selfInfo}>
+                <Text style={styles.selfName}>{user?.name}</Text>
+              </View>
+            </View>
+          </View>
         </View>
       </SafeAreaView>
     </LinearGradient>
@@ -223,6 +237,32 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   childAge: {
+    fontSize: 16,
+    color: "#757575",
+    marginTop: 4,
+  },
+  selfCard: {
+    backgroundColor: "#FFFFFF",
+    padding: 20,
+    borderRadius: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 15,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  selfInfo: {
+    flex: 1,
+  },
+  selfName: {
+    fontSize: 18,
+    color: "#333",
+    fontWeight: "600",
+  },
+  selfDetails: {
     fontSize: 16,
     color: "#757575",
     marginTop: 4,
