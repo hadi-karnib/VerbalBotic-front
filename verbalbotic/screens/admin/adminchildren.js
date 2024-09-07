@@ -143,6 +143,13 @@ const Adminchildren = () => {
               <View style={styles.selfInfo}>
                 <Text style={styles.selfName}>{user?.name}</Text>
               </View>
+              <View style={styles.arrowIcon}>
+                <MaterialIcons
+                  name="arrow-forward-ios"
+                  size={15}
+                  color="#757575"
+                />
+              </View>
             </View>
           </View>
         </View>
