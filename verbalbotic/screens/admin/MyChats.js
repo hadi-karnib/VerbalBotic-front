@@ -140,9 +140,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 10,
     paddingVertical: 5,
-    backgroundColor: "#fff",
     borderTopWidth: 1,
-    borderColor: "#ccc",
+    borderColor: "#90c2d8",
   },
   input: {
     flex: 1,
