@@ -54,7 +54,6 @@ const Adminchildren = () => {
   const handleSelfPress = () => {
     if (user) {
       navigation.navigate("ChildChats", {
-        id: user._id,
         name: user.name,
         color: "#66b3ff",
       });
