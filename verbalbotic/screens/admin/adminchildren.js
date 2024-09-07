@@ -13,7 +13,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import LottieView from "lottie-react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import NoChildrenAnimation from "../../assets/NoChildren.json"; // Assuming the animation is located here
+import NoChildrenAnimation from "../../assets/NoChildren.json";
 
 const Adminchildren = () => {
   const dispatch = useDispatch();
@@ -125,7 +125,6 @@ const Adminchildren = () => {
             </View>
           )}
 
-          {/* Title for My Chats */}
           <Text style={styles.title}>My Chats</Text>
         </View>
       </SafeAreaView>
