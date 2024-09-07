@@ -54,19 +54,21 @@ const MyChats = () => {
           contentContainerStyle={styles.scrollContainer}
         >
           {loading ? (
-            <LottieView
-              source={require("../../assets/loading.json")}
-              autoPlay
-              loop
-              style={styles.lottieAnimation}
-            />
+            <View style={styles.loadingContainer}>
+              <LottieView
+                source={require("../../assets/loading.json")}
+                autoPlay
+                loop
+                style={styles.loadingAnimation}
+              />
+            </View>
           ) : chats.length === 0 ? (
             <View style={styles.noChatsContainer}>
               <LottieView
                 source={require("../../assets/NoChats.json")}
                 autoPlay
                 loop
-                style={styles.lottieAnimation}
+                style={styles.noChatsAnimation}
               />
               <Text style={styles.noChatsText}>No chats available</Text>
             </View>
@@ -178,18 +180,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   noChatsText: {
-    fontSize: 16,
+    fontSize: 20, // Increased font size for more emphasis
     color: "#666",
     marginTop: 10,
   },
-  lottieAnimation: {
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  noChatsAnimation: {
+    width: 200, // Made NoChats animation bigger
+    height: 200,
+  },
+  loadingAnimation: {
     width: 150,
     height: 150,
-  },
-  loadingText: {
-    textAlign: "center",
-    color: "#666",
-    fontSize: 16,
   },
 });
 
