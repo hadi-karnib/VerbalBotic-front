@@ -4,14 +4,16 @@ import {
   Text,
   View,
   SafeAreaView,
-  ScrollView,
   TextInput,
   TouchableOpacity,
+  Platform,
+  KeyboardAvoidingView,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { LinearGradient } from "expo-linear-gradient";
 import { MaterialIcons } from "@expo/vector-icons";
 import LottieView from "lottie-react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view"; // Importing KeyboardAwareScrollView
 import { getMyChats } from "../../store/Chats/chatsActions";
 
 const MyChats = () => {
@@ -35,66 +37,74 @@ const MyChats = () => {
     }
   }, [chats]);
 
-  const handleSend = () => {};
+  const handleSend = () => {
+    // Your send message logic here
+  };
 
   return (
     <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.gradient}>
       <SafeAreaView style={styles.safeArea}>
-        <View style={styles.headerContainer}>
-          <View style={styles.avatarPlaceholder}>
-            <Text style={styles.avatarText}>{user?.name?.charAt(0)}</Text>
-          </View>
-          <Text style={styles.headerText}>My Chats</Text>
-        </View>
-
-        <ScrollView
-          ref={scrollViewRef}
-          contentContainerStyle={styles.scrollContainer}
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={styles.container}
         >
-          {loading ? (
-            <View style={styles.loadingContainer}>
-              <LottieView
-                source={require("../../assets/loading.json")}
-                autoPlay
-                loop
-                style={styles.loadingAnimation}
-              />
+          <KeyboardAwareScrollView
+            ref={scrollViewRef}
+            contentContainerStyle={styles.scrollContainer}
+            extraHeight={10}
+          >
+            <View style={styles.headerContainer}>
+              <View style={styles.avatarPlaceholder}>
+                <Text style={styles.avatarText}>{user?.name?.charAt(0)}</Text>
+              </View>
+              <Text style={styles.headerText}>My Chats</Text>
             </View>
-          ) : chats.length === 0 ? (
-            <View style={styles.noChatsContainer}>
-              <LottieView
-                source={require("../../assets/NoChats.json")}
-                autoPlay
-                loop
-                style={styles.noChatsAnimation}
-              />
-              <Text style={styles.noChatsText}>
-                No chats for now. Lets Start!
-              </Text>
-            </View>
-          ) : (
-            chats.map((chat, index) => (
-              <View key={index} style={styles.messageBubble}>
-                <Text style={styles.messageText}>{chat.message}</Text>
-                <Text style={styles.timeText}>
-                  {new Date(chat.timestamp).toLocaleTimeString()}
+
+            {loading ? (
+              <View style={styles.loadingContainer}>
+                <LottieView
+                  source={require("../../assets/loading.json")}
+                  autoPlay
+                  loop
+                  style={styles.loadingAnimation}
+                />
+              </View>
+            ) : chats.length === 0 ? (
+              <View style={styles.noChatsContainer}>
+                <LottieView
+                  source={require("../../assets/NoChats.json")}
+                  autoPlay
+                  loop
+                  style={styles.noChatsAnimation}
+                />
+                <Text style={styles.noChatsText}>
+                  No chats for now. Let’s Start!
                 </Text>
               </View>
-            ))
-          )}
-        </ScrollView>
+            ) : (
+              chats.map((chat, index) => (
+                <View key={index} style={styles.messageBubble}>
+                  <Text style={styles.messageText}>{chat.message}</Text>
+                  <Text style={styles.timeText}>
+                    {new Date(chat.timestamp).toLocaleTimeString()}
+                  </Text>
+                </View>
+              ))
+            )}
+          </KeyboardAwareScrollView>
 
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Type a message"
-            value={messageInput}
-            onChangeText={setMessageInput}
-          />
-          <TouchableOpacity onPress={handleSend} style={styles.sendButton}>
-            <MaterialIcons name="send" size={24} color="#FFF" />
-          </TouchableOpacity>
-        </View>
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.input}
+              placeholder="Type a message"
+              value={messageInput}
+              onChangeText={setMessageInput}
+            />
+            <TouchableOpacity onPress={handleSend} style={styles.sendButton}>
+              <MaterialIcons name="send" size={24} color="#FFF" />
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
       </SafeAreaView>
     </LinearGradient>
   );
@@ -105,6 +115,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   safeArea: {
+    flex: 1,
+  },
+  container: {
     flex: 1,
   },
   headerContainer: {
@@ -158,8 +171,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 10,
     paddingVertical: 5,
-    borderTopWidth: 1,
-    borderColor: "#90c2d8",
   },
   input: {
     flex: 1,
