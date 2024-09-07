@@ -188,7 +188,9 @@ const styles = StyleSheet.create({
     marginTop: 20,
     textAlign: "center",
   },
-  childrenList: {},
+  childrenList: {
+    flex: 0,
+  },
   childItem: {
     backgroundColor: "#FFFFFF",
     padding: 20,
