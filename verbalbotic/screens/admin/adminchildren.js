@@ -20,7 +20,7 @@ const Adminchildren = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const { children, loading } = useSelector((state) => state.children);
-  const { user, loading: userLoading } = useSelector((state) => state.user); // Fetch self data and check loading
+  const { user, loading: userLoading } = useSelector((state) => state.user);
 
   const fadeAnim = useRef(new Animated.Value(1)).current;
   const translateAnim = useRef(new Animated.Value(0)).current;
@@ -135,49 +135,51 @@ const Adminchildren = () => {
 
           {/* Title for My Chats */}
           <Text style={styles.title}>My Chats</Text>
-          <TouchableOpacity onPress={handleSelfPress} style={styles.selfCard}>
-            <Animated.View
-              style={[
-                styles.childItem,
-                {
-                  opacity: fadeAnim,
-                  transform: [{ translateY: translateAnim }],
-                },
-              ]}
-            >
-              <View
+          {userLoading && (
+            <View style={styles.loadingContainer}>
+              <LottieView
+                source={require("../../assets/loading.json")}
+                autoPlay
+                loop
+                style={styles.loadingAnimation}
+              />
+            </View>
+          )}
+          {!userLoading && user && (
+            <TouchableOpacity onPress={handleSelfPress} style={styles.selfCard}>
+              <Animated.View
                 style={[
-                  styles.avatarPlaceholder,
-                  { backgroundColor: "#66b3ff" },
+                  styles.childItem,
+                  {
+                    opacity: fadeAnim,
+                    transform: [{ translateY: translateAnim }],
+                  },
                 ]}
               >
-                <Text style={styles.avatarText}>{user?.name?.charAt(0)}</Text>
-              </View>
-              <View style={styles.rowView}>
-                <View style={styles.selfInfo}>
-                  <Text style={styles.selfName}>{user?.name}</Text>
-                  <Text style={styles.childAge}>Take advice from our AI</Text>
+                <View
+                  style={[
+                    styles.avatarPlaceholder,
+                    { backgroundColor: "#66b3ff" },
+                  ]}
+                >
+                  <Text style={styles.avatarText}>{user?.name?.charAt(0)}</Text>
                 </View>
-                <View style={styles.SelfarrowIcon}>
-                  <MaterialIcons
-                    name="arrow-forward-ios"
-                    size={15}
-                    color="#757575"
-                  />
+                <View style={styles.rowView}>
+                  <View style={styles.selfInfo}>
+                    <Text style={styles.selfName}>{user?.name}</Text>
+                    <Text style={styles.childAge}>Take advice from our AI</Text>
+                  </View>
+                  <View style={styles.SelfarrowIcon}>
+                    <MaterialIcons
+                      name="arrow-forward-ios"
+                      size={15}
+                      color="#757575"
+                    />
+                  </View>
                 </View>
-              </View>
-            </Animated.View>
-            {userLoading && (
-              <View style={styles.loadingContainer}>
-                <LottieView
-                  source={require("../../assets/loading.json")}
-                  autoPlay
-                  loop
-                  style={styles.loadingAnimation}
-                />
-              </View>
-            )}
-          </TouchableOpacity>
+              </Animated.View>
+            </TouchableOpacity>
+          )}
         </View>
       </SafeAreaView>
     </LinearGradient>
@@ -198,7 +200,7 @@ const styles = StyleSheet.create({
     paddingTop: 15,
   },
   SelfarrowIcon: {
-    paddingTop: 4,
+    paddingTop: 15,
   },
   container: {
     flex: 1,
