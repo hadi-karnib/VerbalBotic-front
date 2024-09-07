@@ -56,7 +56,7 @@ const Adminchildren = () => {
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.container}>
           {/* Title for Children */}
-          <Text style={styles.title}>Children</Text>
+          <Text style={styles.title}>Children Chats</Text>
           <View style={styles.childrenList}>
             {loading && (
               <View style={styles.loadingContainer}>
