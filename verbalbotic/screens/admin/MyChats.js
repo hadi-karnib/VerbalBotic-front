@@ -11,6 +11,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { LinearGradient } from "expo-linear-gradient";
 import { MaterialIcons } from "@expo/vector-icons";
+import LottieView from "lottie-react-native"; // Import Lottie
 import { getMyChats } from "../../store/Chats/chatsActions"; // Assuming getMyChats is the correct action for fetching user chats
 
 const MyChats = () => {
@@ -53,7 +54,22 @@ const MyChats = () => {
           contentContainerStyle={styles.scrollContainer}
         >
           {loading ? (
-            <Text style={styles.loadingText}>Loading chats...</Text>
+            <LottieView
+              source={require("../../assets/loading.json")}
+              autoPlay
+              loop
+              style={styles.lottieAnimation}
+            />
+          ) : chats.length === 0 ? (
+            <View style={styles.noChatsContainer}>
+              <LottieView
+                source={require("../../assets/NoChats.json")}
+                autoPlay
+                loop
+                style={styles.lottieAnimation}
+              />
+              <Text style={styles.noChatsText}>No chats available</Text>
+            </View>
           ) : (
             chats.map((chat, index) => (
               <View key={index} style={styles.messageBubble}>
@@ -155,6 +171,20 @@ const styles = StyleSheet.create({
     backgroundColor: "#66b3ff",
     padding: 10,
     borderRadius: 25,
+  },
+  noChatsContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  noChatsText: {
+    fontSize: 16,
+    color: "#666",
+    marginTop: 10,
+  },
+  lottieAnimation: {
+    width: 150,
+    height: 150,
   },
   loadingText: {
     textAlign: "center",
