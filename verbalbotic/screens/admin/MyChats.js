@@ -11,8 +11,8 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { LinearGradient } from "expo-linear-gradient";
 import { MaterialIcons } from "@expo/vector-icons";
-import LottieView from "lottie-react-native"; // Import Lottie
-import { getMyChats } from "../../store/Chats/chatsActions"; // Assuming getMyChats is the correct action for fetching user chats
+import LottieView from "lottie-react-native";
+import { getMyChats } from "../../store/Chats/chatsActions";
 
 const MyChats = () => {
   const dispatch = useDispatch();
@@ -35,9 +35,7 @@ const MyChats = () => {
     }
   }, [chats]);
 
-  const handleSend = () => {
-    // Function to send new message (implementation depends on your message sending setup)
-  };
+  const handleSend = () => {};
 
   return (
     <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.gradient}>
@@ -180,8 +178,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   noChatsText: {
-    fontSize: 20, // Increased font size for more emphasis
-    color: "#666",
+    fontSize: 20,
+    color: "#000",
     marginTop: 10,
   },
   loadingContainer: {
@@ -190,7 +188,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   noChatsAnimation: {
-    width: 200, // Made NoChats animation bigger
+    width: 200,
     height: 200,
   },
   loadingAnimation: {
