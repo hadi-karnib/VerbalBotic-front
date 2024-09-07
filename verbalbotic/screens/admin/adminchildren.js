@@ -56,19 +56,20 @@ const Adminchildren = () => {
         <View style={styles.container}>
           {/* Title for Children */}
           <Text style={styles.title}>Children</Text>
-          {loading && (
-            <View style={styles.loadingContainer}>
-              <LottieView
-                source={require("../../assets/loading.json")}
-                autoPlay
-                loop
-                style={styles.loadingAnimation}
-              />
-            </View>
-          )}
-          {!loading && children.length > 0 && (
-            <View style={styles.childrenList}>
-              {children.map((child, index) => (
+          <View style={styles.childrenList}>
+            {loading && (
+              <View style={styles.loadingContainer}>
+                <LottieView
+                  source={require("../../assets/loading.json")}
+                  autoPlay
+                  loop
+                  style={styles.loadingAnimation}
+                />
+              </View>
+            )}
+            {!loading &&
+              children.length > 0 &&
+              children.map((child, index) => (
                 <TouchableOpacity
                   key={child._id}
                   onPress={() =>
@@ -112,20 +113,22 @@ const Adminchildren = () => {
                   </Animated.View>
                 </TouchableOpacity>
               ))}
-            </View>
-          )}
-          {!loading && children.length === 0 && (
-            <View style={styles.noChildrenContainer}>
-              <LottieView
-                source={NoChildrenAnimation}
-                autoPlay
-                loop
-                style={styles.noChildrenLottie}
-              />
-              <Text style={styles.noChildrenText}>No children added yet.</Text>
-            </View>
-          )}
+            {!loading && children.length === 0 && (
+              <View style={styles.noChildrenContainer}>
+                <LottieView
+                  source={NoChildrenAnimation}
+                  autoPlay
+                  loop
+                  style={styles.noChildrenLottie}
+                />
+                <Text style={styles.noChildrenText}>
+                  No children added yet.
+                </Text>
+              </View>
+            )}
+          </View>
 
+          {/* Title for My Chats */}
           <Text style={styles.title}>My Chats</Text>
         </View>
       </SafeAreaView>
@@ -159,19 +162,12 @@ const styles = StyleSheet.create({
     textAlign: "start",
   },
   loadingContainer: {
-    flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
   loadingAnimation: {
     width: 150,
     height: 150,
-  },
-  errorText: {
-    fontSize: 18,
-    color: "red",
-    textAlign: "center",
-    marginVertical: 10,
   },
   noChildrenContainer: {
     flex: 1,
