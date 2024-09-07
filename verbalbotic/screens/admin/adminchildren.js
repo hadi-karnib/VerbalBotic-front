@@ -26,7 +26,7 @@ const Adminchildren = () => {
 
   useEffect(() => {
     dispatch(fetchChildren());
-
+    dispatch(getSelf());
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 800,
