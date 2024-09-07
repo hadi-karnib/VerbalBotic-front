@@ -68,7 +68,9 @@ const MyChats = () => {
                 loop
                 style={styles.noChatsAnimation}
               />
-              <Text style={styles.noChatsText}>No chats available</Text>
+              <Text style={styles.noChatsText}>
+                No chats for now. Lets Start!
+              </Text>
             </View>
           ) : (
             chats.map((chat, index) => (
