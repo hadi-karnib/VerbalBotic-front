@@ -43,6 +43,7 @@ export default function App() {
             <Stack.Screen name="adminChildren" component={Adminchildren} />
             <Stack.Screen name="adminTabs" component={AdminTabs} />
             <Stack.Screen name="ChildChats" component={ChildChats} />
+            <Stack.Screen name="MyChats" component={MyChats} />
           </Stack.Navigator>
           <StatusBar style="auto" />
         </NavigationContainer>
