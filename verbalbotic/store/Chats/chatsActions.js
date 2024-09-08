@@ -212,7 +212,7 @@ export const fetchChildChats = (childId) => async (dispatch) => {
 
 export const adminMessages = (messageContent) => async (dispatch) => {
   try {
-    dispatch(chatsActions.saveVoiceNoteRequest());
+    dispatch(chatsActions.adminMessageRequest());
 
     const token = await AsyncStorage.getItem("token");
 
@@ -228,15 +228,15 @@ export const adminMessages = (messageContent) => async (dispatch) => {
     );
 
     const { _id: messageId } = response.data;
-    dispatch(chatsActions.saveVoiceNoteSuccess(response.data));
 
-    const prompt = messageContent;
+    // Dispatch the success action with the newly created message
+    dispatch(chatsActions.adminMessageSuccess(response.data));
 
     // Call the parent advice function in the background
-    dispatch(getParentAdviceWithMessageId(prompt, messageId));
+    dispatch(getParentAdviceWithMessageId(messageContent, messageId));
   } catch (error) {
     dispatch(
-      chatsActions.saveVoiceNoteFailure(
+      chatsActions.adminMessageFailure(
         error.response?.data?.message || error.message
       )
     );
@@ -245,7 +245,7 @@ export const adminMessages = (messageContent) => async (dispatch) => {
 };
 
 export const getParentAdviceWithMessageId =
-  (prompt, messageId) => async (dispatch, getState) => {
+  (prompt, messageId) => async (dispatch) => {
     try {
       dispatch(chatsActions.getParentAdviceRequest());
 
@@ -264,8 +264,8 @@ export const getParentAdviceWithMessageId =
 
       const { advice } = response.data;
 
-      // Update the specific chat message in the Redux store
-      dispatch(chatsActions.updateAIResponseSuccess({ messageId, advice }));
+      // Dispatch the success action with the messageId and AI advice
+      dispatch(chatsActions.getParentAdviceSuccess({ messageId, advice }));
 
       Alert.alert(
         "AI Advice Updated",
