@@ -25,6 +25,14 @@ const MyChats = () => {
 
   const [messageInput, setMessageInput] = useState("");
 
+  // Force a re-render when `chats` change
+  useEffect(() => {
+    if (scrollViewRef.current) {
+      scrollViewRef.current.scrollToEnd({ animated: true });
+    }
+  }, [chats]); // Detect changes in the `chats` array
+
+  // Fetch chats on component mount
   useEffect(() => {
     if (user) {
       dispatch(getMyChats());
@@ -32,8 +40,10 @@ const MyChats = () => {
   }, [dispatch, user]);
 
   const handleSend = () => {
-    dispatch(adminMessages(messageInput));
-    setMessageInput("");
+    if (messageInput.trim()) {
+      dispatch(adminMessages(messageInput));
+      setMessageInput(""); // Clear the input field after sending the message
+    }
   };
 
   return (
@@ -79,7 +89,7 @@ const MyChats = () => {
             ) : (
               chats.map((chat, index) => (
                 <View key={index} style={styles.messageContainer}>
-                  {/* User message bubble */}
+                  {/* User Message Bubble */}
                   <View style={[styles.messageBubble, styles.userMessage]}>
                     <Text style={styles.messageText}>{chat.message}</Text>
                     <Text style={styles.timeText}>
@@ -91,7 +101,7 @@ const MyChats = () => {
                     </Text>
                   </View>
 
-                  {/* AI response bubble */}
+                  {/* AI Response Bubble (Aligned to the Left) */}
                   {chat.AI_response && (
                     <View
                       style={[styles.messageBubble, styles.aiResponseBubble]}
