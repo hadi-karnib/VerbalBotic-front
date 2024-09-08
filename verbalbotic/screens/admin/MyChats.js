@@ -19,21 +19,20 @@ import { getMyChats, adminMessages } from "../../store/Chats/chatsActions";
 const MyChats = () => {
   const dispatch = useDispatch();
 
-  // Selecting chats from the Redux state
   const { user } = useSelector((state) => state.user);
-  const { chats = [], loading, error } = useSelector((state) => state.chats); // Make sure you're selecting chats correctly
+  const { chats = [], loading, error } = useSelector((state) => state.chats);
 
   const [messageInput, setMessageInput] = useState("");
   useEffect(() => {
     if (user) {
-      dispatch(getMyChats()); // Fetch chats on component mount
+      dispatch(getMyChats());
     }
   }, [dispatch, user]);
 
   const handleSend = () => {
     if (messageInput.trim()) {
-      dispatch(adminMessages(messageInput)); // Sending a new message
-      setMessageInput(""); // Clear the input field after sending the message
+      dispatch(adminMessages(messageInput));
+      setMessageInput("");
     }
   };
 
@@ -65,7 +64,7 @@ const MyChats = () => {
                   autoPlay
                   loop
                   style={styles.loadingAnimation}
-                  useNativeDriver={true} // Explicitly set useNativeDriver
+                  useNativeDriver={true}
                 />
               </View>
             ) : chats.length === 0 ? (
@@ -75,7 +74,7 @@ const MyChats = () => {
                   autoPlay
                   loop
                   style={styles.noChatsAnimation}
-                  useNativeDriver={true} // Explicitly set useNativeDriver
+                  useNativeDriver={true}
                 />
                 <Text style={styles.noChatsText}>
                   No chats for now. Let’s Start!
