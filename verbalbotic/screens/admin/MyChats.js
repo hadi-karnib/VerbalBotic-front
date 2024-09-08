@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   StyleSheet,
   Text,
@@ -18,21 +18,41 @@ import { getMyChats, adminMessages } from "../../store/Chats/chatsActions";
 
 const MyChats = () => {
   const dispatch = useDispatch();
+  const scrollViewRef = useRef(null); // Create a ref for the ScrollView
 
+  // Selecting chats from the Redux state
   const { user } = useSelector((state) => state.user);
-  const { chats = [], loading, error } = useSelector((state) => state.chats);
+  const { chats = [], loading, error } = useSelector((state) => state.chats); // Make sure you're selecting chats correctly
 
   const [messageInput, setMessageInput] = useState("");
+
+  // Scroll to the bottom of the chats
+  const scrollToBottom = () => {
+    scrollViewRef.current?.scrollToEnd({ animated: true });
+  };
+
+  // Scroll to bottom when the component mounts and when chats are updated
+  useEffect(() => {
+    if (chats.length > 0) {
+      setTimeout(() => {
+        scrollToBottom(); // Scroll to the bottom after chats are loaded
+      }, 100); // Add a slight delay to ensure content is rendered
+    }
+  }, [chats]);
+
   useEffect(() => {
     if (user) {
-      dispatch(getMyChats());
+      dispatch(getMyChats()); // Fetch chats on component mount
     }
   }, [dispatch, user]);
 
   const handleSend = () => {
     if (messageInput.trim()) {
-      dispatch(adminMessages(messageInput));
-      setMessageInput("");
+      dispatch(adminMessages(messageInput)); // Sending a new message
+      setMessageInput(""); // Clear the input field after sending the message
+      setTimeout(() => {
+        scrollToBottom(); // Scroll to the bottom after sending a message
+      }, 100); // Slight delay to ensure the message is added to chats
     }
   };
 
@@ -49,6 +69,7 @@ const MyChats = () => {
           <ScrollView
             contentContainerStyle={styles.scrollContainer}
             keyboardShouldPersistTaps="handled"
+            ref={scrollViewRef} // Attach the ScrollView ref
           >
             <View style={styles.headerContainer}>
               <View style={styles.avatarPlaceholder}>
@@ -64,7 +85,7 @@ const MyChats = () => {
                   autoPlay
                   loop
                   style={styles.loadingAnimation}
-                  useNativeDriver={true}
+                  useNativeDriver={true} // Explicitly set useNativeDriver
                 />
               </View>
             ) : chats.length === 0 ? (
@@ -74,7 +95,7 @@ const MyChats = () => {
                   autoPlay
                   loop
                   style={styles.noChatsAnimation}
-                  useNativeDriver={true}
+                  useNativeDriver={true} // Explicitly set useNativeDriver
                 />
                 <Text style={styles.noChatsText}>
                   No chats for now. Let’s Start!
