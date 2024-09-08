@@ -37,7 +37,10 @@ const MyChats = () => {
     }
   }, [chats]);
 
-  const handleSend = () => {};
+  const handleSend = () => {
+    dispatch(adminMessages(messageInput));
+    setMessageInput("");
+  };
 
   return (
     <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.gradient}>
