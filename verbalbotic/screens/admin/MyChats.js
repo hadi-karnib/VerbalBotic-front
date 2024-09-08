@@ -83,9 +83,6 @@ const MyChats = () => {
               </View>
             ) : (
               chats.map((chat, index) => {
-                // Debugging: Log the createdAt field
-                console.log("Chat Created At:", chat.createdAt);
-
                 return (
                   <View key={index} style={styles.messageBubble}>
                     <Text style={styles.messageText}>{chat.message}</Text>
