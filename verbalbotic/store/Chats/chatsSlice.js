@@ -104,29 +104,39 @@ const chatsSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    adminMessageRequest: (state) => {
+      state.adminMessageLoading = true;
+      state.adminMessageError = null;
+    },
+    adminMessageSuccess: (state, action) => {
+      state.adminMessageLoading = false;
+      state.chats.push(action.payload); // Add the message without refetching chats
+    },
+    adminMessageFailure: (state, action) => {
+      state.adminMessageLoading = false;
+      state.adminMessageError = action.payload;
+    },
+
+    // For AI advice response
     getParentAdviceRequest: (state) => {
-      state.loading = true;
-      state.error = null;
+      state.updatingAIResponse = true;
+      state.updateAIResponseError = null;
     },
     getParentAdviceSuccess: (state, action) => {
-      state.loading = false;
-      state.parentAdvice = action.payload;
-    },
-    getParentAdviceFailure: (state, action) => {
-      state.loading = false;
-      state.error = action.payload;
-    },
-    updateAIResponseSuccess: (state, action) => {
+      state.updatingAIResponse = false;
       const { messageId, advice } = action.payload;
-
       const messageIndex = state.chats.findIndex(
         (chat) => chat._id === messageId
       );
-
       if (messageIndex !== -1) {
         state.chats[messageIndex].AI_response = advice;
       }
     },
+    getParentAdviceFailure: (state, action) => {
+      state.updatingAIResponse = false;
+      state.updateAIResponseError = action.payload;
+    },
+
     clearChats: (state) => {
       state.chats = [];
     },
