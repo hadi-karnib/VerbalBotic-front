@@ -35,6 +35,7 @@
     "react-native-dotenv": "^3.4.11",
     "react-native-element-dropdown": "^2.12.1",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
+    "react-native-keyboard-aware-view": "^0.0.14",
     "react-native-multi-slider": "^0.3.6",
     "react-native-paper": "^5.12.5",
     "react-native-picker-select": "^9.3.1",
