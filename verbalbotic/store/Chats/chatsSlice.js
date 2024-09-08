@@ -122,9 +122,9 @@ const chatsSlice = createSlice({
     },
     getParentAdviceSuccess: (state, action) => {
       state.updatingAIResponse = false;
-      const { messageId, advice } = action.payload;
+      const { messageId, AI_response } = action.payload;
       state.chats = state.chats.map((chat) =>
-        chat._id === messageId ? { ...chat, AI_response: advice } : chat
+        chat._id === messageId ? { ...chat, AI_response: AI_response } : chat
       );
     },
     getParentAdviceFailure: (state, action) => {
