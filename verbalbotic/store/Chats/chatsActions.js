@@ -245,7 +245,7 @@ export const adminMessages = (messageContent) => async (dispatch) => {
 };
 
 export const getParentAdviceWithMessageId =
-  (prompt, messageId) => async (dispatch) => {
+  (prompt, messageId) => async (dispatch, getState) => {
     try {
       dispatch(chatsActions.getParentAdviceRequest());
 
@@ -266,6 +266,18 @@ export const getParentAdviceWithMessageId =
 
       // Dispatch the success action with the messageId and AI advice
       dispatch(chatsActions.getParentAdviceSuccess({ messageId, advice }));
+
+      // Update the specific chat in the current state without calling getMyChats
+      const currentChats = getState().chats.chats;
+      const updatedChats = currentChats.map((chat) => {
+        if (chat._id === messageId) {
+          return { ...chat, AI_response: advice };
+        }
+        return chat;
+      });
+
+      // Dispatch action to update the chats in the state
+      dispatch(chatsActions.updateChats(updatedChats));
 
       Alert.alert(
         "AI Advice Updated",
