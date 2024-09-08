@@ -24,7 +24,11 @@ const MyChats = () => {
   const { chats = [], loading, error } = useSelector((state) => state.chats); // Make sure you're selecting chats correctly
 
   const [messageInput, setMessageInput] = useState("");
-
+  useEffect(() => {
+    if (chats) {
+      console.log(chats);
+    }
+  }, [chats]);
   useEffect(() => {
     if (user) {
       dispatch(getMyChats()); // Fetch chats on component mount
