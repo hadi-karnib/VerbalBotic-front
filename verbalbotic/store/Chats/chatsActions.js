@@ -258,9 +258,9 @@ export const getParentAdviceWithMessageId =
         }
       );
 
-      const { advice } = response.data;
+      const { AI_response } = response.data;
 
-      dispatch(chatsActions.getParentAdviceSuccess({ messageId, advice }));
+      dispatch(chatsActions.getParentAdviceSuccess({ messageId, AI_response }));
       console.log("Parent advice received and dispatched.");
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message;
