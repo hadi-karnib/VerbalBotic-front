@@ -23,7 +23,7 @@ export const getMyChats = () => async (dispatch) => {
         error.response?.data?.message || error.message
       )
     );
-    console.log("failure");
+    console.log("failure getting my chats");
   }
 };
 
@@ -233,23 +233,20 @@ export const adminMessages = (messageContent) => async (dispatch) => {
     // Fetch AI response in the background
     dispatch(getParentAdviceWithMessageId(messageContent, messageId));
   } catch (error) {
-    dispatch(
-      chatsActions.adminMessageFailure(
-        error.response?.data?.message || error.message
-      )
-    );
+    const errorMessage = error.response?.data?.message || error.message;
+    dispatch(chatsActions.adminMessageFailure(errorMessage));
+    console.error("Error sending admin message:", errorMessage);
   }
 };
 
 export const getParentAdviceWithMessageId =
-  (prompt, messageId) => async (dispatch, getState) => {
-    console.log("getting advice");
+  (prompt, messageId) => async (dispatch) => {
+    console.log("Requesting parent advice...");
 
     try {
       dispatch(chatsActions.getParentAdviceRequest());
 
       const token = await AsyncStorage.getItem("token");
-
       const response = await axios.post(
         `${API_URL}/api/messages/parentAdvice`,
         { prompt, messageId },
@@ -261,22 +258,13 @@ export const getParentAdviceWithMessageId =
         }
       );
 
-      if (response.status >= 200 && response.status < 300) {
-        // Success, dispatch the success action
-        const { advice } = response.data;
-        dispatch(chatsActions.getParentAdviceSuccess({ messageId, advice }));
-      } else {
-        // Handle unexpected status codes
-        throw new Error(`Unexpected status code: ${response.status}`);
-      }
-    } catch (error) {
-      console.log("Error details: ", error.response?.data || error.message);
+      const { advice } = response.data;
 
-      dispatch(
-        chatsActions.getParentAdviceFailure(
-          error.response?.data?.message || error.message
-        )
-      );
-      console.log("failure");
+      dispatch(chatsActions.getParentAdviceSuccess({ messageId, advice }));
+      console.log("Parent advice received and dispatched.");
+    } catch (error) {
+      const errorMessage = error.response?.data?.message || error.message;
+      dispatch(chatsActions.getParentAdviceFailure(errorMessage));
+      console.error("Error fetching parent advice:", errorMessage);
     }
   };
