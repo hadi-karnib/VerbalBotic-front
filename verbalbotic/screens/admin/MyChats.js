@@ -14,7 +14,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { MaterialIcons } from "@expo/vector-icons";
 import LottieView from "lottie-react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { getMyChats } from "../../store/Chats/chatsActions";
+import { getMyChats, adminMessages } from "../../store/Chats/chatsActions";
 
 const MyChats = () => {
   const dispatch = useDispatch();
