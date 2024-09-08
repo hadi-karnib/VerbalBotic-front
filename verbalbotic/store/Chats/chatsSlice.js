@@ -116,6 +116,17 @@ const chatsSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    updateAIResponseSuccess: (state, action) => {
+      const { messageId, advice } = action.payload;
+
+      const messageIndex = state.chats.findIndex(
+        (chat) => chat._id === messageId
+      );
+
+      if (messageIndex !== -1) {
+        state.chats[messageIndex].AI_response = advice;
+      }
+    },
     clearChats: (state) => {
       state.chats = [];
     },
