@@ -110,7 +110,7 @@ const chatsSlice = createSlice({
     },
     getParentAdviceSuccess: (state, action) => {
       state.loading = false;
-      state.parentAdvice = action.payload; // Save the AI advice
+      state.parentAdvice = action.payload;
     },
     getParentAdviceFailure: (state, action) => {
       state.loading = false;
