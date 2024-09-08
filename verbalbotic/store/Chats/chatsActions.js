@@ -239,5 +239,33 @@ export const adminMessages = (messageContent) => async (dispatch) => {
 };
 export const getParentAdvice = (prompt) => async (dispatch) => {
   try {
-  } catch (error) {}
+    dispatch(chatsActions.getParentAdviceRequest());
+
+    const token = await AsyncStorage.getItem("token");
+
+    const response = await axios.post(
+      `${API_URL}/api/messages/parentAdvice`,
+      { prompt },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    dispatch(chatsActions.getParentAdviceSuccess(response.data.advice));
+    Alert.alert(
+      "Advice Retrieved",
+      "AI advice has been successfully retrieved."
+    );
+  } catch (error) {
+    dispatch(
+      chatsActions.getParentAdviceFailure(
+        error.response?.data?.message || error.message
+      )
+    );
+    Alert.alert("Error", "Failed to retrieve parent advice.");
+    console.error("Error fetching parent advice: ", error);
+  }
 };
