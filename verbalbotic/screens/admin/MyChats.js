@@ -85,7 +85,6 @@ const MyChats = () => {
             ) : (
               chats.map((chat, index) => (
                 <View key={index} style={styles.messageContainer}>
-                  {/* User Message Bubble (aligned right) */}
                   <View style={[styles.messageBubble, styles.userMessage]}>
                     <Text style={styles.messageText}>{chat.message}</Text>
                     <Text style={styles.timeText}>
@@ -97,7 +96,6 @@ const MyChats = () => {
                     </Text>
                   </View>
 
-                  {/* AI Response Bubble (aligned left) */}
                   {chat.AI_response && (
                     <View
                       style={[styles.messageBubble, styles.aiResponseBubble]}
@@ -188,11 +186,11 @@ const styles = StyleSheet.create({
   },
   userMessage: {
     backgroundColor: "#dcf8c6",
-    alignSelf: "flex-end", // Right alignment for user messages
+    alignSelf: "flex-end",
   },
   aiResponseBubble: {
     backgroundColor: "#fff",
-    alignSelf: "flex-start", // Left alignment for AI responses
+    alignSelf: "flex-start",
     marginTop: 10,
   },
   messageText: {
