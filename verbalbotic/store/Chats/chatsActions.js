@@ -262,7 +262,7 @@ export const getParentAdviceWithMessageId =
       );
 
       dispatch(chatsActions.getParentAdviceSuccess(response.data.advice));
-
+      dispatch(getMyChats());
       Alert.alert(
         "AI Advice Updated",
         "AI advice has been successfully retrieved and saved."
