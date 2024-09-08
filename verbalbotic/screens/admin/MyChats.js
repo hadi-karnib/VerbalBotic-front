@@ -173,6 +173,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "#999",
     marginTop: 5,
+    alignSelf: "flex-end",
   },
   inputContainer: {
     flexDirection: "row",
