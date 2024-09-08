@@ -216,6 +216,7 @@ export const adminMessages = (messageContent) => async (dispatch) => {
 
     const token = await AsyncStorage.getItem("token");
 
+    // Sending the admin message to get the message ID from the response
     const response = await axios.post(
       `${API_URL}/api/messages/parentMessage`,
       { messageContent },
@@ -227,7 +228,14 @@ export const adminMessages = (messageContent) => async (dispatch) => {
       }
     );
 
+    const { _id: messageId } = response.data; // Extract messageId from response
     dispatch(chatsActions.saveVoiceNoteSuccess(response.data));
+
+    // Now call the getParentAdvice in the background using the messageId
+    const prompt = messageContent;
+
+    // Call the parent advice function in the background
+    dispatch(getParentAdviceWithMessageId(prompt, messageId));
   } catch (error) {
     dispatch(
       chatsActions.saveVoiceNoteFailure(
@@ -237,35 +245,41 @@ export const adminMessages = (messageContent) => async (dispatch) => {
     console.error("Error sending admin message: ", error);
   }
 };
-export const getParentAdvice = (prompt) => async (dispatch) => {
-  try {
-    dispatch(chatsActions.getParentAdviceRequest());
 
-    const token = await AsyncStorage.getItem("token");
+// Background function to call parent advice
+export const getParentAdviceWithMessageId =
+  (prompt, messageId) => async (dispatch) => {
+    try {
+      dispatch(chatsActions.getParentAdviceRequest());
 
-    const response = await axios.post(
-      `${API_URL}/api/messages/parentAdvice`,
-      { prompt },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+      const token = await AsyncStorage.getItem("token");
 
-    dispatch(chatsActions.getParentAdviceSuccess(response.data.advice));
-    Alert.alert(
-      "Advice Retrieved",
-      "AI advice has been successfully retrieved."
-    );
-  } catch (error) {
-    dispatch(
-      chatsActions.getParentAdviceFailure(
-        error.response?.data?.message || error.message
-      )
-    );
-    Alert.alert("Error", "Failed to retrieve parent advice.");
-    console.error("Error fetching parent advice: ", error);
-  }
-};
+      // Calling parent advice API with the prompt and messageId
+      const response = await axios.post(
+        `${API_URL}/api/messages/parentAdvice`,
+        { prompt, messageId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      // Dispatch success action to update state with AI advice
+      dispatch(chatsActions.getParentAdviceSuccess(response.data.advice));
+
+      Alert.alert(
+        "AI Advice Updated",
+        "AI advice has been successfully retrieved and saved."
+      );
+    } catch (error) {
+      dispatch(
+        chatsActions.getParentAdviceFailure(
+          error.response?.data?.message || error.message
+        )
+      );
+      console.error("Error fetching AI advice: ", error);
+      Alert.alert("Error", "Failed to retrieve AI advice.");
+    }
+  };
