@@ -104,6 +104,10 @@ const chatsSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    getParentAdviceRequest: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
     clearChats: (state) => {
       state.chats = [];
     },
