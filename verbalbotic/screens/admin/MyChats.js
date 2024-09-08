@@ -31,12 +31,6 @@ const MyChats = () => {
     }
   }, [dispatch, user]);
 
-  useEffect(() => {
-    if (scrollViewRef.current) {
-      scrollViewRef.current.scrollToEnd({ animated: true });
-    }
-  }, [chats]);
-
   const handleSend = () => {
     dispatch(adminMessages(messageInput));
     setMessageInput("");
@@ -85,6 +79,7 @@ const MyChats = () => {
             ) : (
               chats.map((chat, index) => (
                 <View key={index} style={styles.messageContainer}>
+                  {/* User message bubble */}
                   <View style={[styles.messageBubble, styles.userMessage]}>
                     <Text style={styles.messageText}>{chat.message}</Text>
                     <Text style={styles.timeText}>
@@ -96,6 +91,7 @@ const MyChats = () => {
                     </Text>
                   </View>
 
+                  {/* AI response bubble */}
                   {chat.AI_response && (
                     <View
                       style={[styles.messageBubble, styles.aiResponseBubble]}
