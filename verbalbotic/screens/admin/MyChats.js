@@ -19,20 +19,21 @@ import { getMyChats, adminMessages } from "../../store/Chats/chatsActions";
 const MyChats = () => {
   const dispatch = useDispatch();
 
+  // Selecting chats from the Redux state
   const { user } = useSelector((state) => state.user);
-  const { chats = [], loading, error } = useSelector((state) => state.chats);
+  const { chats = [], loading, error } = useSelector((state) => state.chats); // Make sure you're selecting chats correctly
 
   const [messageInput, setMessageInput] = useState("");
 
   useEffect(() => {
     if (user) {
-      dispatch(getMyChats());
+      dispatch(getMyChats()); // Fetch chats on component mount
     }
   }, [dispatch, user]);
 
   const handleSend = () => {
     if (messageInput.trim()) {
-      dispatch(adminMessages(messageInput));
+      dispatch(adminMessages(messageInput)); // Sending a new message
       setMessageInput(""); // Clear the input field after sending the message
     }
   };
@@ -82,9 +83,8 @@ const MyChats = () => {
                 </Text>
               </View>
             ) : (
-              chats.map((chat, index) => (
-                <View key={index} style={styles.messageContainer}>
-                  {/* User Message Bubble */}
+              chats.map((chat) => (
+                <View key={chat._id} style={styles.messageContainer}>
                   <View style={[styles.messageBubble, styles.userMessage]}>
                     <Text style={styles.messageText}>{chat.message}</Text>
                     <Text style={styles.timeText}>
@@ -95,8 +95,6 @@ const MyChats = () => {
                       })}
                     </Text>
                   </View>
-
-                  {/* AI Response Bubble (Aligned to the Left) */}
                   {chat.AI_response && (
                     <View
                       style={[styles.messageBubble, styles.aiResponseBubble]}
