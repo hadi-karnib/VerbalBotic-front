@@ -37,9 +37,7 @@ const MyChats = () => {
     }
   }, [chats]);
 
-  const handleSend = () => {
-    // Your send message logic here
-  };
+  const handleSend = () => {};
 
   return (
     <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.gradient}>
