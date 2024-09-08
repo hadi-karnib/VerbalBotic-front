@@ -25,11 +25,6 @@ const MyChats = () => {
 
   const [messageInput, setMessageInput] = useState("");
   useEffect(() => {
-    if (chats) {
-      console.log(chats);
-    }
-  }, [chats]);
-  useEffect(() => {
     if (user) {
       dispatch(getMyChats()); // Fetch chats on component mount
     }
