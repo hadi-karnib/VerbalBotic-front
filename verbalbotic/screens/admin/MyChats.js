@@ -25,19 +25,18 @@ const MyChats = () => {
 
   const [messageInput, setMessageInput] = useState("");
 
-  // Force a re-render when `chats` change
-  useEffect(() => {
-    if (scrollViewRef.current) {
-      scrollViewRef.current.scrollToEnd({ animated: true });
-    }
-  }, [chats]); // Detect changes in the `chats` array
-
-  // Fetch chats on component mount
   useEffect(() => {
     if (user) {
       dispatch(getMyChats());
     }
   }, [dispatch, user]);
+
+  // Scroll to the bottom of chats whenever they change
+  useEffect(() => {
+    if (scrollViewRef.current) {
+      scrollViewRef.current.scrollToEnd({ animated: true });
+    }
+  }, [chats]);
 
   const handleSend = () => {
     if (messageInput.trim()) {

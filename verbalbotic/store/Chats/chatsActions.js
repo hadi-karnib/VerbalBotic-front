@@ -229,8 +229,10 @@ export const adminMessages = (messageContent) => async (dispatch) => {
 
     const { _id: messageId } = response.data;
 
+    // Immediately update the chat list with the new message
     dispatch(chatsActions.adminMessageSuccess(response.data));
 
+    // Fetch AI response in the background
     dispatch(getParentAdviceWithMessageId(messageContent, messageId));
   } catch (error) {
     dispatch(
@@ -238,10 +240,10 @@ export const adminMessages = (messageContent) => async (dispatch) => {
         error.response?.data?.message || error.message
       )
     );
-    console.error("Error sending admin message: ", error);
   }
 };
 
+// Function to get AI response
 export const getParentAdviceWithMessageId =
   (prompt, messageId) => async (dispatch, getState) => {
     try {
@@ -262,24 +264,13 @@ export const getParentAdviceWithMessageId =
 
       const { advice } = response.data;
 
+      // Dispatch the success action with the messageId and AI advice
       dispatch(chatsActions.getParentAdviceSuccess({ messageId, advice }));
-
-      const currentChats = getState().chats.chats;
-      const updatedChats = currentChats.map((chat) => {
-        if (chat._id === messageId) {
-          return { ...chat, AI_response: advice };
-        }
-        return chat;
-      });
-
-      dispatch(chatsActions.updateChats(updatedChats));
     } catch (error) {
       dispatch(
         chatsActions.getParentAdviceFailure(
           error.response?.data?.message || error.message
         )
       );
-      console.error("Error fetching AI advice: ", error);
-      Alert.alert("Error", "Failed to retrieve AI advice.");
     }
   };
