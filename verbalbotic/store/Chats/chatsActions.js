@@ -216,7 +216,6 @@ export const adminMessages = (messageContent) => async (dispatch) => {
 
     const token = await AsyncStorage.getItem("token");
 
-    // Sending the admin message to get the message ID from the response
     const response = await axios.post(
       `${API_URL}/api/messages/parentMessage`,
       { messageContent },
@@ -228,13 +227,11 @@ export const adminMessages = (messageContent) => async (dispatch) => {
       }
     );
 
-    const { _id: messageId } = response.data; // Extract messageId from response
+    const { _id: messageId } = response.data;
     dispatch(chatsActions.saveVoiceNoteSuccess(response.data));
 
-    // Now call the getParentAdvice in the background using the messageId
     const prompt = messageContent;
 
-    // Call the parent advice function in the background
     dispatch(getParentAdviceWithMessageId(prompt, messageId));
   } catch (error) {
     dispatch(
@@ -246,7 +243,6 @@ export const adminMessages = (messageContent) => async (dispatch) => {
   }
 };
 
-// Background function to call parent advice
 export const getParentAdviceWithMessageId =
   (prompt, messageId) => async (dispatch) => {
     try {
@@ -254,7 +250,6 @@ export const getParentAdviceWithMessageId =
 
       const token = await AsyncStorage.getItem("token");
 
-      // Calling parent advice API with the prompt and messageId
       const response = await axios.post(
         `${API_URL}/api/messages/parentAdvice`,
         { prompt, messageId },
@@ -266,7 +261,6 @@ export const getParentAdviceWithMessageId =
         }
       );
 
-      // Dispatch success action to update state with AI advice
       dispatch(chatsActions.getParentAdviceSuccess(response.data.advice));
 
       Alert.alert(
