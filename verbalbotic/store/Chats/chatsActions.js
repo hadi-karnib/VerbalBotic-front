@@ -228,8 +228,6 @@ export const adminMessages = (messageContent) => async (dispatch) => {
     );
 
     dispatch(chatsActions.saveVoiceNoteSuccess(response.data));
-    Alert.alert("Message sent successfully", "Admin message has been added.");
-    console.log(response.data);
   } catch (error) {
     dispatch(
       chatsActions.saveVoiceNoteFailure(
