@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -8,17 +8,16 @@ import {
   TouchableOpacity,
   Platform,
   KeyboardAvoidingView,
+  ScrollView,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { LinearGradient } from "expo-linear-gradient";
 import { MaterialIcons } from "@expo/vector-icons";
 import LottieView from "lottie-react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { getMyChats, adminMessages } from "../../store/Chats/chatsActions";
 
 const MyChats = () => {
   const dispatch = useDispatch();
-  const scrollViewRef = useRef(null);
 
   const { user } = useSelector((state) => state.user);
   const { chats = [], loading, error } = useSelector((state) => state.chats);
@@ -30,13 +29,6 @@ const MyChats = () => {
       dispatch(getMyChats());
     }
   }, [dispatch, user]);
-
-  // Scroll to the bottom of chats whenever they change
-  useEffect(() => {
-    if (scrollViewRef.current) {
-      scrollViewRef.current.scrollToEnd({ animated: true });
-    }
-  }, [chats]);
 
   const handleSend = () => {
     if (messageInput.trim()) {
@@ -51,11 +43,11 @@ const MyChats = () => {
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           style={styles.container}
+          keyboardVerticalOffset={90}
         >
-          <KeyboardAwareScrollView
-            ref={scrollViewRef}
+          <ScrollView
             contentContainerStyle={styles.scrollContainer}
-            extraHeight={10}
+            keyboardShouldPersistTaps="handled"
           >
             <View style={styles.headerContainer}>
               <View style={styles.avatarPlaceholder}>
@@ -71,6 +63,7 @@ const MyChats = () => {
                   autoPlay
                   loop
                   style={styles.loadingAnimation}
+                  useNativeDriver={true} // Explicitly set useNativeDriver
                 />
               </View>
             ) : chats.length === 0 ? (
@@ -80,6 +73,7 @@ const MyChats = () => {
                   autoPlay
                   loop
                   style={styles.noChatsAnimation}
+                  useNativeDriver={true} // Explicitly set useNativeDriver
                 />
                 <Text style={styles.noChatsText}>
                   No chats for now. Let’s Start!
@@ -118,7 +112,7 @@ const MyChats = () => {
                 </View>
               ))
             )}
-          </KeyboardAwareScrollView>
+          </ScrollView>
 
           <View style={styles.inputContainer}>
             <TextInput
