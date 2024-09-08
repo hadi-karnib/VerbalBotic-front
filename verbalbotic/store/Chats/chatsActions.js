@@ -266,6 +266,7 @@ export const getParentAdviceWithMessageId =
 
       // Dispatch the success action with the messageId and AI advice
       dispatch(chatsActions.getParentAdviceSuccess({ messageId, advice }));
+      dispatch(getMyChats());
     } catch (error) {
       dispatch(
         chatsActions.getParentAdviceFailure(
