@@ -83,9 +83,10 @@ const MyChats = () => {
                 </Text>
               </View>
             ) : (
-              chats.map((chat, index) => {
-                return (
-                  <View key={index} style={styles.messageBubble}>
+              chats.map((chat, index) => (
+                <View key={index} style={styles.messageContainer}>
+                  {/* User Message Bubble */}
+                  <View style={styles.messageBubble}>
                     <Text style={styles.messageText}>{chat.message}</Text>
                     <Text style={styles.timeText}>
                       {new Date(chat.createdAt).toLocaleTimeString([], {
@@ -95,8 +96,24 @@ const MyChats = () => {
                       })}
                     </Text>
                   </View>
-                );
-              })
+
+                  {/* AI Response Bubble (Aligned to the Left) */}
+                  {chat.AI_response && (
+                    <View
+                      style={[styles.messageBubble, styles.aiResponseBubble]}
+                    >
+                      <Text style={styles.messageText}>{chat.AI_response}</Text>
+                      <Text style={styles.timeText}>
+                        {new Date(chat.createdAt).toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          hour12: true,
+                        })}
+                      </Text>
+                    </View>
+                  )}
+                </View>
+              ))
             )}
           </KeyboardAwareScrollView>
 
@@ -158,12 +175,21 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     padding: 20,
   },
+  messageContainer: {
+    marginBottom: 20,
+  },
   messageBubble: {
     backgroundColor: "#dcf8c6",
     padding: 15,
     borderRadius: 20,
     marginBottom: 10,
-    alignSelf: "flex-end",
+    maxWidth: "80%",
+    minWidth: "60%",
+  },
+  aiResponseBubble: {
+    backgroundColor: "#fff",
+    alignSelf: "flex-start",
+    marginTop: 10,
   },
   messageText: {
     fontSize: 16,
