@@ -123,6 +123,8 @@ const chatsSlice = createSlice({
       state.updateAIResponseError = null;
     },
     getParentAdviceSuccess: (state, action) => {
+      console.log(state.chats); // Log state.chats, not undefined "chats"
+
       state.updatingAIResponse = false;
       const { messageId, advice } = action.payload;
       const messageIndex = state.chats.findIndex(

@@ -6,7 +6,6 @@ import { Alert } from "react-native";
 
 export const getMyChats = () => async (dispatch) => {
   try {
-    console.log("getting chats");
     dispatch(chatsActions.clearChats());
 
     dispatch(chatsActions.getChatsRequest());
@@ -16,7 +15,6 @@ export const getMyChats = () => async (dispatch) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log("successful");
 
     dispatch(chatsActions.getChatsSuccess(response.data));
   } catch (error) {
@@ -243,9 +241,10 @@ export const adminMessages = (messageContent) => async (dispatch) => {
   }
 };
 
-// Function to get AI response
 export const getParentAdviceWithMessageId =
   (prompt, messageId) => async (dispatch, getState) => {
+    console.log("getting advice");
+
     try {
       dispatch(chatsActions.getParentAdviceRequest());
 
@@ -262,16 +261,22 @@ export const getParentAdviceWithMessageId =
         }
       );
 
-      const { advice } = response.data;
-
-      // Dispatch the success action with the messageId and AI advice
-      dispatch(chatsActions.getParentAdviceSuccess({ messageId, advice }));
-      dispatch(getMyChats());
+      if (response.status >= 200 && response.status < 300) {
+        // Success, dispatch the success action
+        const { advice } = response.data;
+        dispatch(chatsActions.getParentAdviceSuccess({ messageId, advice }));
+      } else {
+        // Handle unexpected status codes
+        throw new Error(`Unexpected status code: ${response.status}`);
+      }
     } catch (error) {
+      console.log("Error details: ", error.response?.data || error.message);
+
       dispatch(
         chatsActions.getParentAdviceFailure(
           error.response?.data?.message || error.message
         )
       );
+      console.log("failure");
     }
   };
