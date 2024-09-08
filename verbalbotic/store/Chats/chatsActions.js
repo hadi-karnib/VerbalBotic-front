@@ -7,9 +7,9 @@ import { Alert } from "react-native";
 export const getMyChats = () => async (dispatch) => {
   try {
     console.log("getting chats");
+    dispatch(chatsActions.clearChats());
 
     dispatch(chatsActions.getChatsRequest());
-
     const token = await AsyncStorage.getItem("token");
     const response = await axios.get(`${API_URL}/api/messages/`, {
       headers: {
