@@ -229,10 +229,8 @@ export const adminMessages = (messageContent) => async (dispatch) => {
 
     const { _id: messageId } = response.data;
 
-    // Dispatch the success action with the newly created message
     dispatch(chatsActions.adminMessageSuccess(response.data));
 
-    // Call the parent advice function in the background
     dispatch(getParentAdviceWithMessageId(messageContent, messageId));
   } catch (error) {
     dispatch(
@@ -264,10 +262,8 @@ export const getParentAdviceWithMessageId =
 
       const { advice } = response.data;
 
-      // Dispatch the success action with the messageId and AI advice
       dispatch(chatsActions.getParentAdviceSuccess({ messageId, advice }));
 
-      // Update the specific chat in the current state without calling getMyChats
       const currentChats = getState().chats.chats;
       const updatedChats = currentChats.map((chat) => {
         if (chat._id === messageId) {
@@ -276,13 +272,7 @@ export const getParentAdviceWithMessageId =
         return chat;
       });
 
-      // Dispatch action to update the chats in the state
       dispatch(chatsActions.updateChats(updatedChats));
-
-      Alert.alert(
-        "AI Advice Updated",
-        "AI advice has been successfully retrieved and saved."
-      );
     } catch (error) {
       dispatch(
         chatsActions.getParentAdviceFailure(
