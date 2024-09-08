@@ -245,7 +245,7 @@ export const adminMessages = (messageContent) => async (dispatch) => {
 };
 
 export const getParentAdviceWithMessageId =
-  (prompt, messageId) => async (dispatch) => {
+  (prompt, messageId) => async (dispatch, getState) => {
     try {
       dispatch(chatsActions.getParentAdviceRequest());
 
@@ -262,8 +262,11 @@ export const getParentAdviceWithMessageId =
         }
       );
 
-      dispatch(chatsActions.getParentAdviceSuccess(response.data.advice));
-      dispatch(getMyChats());
+      const { advice } = response.data;
+
+      // Update the specific chat message in the Redux store
+      dispatch(chatsActions.updateAIResponseSuccess({ messageId, advice }));
+
       Alert.alert(
         "AI Advice Updated",
         "AI advice has been successfully retrieved and saved."
