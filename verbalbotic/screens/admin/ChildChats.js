@@ -10,7 +10,8 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { useDispatch, useSelector } from "react-redux";
 import { useFocusEffect, useRoute } from "@react-navigation/native";
-import { fetchChildChats } from "../../store/Chats/chatsActions";
+import { fetchChildChats } from "../../store/Chats/chatsActions"; // Import clearChats
+import { chatsActions } from "../../store/Chats/chatsSlice";
 import { Audio } from "expo-av";
 import Slider from "@react-native-community/slider";
 import { API_URL } from "@env";
@@ -31,6 +32,8 @@ const ChildChats = () => {
 
   useEffect(() => {
     if (childId) {
+      // Clear chats before fetching new child chats
+      dispatch(chatsActions.clearChats());
       dispatch(fetchChildChats(childId));
     }
   }, [dispatch, childId]);
@@ -39,7 +42,8 @@ const ChildChats = () => {
     if (chats.length > 0) {
       const initialDurations = {};
       chats.forEach((chat) => {
-        initialDurations[chat._id] = chat.voiceNoteMetadata.duration * 1000;
+        initialDurations[chat._id] =
+          chat.voiceNoteMetadata?.duration * 1000 || 0;
       });
       setDurations(initialDurations);
     }
@@ -246,18 +250,14 @@ const ChildChats = () => {
                     </Text>
                   </View>
                   <Text style={styles.timeText}>
-                    {new Date(
-                      chat.voiceNoteMetadata.uploadDate
-                    ).toLocaleTimeString()}
+                    {new Date(chat.createdAt).toLocaleTimeString()}
                   </Text>
                 </View>
                 {chat.AI_response && (
                   <View style={[styles.messageBubble, styles.aiResponseBubble]}>
                     <Text style={styles.chatText}>{chat.AI_response}</Text>
                     <Text style={styles.timeText}>
-                      {new Date(
-                        chat.voiceNoteMetadata.uploadDate
-                      ).toLocaleTimeString()}
+                      {new Date(chat.createdAt).toLocaleTimeString()}
                     </Text>
                   </View>
                 )}
