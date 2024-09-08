@@ -209,3 +209,5 @@ export const fetchChildChats = (childId) => async (dispatch) => {
     );
   }
 };
+
+export const adminMessages = (messageContent) => async (dispatch) => {};
