@@ -237,3 +237,4 @@ export const adminMessages = (messageContent) => async (dispatch) => {
     console.error("Error sending admin message: ", error);
   }
 };
+export const getParentAdvice = (prompt) => async (dispatch) => {};
