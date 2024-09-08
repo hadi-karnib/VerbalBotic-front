@@ -212,5 +212,30 @@ export const fetchChildChats = (childId) => async (dispatch) => {
 
 export const adminMessages = (messageContent) => async (dispatch) => {
   try {
-  } catch (error) {}
+    dispatch(chatsActions.saveVoiceNoteRequest());
+
+    const token = await AsyncStorage.getItem("token");
+
+    const response = await axios.post(
+      `${API_URL}/api/messages/parentMessage`,
+      { messageContent },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    dispatch(chatsActions.saveVoiceNoteSuccess(response.data));
+    Alert.alert("Message sent successfully", "Admin message has been added.");
+    console.log(response.data);
+  } catch (error) {
+    dispatch(
+      chatsActions.saveVoiceNoteFailure(
+        error.response?.data?.message || error.message
+      )
+    );
+    console.error("Error sending admin message: ", error);
+  }
 };
