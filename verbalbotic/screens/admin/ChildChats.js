@@ -253,7 +253,7 @@ const ChildChats = () => {
                     {new Date(chat.createdAt).toLocaleTimeString([], {
                       hour: "2-digit",
                       minute: "2-digit",
-                      hour12: true, // Remove seconds and display 12-hour format
+                      hour12: true,
                     })}
                   </Text>
                 </View>
@@ -264,7 +264,7 @@ const ChildChats = () => {
                       {new Date(chat.createdAt).toLocaleTimeString([], {
                         hour: "2-digit",
                         minute: "2-digit",
-                        hour12: true, // Remove seconds and display 12-hour format
+                        hour12: true,
                       })}
                     </Text>
                   </View>
