@@ -116,29 +116,21 @@ const chatsSlice = createSlice({
       state.adminMessageLoading = false;
       state.adminMessageError = action.payload;
     },
-
-    // For AI advice response
     getParentAdviceRequest: (state) => {
       state.updatingAIResponse = true;
       state.updateAIResponseError = null;
     },
     getParentAdviceSuccess: (state, action) => {
-      console.log(state.chats); // Log state.chats, not undefined "chats"
-
       state.updatingAIResponse = false;
       const { messageId, advice } = action.payload;
-      const messageIndex = state.chats.findIndex(
-        (chat) => chat._id === messageId
+      state.chats = state.chats.map((chat) =>
+        chat._id === messageId ? { ...chat, AI_response: advice } : chat
       );
-      if (messageIndex !== -1) {
-        state.chats[messageIndex].AI_response = advice;
-      }
     },
     getParentAdviceFailure: (state, action) => {
       state.updatingAIResponse = false;
       state.updateAIResponseError = action.payload;
     },
-
     clearChats: (state) => {
       state.chats = [];
     },
