@@ -250,14 +250,22 @@ const ChildChats = () => {
                     </Text>
                   </View>
                   <Text style={styles.timeText}>
-                    {new Date(chat.createdAt).toLocaleTimeString()}
+                    {new Date(chat.createdAt).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      hour12: true, // Remove seconds and display 12-hour format
+                    })}
                   </Text>
                 </View>
                 {chat.AI_response && (
                   <View style={[styles.messageBubble, styles.aiResponseBubble]}>
                     <Text style={styles.chatText}>{chat.AI_response}</Text>
                     <Text style={styles.timeText}>
-                      {new Date(chat.createdAt).toLocaleTimeString()}
+                      {new Date(chat.createdAt).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true, // Remove seconds and display 12-hour format
+                      })}
                     </Text>
                   </View>
                 )}
