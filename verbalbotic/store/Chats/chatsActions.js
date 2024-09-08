@@ -232,6 +232,7 @@ export const adminMessages = (messageContent) => async (dispatch) => {
 
     const prompt = messageContent;
 
+    // Call the parent advice function in the background
     dispatch(getParentAdviceWithMessageId(prompt, messageId));
   } catch (error) {
     dispatch(
