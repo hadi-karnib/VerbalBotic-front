@@ -37,13 +37,15 @@ const MyChats = () => {
     }
   };
 
+  const isInputEmpty = messageInput.trim().length === 0;
+
   return (
     <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.gradient}>
       <SafeAreaView style={styles.safeArea}>
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           style={styles.container}
-          keyboardVerticalOffset={90}
+          keyboardVerticalOffset={0}
         >
           <ScrollView
             contentContainerStyle={styles.scrollContainer}
@@ -121,7 +123,14 @@ const MyChats = () => {
               value={messageInput}
               onChangeText={setMessageInput}
             />
-            <TouchableOpacity onPress={handleSend} style={styles.sendButton}>
+            <TouchableOpacity
+              onPress={handleSend}
+              style={[
+                styles.sendButton,
+                isInputEmpty && { backgroundColor: "#a3d3ff" },
+              ]}
+              disabled={isInputEmpty}
+            >
               <MaterialIcons name="send" size={24} color="#FFF" />
             </TouchableOpacity>
           </View>
