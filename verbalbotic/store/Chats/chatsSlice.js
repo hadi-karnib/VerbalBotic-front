@@ -116,7 +116,9 @@ const chatsSlice = createSlice({
       state.adminMessageLoading = false;
       state.adminMessageError = action.payload;
     },
-
+    updateChats: (state, action) => {
+      state.chats = action.payload;
+    },
     // For AI advice response
     getParentAdviceRequest: (state) => {
       state.updatingAIResponse = true;
