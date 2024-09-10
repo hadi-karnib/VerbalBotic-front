@@ -19,6 +19,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import LottieView from "lottie-react-native";
 import loadingAnimation from "../assets/loading.json";
 import noChatsAnimation from "../assets/NoChats.json";
+import { chatsActions } from "../store/Chats/chatsSlice";
 
 const ChatsScreen = () => {
   const dispatch = useDispatch();
@@ -29,6 +30,10 @@ const ChatsScreen = () => {
   const scrollViewRef = useRef(null);
 
   useEffect(() => {
+    dispatch(chatsActions.clearChats());
+  }, []);
+
+  useEffect(() => {
     dispatch(getMyChats());
   }, [dispatch]);
 
@@ -36,7 +41,9 @@ const ChatsScreen = () => {
     if (chats.length > 0) {
       const initialDurations = {};
       chats.forEach((chat) => {
-        initialDurations[chat._id] = chat.voiceNoteMetadata.duration * 1000;
+        if (chat.voiceNoteMetadata && chat.voiceNoteMetadata.duration) {
+          initialDurations[chat._id] = chat.voiceNoteMetadata.duration * 1000;
+        }
       });
       setDurations(initialDurations);
     }
