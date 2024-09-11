@@ -145,10 +145,7 @@ const HomeScreen = ({ navigation, route }) => {
   };
 
   return (
-    <LinearGradient
-      colors={["#E3F2FD", "#FFF1F0", "#F3E5F5"]}
-      style={styles.container}
-    >
+    <View style={[styles.container, { backgroundColor: "#E3F2FD" }]}>
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.header}>
           <Text style={styles.title}>Home</Text>
@@ -166,10 +163,10 @@ const HomeScreen = ({ navigation, route }) => {
           <SwitchToggle
             switchOn={toggleOn}
             onPress={handleToggle}
-            circleColorOff="#B3E5FC"
-            circleColorOn="#FFCDD2"
-            backgroundColorOn="#0288D1"
-            backgroundColorOff="#ffc0cc"
+            circleColorOff="#eeeeee"
+            circleColorOn="#90caf9"
+            backgroundColorOn="#2196F3"
+            backgroundColorOff="#b0bec5"
             containerStyle={styles.toggleSwitch}
             circleStyle={styles.toggleCircle}
           />
@@ -207,7 +204,7 @@ const HomeScreen = ({ navigation, route }) => {
             <MaterialIcons
               name="mic"
               size={100}
-              color={isRecording ? "#FF3B30" : "#0288D1"}
+              color={isRecording ? "#FF5F52 " : "#03A9F4"}
             />
           </TouchableOpacity>
         </View>
@@ -217,7 +214,7 @@ const HomeScreen = ({ navigation, route }) => {
             : recordingText}
         </Text>
       </SafeAreaView>
-    </LinearGradient>
+    </View>
   );
 };
 const styles = StyleSheet.create({
@@ -241,7 +238,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: "#FFF3E0",
+    backgroundColor: "#FFF3E0", // Lighter peach
     margin: 20,
     padding: 15,
     borderRadius: 10,
@@ -249,18 +246,19 @@ const styles = StyleSheet.create({
   dailyStreakText: {
     fontSize: 18,
     fontWeight: "bold",
+    color: "#FF8A65", // Medium coral
   },
   streakBox: {
     width: 60,
     height: 60,
-    backgroundColor: "#E0E0E0",
+    backgroundColor: "#FFE0B2", // Lighter peach
     borderRadius: 30,
     justifyContent: "center",
     alignItems: "center",
   },
   streakNumber: {
     fontSize: 30,
-    color: "#0288D1",
+    color: "#E64A19", // Bold orange-red
     fontWeight: "bold",
   },
   toggleContainer: {
@@ -279,11 +277,19 @@ const styles = StyleSheet.create({
     height: 30,
     borderRadius: 25,
     padding: 5,
+    backgroundColor: "#64b5f6", // Brighter sky blue when active
   },
   toggleCircle: {
     width: 20,
     height: 20,
     borderRadius: 10,
+    backgroundColor: "#42a5f5", // Darker blue when active
+  },
+  toggleOffSwitch: {
+    backgroundColor: "#ffab91", // Soft peach when inactive
+  },
+  toggleOffCircle: {
+    backgroundColor: "#ff7043", // Bright orange when inactive
   },
   dropdownContainer: {
     marginHorizontal: 20,
@@ -325,20 +331,20 @@ const styles = StyleSheet.create({
   microphoneButton: {
     width: 150,
     height: 150,
-    backgroundColor: "#B3E5FC",
+    backgroundColor: "#0277BD", // Light blue for calmness
     borderRadius: 75,
     justifyContent: "center",
     alignItems: "center",
   },
   recordingButton: {
-    backgroundColor: "#FFCDD2",
+    backgroundColor: "#FFCDD2", // Light red for recording
   },
   analyzingText: {
     padding: 10,
     textAlign: "center",
     marginBottom: 40,
     fontSize: 16,
-    color: "#555",
+    color: "#000",
   },
 });
 
