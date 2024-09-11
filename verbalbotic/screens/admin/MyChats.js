@@ -11,7 +11,6 @@ import {
   ScrollView,
 } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import { LinearGradient } from "expo-linear-gradient";
 import { MaterialIcons } from "@expo/vector-icons";
 import LottieView from "lottie-react-native";
 import { getMyChats, adminMessages } from "../../store/Chats/chatsActions";
@@ -21,7 +20,7 @@ const MyChats = () => {
   const scrollViewRef = useRef(null);
 
   const { user } = useSelector((state) => state.user);
-  const { chats = [], loading, error } = useSelector((state) => state.chats);
+  const { chats = [], loading } = useSelector((state) => state.chats);
 
   const [messageInput, setMessageInput] = useState("");
 
@@ -56,53 +55,63 @@ const MyChats = () => {
   const isInputEmpty = messageInput.trim().length === 0;
 
   return (
-    <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.gradient}>
-      <SafeAreaView style={styles.safeArea}>
-        <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          style={styles.container}
-          keyboardVerticalOffset={0}
+    <SafeAreaView style={styles.safeArea}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.container}
+        keyboardVerticalOffset={0}
+      >
+        <ScrollView
+          contentContainerStyle={styles.scrollContainer}
+          keyboardShouldPersistTaps="handled"
+          ref={scrollViewRef}
         >
-          <ScrollView
-            contentContainerStyle={styles.scrollContainer}
-            keyboardShouldPersistTaps="handled"
-            ref={scrollViewRef}
-          >
-            <View style={styles.headerContainer}>
-              <View style={styles.avatarPlaceholder}>
-                <Text style={styles.avatarText}>{user?.name?.charAt(0)}</Text>
-              </View>
-              <Text style={styles.headerText}>My Chats</Text>
+          <View style={styles.headerContainer}>
+            <View style={styles.avatarPlaceholder}>
+              <Text style={styles.avatarText}>{user?.name?.charAt(0)}</Text>
             </View>
+            <Text style={styles.headerText}>My Chats</Text>
+          </View>
 
-            {loading ? (
-              <View style={styles.loadingContainer}>
-                <LottieView
-                  source={require("../../assets/loading.json")}
-                  autoPlay
-                  loop
-                  style={styles.loadingAnimation}
-                  useNativeDriver={true}
-                />
-              </View>
-            ) : chats.length === 0 ? (
-              <View style={styles.noChatsContainer}>
-                <LottieView
-                  source={require("../../assets/NoChats.json")}
-                  autoPlay
-                  loop
-                  style={styles.noChatsAnimation}
-                  useNativeDriver={true}
-                />
-                <Text style={styles.noChatsText}>
-                  No chats for now. Let’s Start!
-                </Text>
-              </View>
-            ) : (
-              chats.map((chat) => (
-                <View key={chat._id} style={styles.messageContainer}>
-                  <View style={[styles.messageBubble, styles.userMessage]}>
-                    <Text style={styles.messageText}>{chat.message}</Text>
+          {loading ? (
+            <View style={styles.loadingContainer}>
+              <LottieView
+                source={require("../../assets/loading.json")}
+                autoPlay
+                loop
+                style={styles.loadingAnimation}
+                useNativeDriver={true}
+              />
+            </View>
+          ) : chats.length === 0 ? (
+            <View style={styles.noChatsContainer}>
+              <LottieView
+                source={require("../../assets/NoChats.json")}
+                autoPlay
+                loop
+                style={styles.noChatsAnimation}
+                useNativeDriver={true}
+              />
+              <Text style={styles.noChatsText}>
+                No chats for now. Let’s Start!
+              </Text>
+            </View>
+          ) : (
+            chats.map((chat) => (
+              <View key={chat._id} style={styles.messageContainer}>
+                <View style={[styles.messageBubble, styles.userMessage]}>
+                  <Text style={styles.messageText}>{chat.message}</Text>
+                  <Text style={styles.timeText}>
+                    {new Date(chat.createdAt).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      hour12: true,
+                    })}
+                  </Text>
+                </View>
+                {chat.AI_response && (
+                  <View style={[styles.messageBubble, styles.aiResponseBubble]}>
+                    <Text style={styles.messageText}>{chat.AI_response}</Text>
                     <Text style={styles.timeText}>
                       {new Date(chat.createdAt).toLocaleTimeString([], {
                         hour: "2-digit",
@@ -111,55 +120,39 @@ const MyChats = () => {
                       })}
                     </Text>
                   </View>
-                  {chat.AI_response && (
-                    <View
-                      style={[styles.messageBubble, styles.aiResponseBubble]}
-                    >
-                      <Text style={styles.messageText}>{chat.AI_response}</Text>
-                      <Text style={styles.timeText}>
-                        {new Date(chat.createdAt).toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                          hour12: true,
-                        })}
-                      </Text>
-                    </View>
-                  )}
-                </View>
-              ))
-            )}
-          </ScrollView>
+                )}
+              </View>
+            ))
+          )}
+        </ScrollView>
 
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="Type a message"
-              value={messageInput}
-              onChangeText={setMessageInput}
-            />
-            <TouchableOpacity
-              onPress={handleSend}
-              style={[
-                styles.sendButton,
-                isInputEmpty && { backgroundColor: "#a3d3ff" },
-              ]}
-              disabled={isInputEmpty}
-            >
-              <MaterialIcons name="send" size={24} color="#FFF" />
-            </TouchableOpacity>
-          </View>
-        </KeyboardAvoidingView>
-      </SafeAreaView>
-    </LinearGradient>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Type a message"
+            value={messageInput}
+            onChangeText={setMessageInput}
+          />
+          <TouchableOpacity
+            onPress={handleSend}
+            style={[
+              styles.sendButton,
+              isInputEmpty && { backgroundColor: "#a3d3ff" },
+            ]}
+            disabled={isInputEmpty}
+          >
+            <MaterialIcons name="send" size={24} color="#FFF" />
+          </TouchableOpacity>
+        </View>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  gradient: {
-    flex: 1,
-  },
   safeArea: {
     flex: 1,
+    backgroundColor: "#f0f0f0", // Lighter background color
   },
   container: {
     flex: 1,
@@ -167,10 +160,12 @@ const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: "row",
     alignItems: "center",
+    width: "111%",
     paddingHorizontal: 20,
     marginBottom: 20,
     paddingVertical: 10,
-    backgroundColor: "#f3cfd6",
+    backgroundColor: "#0288D1", // Darker color for the header
+    marginHorizontal: -20,
   },
   avatarPlaceholder: {
     width: 40,
@@ -189,7 +184,7 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 18,
     fontWeight: "600",
-    color: "#333",
+    color: "#FFFFFF", // White text color for contrast
   },
   scrollContainer: {
     flexGrow: 1,
@@ -230,11 +225,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 10,
     paddingVertical: 5,
+    backgroundColor: "#e0e0e0", // Slightly darker input container background
   },
   input: {
     flex: 1,
     padding: 10,
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "#f5f5f5", // Darker input background
     borderRadius: 25,
     fontSize: 16,
     marginRight: 10,
