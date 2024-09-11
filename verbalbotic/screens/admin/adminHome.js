@@ -65,93 +65,89 @@ const AdminHome = () => {
   };
 
   return (
-    <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.gradient}>
-      <SafeAreaView style={styles.safeArea}>
-        <View style={styles.container}>
-          <Text style={styles.title}>Children</Text>
-          {loading && (
-            <View style={styles.loadingContainer}>
-              <LottieView
-                source={require("../../assets/loading.json")}
-                autoPlay
-                loop
-                style={styles.loadingAnimation}
-              />
-            </View>
-          )}
-          {error && <Text style={styles.errorText}>Error: {error}</Text>}
-          {!loading && children.length === 0 && (
-            <TouchableOpacity onPress={handleNoChildrenPress}>
-              <Animated.View
-                style={[
-                  styles.noChildrenContainer,
-                  {
-                    opacity: fadeAnim,
-                    transform: [{ translateY: translateAnim }],
-                  },
-                ]}
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        <Text style={styles.title}>Children</Text>
+        {loading && (
+          <View style={styles.loadingContainer}>
+            <LottieView
+              source={require("../../assets/loading.json")}
+              autoPlay
+              loop
+              style={styles.loadingAnimation}
+            />
+          </View>
+        )}
+        {error && <Text style={styles.errorText}>Error: {error}</Text>}
+        {!loading && children.length === 0 && (
+          <TouchableOpacity onPress={handleNoChildrenPress}>
+            <Animated.View
+              style={[
+                styles.noChildrenContainer,
+                {
+                  opacity: fadeAnim,
+                  transform: [{ translateY: translateAnim }],
+                },
+              ]}
+            >
+              <Text style={styles.noChildrenText}>
+                You still haven't added a child. Let's fix that.
+              </Text>
+            </Animated.View>
+          </TouchableOpacity>
+        )}
+        {!loading &&
+          children.length > 0 &&
+          children.map((child) => (
+            <Animated.View
+              key={child._id}
+              style={[
+                styles.childItem,
+                {
+                  opacity: fadeAnim,
+                  transform: [{ translateY: translateAnim }],
+                },
+              ]}
+            >
+              <TouchableOpacity
+                onPressIn={animatePressIn}
+                onPressOut={animatePressOut}
+                onPress={handleChildPress}
+                activeOpacity={0.8}
               >
-                <Text style={styles.noChildrenText}>
-                  You still haven't added a child. Let's fix that.
-                </Text>
-              </Animated.View>
-            </TouchableOpacity>
-          )}
-          {!loading &&
-            children.length > 0 &&
-            children.map((child) => (
-              <Animated.View
-                key={child._id}
-                style={[
-                  styles.childItem,
-                  {
-                    opacity: fadeAnim,
-                    transform: [{ translateY: translateAnim }],
-                  },
-                ]}
-              >
-                <TouchableOpacity
-                  onPressIn={animatePressIn}
-                  onPressOut={animatePressOut}
-                  onPress={handleChildPress}
-                  activeOpacity={0.8}
+                <Animated.View
+                  style={{
+                    transform: [{ scale: scaleAnim }],
+                  }}
                 >
-                  <Animated.View
-                    style={{
-                      transform: [{ scale: scaleAnim }],
-                    }}
-                  >
-                    <View style={styles.childRow}>
-                      <Text style={styles.childName}>{child.name}</Text>
-                      <Text style={styles.childAge}>{child.age} years</Text>
-                    </View>
-                  </Animated.View>
-                </TouchableOpacity>
-              </Animated.View>
-            ))}
-          <Animated.View
-            style={[
-              styles.infoBox,
-              { opacity: fadeAnim, transform: [{ translateY: translateAnim }] },
-            ]}
-          >
-            <Text style={styles.infoText}>
-              Here you can monitor what your child talks with our AI and what
-              their tasks are to perform better.
-            </Text>
-          </Animated.View>
-        </View>
-      </SafeAreaView>
-    </LinearGradient>
+                  <View style={styles.childRow}>
+                    <Text style={styles.childName}>{child.name}</Text>
+                    <Text style={styles.childAge}>{child.age} years</Text>
+                  </View>
+                </Animated.View>
+              </TouchableOpacity>
+            </Animated.View>
+          ))}
+        <Animated.View
+          style={[
+            styles.infoBox,
+            { opacity: fadeAnim, transform: [{ translateY: translateAnim }] },
+          ]}
+        >
+          <Text style={styles.infoText}>
+            Here you can monitor what your child talks with our AI and what
+            their tasks are to perform better.
+          </Text>
+        </Animated.View>
+      </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  gradient: {
-    flex: 1,
-  },
   safeArea: {
     flex: 1,
+    backgroundColor: "#e0e0e0 ",
   },
   container: {
     flex: 1,
@@ -182,7 +178,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   noChildrenContainer: {
-    backgroundColor: "#F0F0F0",
+    backgroundColor: "#d0d0d0",
     padding: 15,
     borderRadius: 8,
     flexDirection: "row",
@@ -193,7 +189,7 @@ const styles = StyleSheet.create({
   },
   noChildrenText: {
     fontSize: 18,
-    color: "#757575",
+    color: "#000",
     textAlign: "center",
   },
   childItem: {
