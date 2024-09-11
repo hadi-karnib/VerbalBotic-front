@@ -161,94 +161,119 @@ const ChildChats = () => {
     }
     return Math.floor(parsedTime);
   };
+  const lightenColor = (color, percent) => {
+    const num = parseInt(color.replace("#", ""), 16),
+      amt = Math.round(2.55 * percent),
+      R = (num >> 16) + amt,
+      G = ((num >> 8) & 0x00ff) + amt,
+      B = (num & 0x0000ff) + amt;
+    return (
+      "#" +
+      (
+        0x1000000 +
+        (R < 255 ? (R < 1 ? 0 : R) : 255) * 0x10000 +
+        (G < 255 ? (G < 1 ? 0 : G) : 255) * 0x100 +
+        (B < 255 ? (B < 1 ? 0 : B) : 255)
+      )
+        .toString(16)
+        .slice(1)
+    );
+  };
 
   return (
-    <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <View style={styles.headerContainer}>
-          <View style={[styles.avatarPlaceholder, { backgroundColor: color }]}>
-            <Text style={styles.avatarText}>{childName.charAt(0)}</Text>
-          </View>
-          <Text style={styles.headerText}>Chats of: {childName}</Text>
+    <SafeAreaView style={styles.safeArea}>
+      <View style={[styles.headerContainer, { backgroundColor: color }]}>
+        <View style={[styles.avatarPlaceholder, { backgroundColor: color }]}>
+          <Text style={styles.avatarText}>{childName.charAt(0)}</Text>
         </View>
-        <ScrollView
-          contentContainerStyle={styles.scrollContainer}
-          ref={scrollViewRef}
-        >
-          {loading && (
-            <View style={styles.lottieContainer}>
-              <LottieView
-                source={loadingAnimation}
-                autoPlay
-                loop
-                style={styles.lottie}
-              />
-            </View>
-          )}
-          {error && (
-            <View style={styles.noChatsContainer}>
-              <LottieView
-                source={NoChatsAnimation}
-                autoPlay
-                loop
-                style={styles.noChatsLottie}
-              />
-              <Text style={styles.noChatsText}>
-                No chats for this child yet!
-              </Text>
-            </View>
-          )}
-          {!loading &&
-            chats.map((chat) => (
-              <View key={chat._id} style={styles.messageContainer}>
-                <View style={styles.messageBubble}>
-                  <View style={styles.voiceNoteContainer}>
-                    <TouchableOpacity
-                      onPress={() => togglePlayPause(chat._id, chat.message)}
-                      style={styles.iconButton}
-                    >
-                      <MaterialIcons
-                        name={
-                          currentPlaying &&
-                          currentPlaying.chatId === chat._id &&
-                          currentPlaying.isPlaying
-                            ? "pause"
-                            : "play-arrow"
-                        }
-                        size={24}
-                        color="#0288D1"
-                      />
-                    </TouchableOpacity>
-                    <Slider
-                      style={styles.progressBar}
-                      value={progresses[chat._id] || 0}
-                      minimumValue={0}
-                      maximumValue={1}
-                      minimumTrackTintColor="#0288D1"
-                      maximumTrackTintColor="#ccc"
-                      thumbTintColor="white"
-                      onSlidingComplete={async (value) => {
-                        if (
-                          currentPlaying &&
-                          currentPlaying.sound &&
-                          currentPlaying.chatId === chat._id
-                        ) {
-                          const position = value * durations[chat._id];
-                          await currentPlaying.sound.setPositionAsync(position);
-                          setProgresses((prev) => ({
-                            ...prev,
-                            [chat._id]: value,
-                          }));
-                        }
-                      }}
+        <Text style={styles.headerText}>Chats of: {childName}</Text>
+      </View>
+      <ScrollView
+        contentContainerStyle={styles.scrollContainer}
+        ref={scrollViewRef}
+      >
+        {loading && (
+          <View style={styles.lottieContainer}>
+            <LottieView
+              source={loadingAnimation}
+              autoPlay
+              loop
+              style={styles.lottie}
+            />
+          </View>
+        )}
+        {error && (
+          <View style={styles.noChatsContainer}>
+            <LottieView
+              source={NoChatsAnimation}
+              autoPlay
+              loop
+              style={styles.noChatsLottie}
+            />
+            <Text style={styles.noChatsText}>No chats for this child yet!</Text>
+          </View>
+        )}
+        {!loading &&
+          chats.map((chat) => (
+            <View key={chat._id} style={styles.messageContainer}>
+              <View style={styles.messageBubble}>
+                <View style={styles.voiceNoteContainer}>
+                  <TouchableOpacity
+                    onPress={() => togglePlayPause(chat._id, chat.message)}
+                    style={styles.iconButton}
+                  >
+                    <MaterialIcons
+                      name={
+                        currentPlaying &&
+                        currentPlaying.chatId === chat._id &&
+                        currentPlaying.isPlaying
+                          ? "pause"
+                          : "play-arrow"
+                      }
+                      size={24}
+                      color="#0288D1"
                     />
-                    <Text style={styles.durationText}>
-                      {`${formatTime(
-                        ((progresses[chat._id] || 0) * durations[chat._id]) /
-                          1000
-                      )}s / ${formatTime((durations[chat._id] || 0) / 1000)}s`}
-                    </Text>
-                  </View>
+                  </TouchableOpacity>
+                  <Slider
+                    style={styles.progressBar}
+                    value={progresses[chat._id] || 0}
+                    minimumValue={0}
+                    maximumValue={1}
+                    minimumTrackTintColor="#0288D1"
+                    maximumTrackTintColor="#ccc"
+                    thumbTintColor="white"
+                    onSlidingComplete={async (value) => {
+                      if (
+                        currentPlaying &&
+                        currentPlaying.sound &&
+                        currentPlaying.chatId === chat._id
+                      ) {
+                        const position = value * durations[chat._id];
+                        await currentPlaying.sound.setPositionAsync(position);
+                        setProgresses((prev) => ({
+                          ...prev,
+                          [chat._id]: value,
+                        }));
+                      }
+                    }}
+                  />
+                  <Text style={styles.durationText}>
+                    {`${formatTime(
+                      ((progresses[chat._id] || 0) * durations[chat._id]) / 1000
+                    )}s / ${formatTime((durations[chat._id] || 0) / 1000)}s`}
+                  </Text>
+                </View>
+                <Text style={styles.timeText}>
+                  {new Date(chat.createdAt).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: true,
+                  })}
+                </Text>
+              </View>
+              {chat.AI_response && (
+                <View style={[styles.messageBubble, styles.aiResponseBubble]}>
+                  <Text style={styles.chatText}>{chat.AI_response}</Text>
                   <Text style={styles.timeText}>
                     {new Date(chat.createdAt).toLocaleTimeString([], {
                       hour: "2-digit",
@@ -257,32 +282,18 @@ const ChildChats = () => {
                     })}
                   </Text>
                 </View>
-                {chat.AI_response && (
-                  <View style={[styles.messageBubble, styles.aiResponseBubble]}>
-                    <Text style={styles.chatText}>{chat.AI_response}</Text>
-                    <Text style={styles.timeText}>
-                      {new Date(chat.createdAt).toLocaleTimeString([], {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        hour12: true,
-                      })}
-                    </Text>
-                  </View>
-                )}
-              </View>
-            ))}
-        </ScrollView>
-      </SafeAreaView>
-    </LinearGradient>
+              )}
+            </View>
+          ))}
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   safeArea: {
     flex: 1,
+    backgroundColor: "#e0e0e0 ",
   },
   headerContainer: {
     flexDirection: "row",
