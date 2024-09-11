@@ -231,6 +231,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    marginVertical: 100,
+    paddingVertical: 10,
   },
   noChildrenLottie: {
     width: 200,
