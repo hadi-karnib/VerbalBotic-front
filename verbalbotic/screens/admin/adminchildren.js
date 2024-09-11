@@ -61,86 +61,12 @@ const Adminchildren = () => {
   };
 
   return (
-    <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.gradient}>
-      <SafeAreaView style={styles.safeArea}>
-        <View style={styles.container}>
-          {/* Title for Children */}
-          <Text style={styles.title}>Children</Text>
-          <View style={styles.childrenList}>
-            {loading && (
-              <View style={styles.loadingContainer}>
-                <LottieView
-                  source={require("../../assets/loading.json")}
-                  autoPlay
-                  loop
-                  style={styles.loadingAnimation}
-                />
-              </View>
-            )}
-            {!loading &&
-              children.length > 0 &&
-              children.map((child, index) => (
-                <TouchableOpacity
-                  key={child._id}
-                  onPress={() =>
-                    handlePress(child._id, child.name, getColorForIndex(index))
-                  }
-                >
-                  <Animated.View
-                    style={[
-                      styles.childItem,
-                      {
-                        opacity: fadeAnim,
-                        transform: [{ translateY: translateAnim }],
-                      },
-                    ]}
-                  >
-                    <View
-                      style={[
-                        styles.avatarPlaceholder,
-                        { backgroundColor: getColorForIndex(index) },
-                      ]}
-                    >
-                      <Text style={styles.avatarText}>
-                        {child.name.charAt(0)}
-                      </Text>
-                    </View>
-                    <View style={styles.rowView}>
-                      <View style={styles.childInfo}>
-                        <Text style={styles.childName}>{child.name}</Text>
-                        <Text style={styles.childAge}>
-                          {child.age} years old
-                        </Text>
-                      </View>
-                      <View style={styles.arrowIcon}>
-                        <MaterialIcons
-                          name="arrow-forward-ios"
-                          size={15}
-                          color="#757575"
-                        />
-                      </View>
-                    </View>
-                  </Animated.View>
-                </TouchableOpacity>
-              ))}
-            {!loading && children.length === 0 && (
-              <View style={styles.noChildrenContainer}>
-                <LottieView
-                  source={NoChildrenAnimation}
-                  autoPlay
-                  loop
-                  style={styles.noChildrenLottie}
-                />
-                <Text style={styles.noChildrenText}>
-                  No children added yet.
-                </Text>
-              </View>
-            )}
-          </View>
-
-          {/* Title for My Chats */}
-          <Text style={styles.title}>My Chats</Text>
-          {userLoading && (
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.container}>
+        {/* Title for Children */}
+        <Text style={styles.title}>Children</Text>
+        <View style={styles.childrenList}>
+          {loading && (
             <View style={styles.loadingContainer}>
               <LottieView
                 source={require("../../assets/loading.json")}
@@ -150,51 +76,119 @@ const Adminchildren = () => {
               />
             </View>
           )}
-          {!userLoading && user && (
-            <TouchableOpacity onPress={handleSelfPress} style={styles.selfCard}>
-              <Animated.View
-                style={[
-                  styles.childItem,
-                  {
-                    opacity: fadeAnim,
-                    transform: [{ translateY: translateAnim }],
-                  },
-                ]}
+          {!loading &&
+            children.length > 0 &&
+            children.map((child, index) => (
+              <TouchableOpacity
+                key={child._id}
+                onPress={() =>
+                  handlePress(child._id, child.name, getColorForIndex(index))
+                }
               >
-                <View
+                <Animated.View
                   style={[
-                    styles.avatarPlaceholder,
-                    { backgroundColor: "#66b3ff" },
+                    styles.childItem,
+                    {
+                      opacity: fadeAnim,
+                      transform: [{ translateY: translateAnim }],
+                    },
                   ]}
                 >
-                  <Text style={styles.avatarText}>{user?.name?.charAt(0)}</Text>
-                </View>
-                <View style={styles.rowView}>
-                  <View style={styles.selfInfo}>
-                    <Text style={styles.selfName}>{user?.name}</Text>
-                    <Text style={styles.childAge}>Take advice from our AI</Text>
+                  <View
+                    style={[
+                      styles.avatarPlaceholder,
+                      { backgroundColor: getColorForIndex(index) },
+                    ]}
+                  >
+                    <Text style={styles.avatarText}>
+                      {child.name.charAt(0)}
+                    </Text>
                   </View>
-                  <View style={styles.SelfarrowIcon}>
-                    <MaterialIcons
-                      name="arrow-forward-ios"
-                      size={15}
-                      color="#757575"
-                    />
+                  <View style={styles.rowView}>
+                    <View style={styles.childInfo}>
+                      <Text style={styles.childName}>{child.name}</Text>
+                      <Text style={styles.childAge}>{child.age} years old</Text>
+                    </View>
+                    <View style={styles.arrowIcon}>
+                      <MaterialIcons
+                        name="arrow-forward-ios"
+                        size={15}
+                        color="#757575"
+                      />
+                    </View>
                   </View>
-                </View>
-              </Animated.View>
-            </TouchableOpacity>
+                </Animated.View>
+              </TouchableOpacity>
+            ))}
+          {!loading && children.length === 0 && (
+            <View style={styles.noChildrenContainer}>
+              <LottieView
+                source={NoChildrenAnimation}
+                autoPlay
+                loop
+                style={styles.noChildrenLottie}
+              />
+              <Text style={styles.noChildrenText}>No children added yet.</Text>
+            </View>
           )}
         </View>
-      </SafeAreaView>
-    </LinearGradient>
+
+        {/* Title for My Chats */}
+        <Text style={styles.title}>My Chats</Text>
+        {userLoading && (
+          <View style={styles.loadingContainer}>
+            <LottieView
+              source={require("../../assets/loading.json")}
+              autoPlay
+              loop
+              style={styles.loadingAnimation}
+            />
+          </View>
+        )}
+        {!userLoading && user && (
+          <TouchableOpacity onPress={handleSelfPress} style={styles.selfCard}>
+            <Animated.View
+              style={[
+                styles.childItem,
+                {
+                  opacity: fadeAnim,
+                  transform: [{ translateY: translateAnim }],
+                },
+              ]}
+            >
+              <View
+                style={[
+                  styles.avatarPlaceholder,
+                  { backgroundColor: "#66b3ff" },
+                ]}
+              >
+                <Text style={styles.avatarText}>{user?.name?.charAt(0)}</Text>
+              </View>
+              <View style={styles.rowView}>
+                <View style={styles.selfInfo}>
+                  <Text style={styles.selfName}>{user?.name}</Text>
+                  <Text style={styles.childAge}>Take advice from our AI</Text>
+                </View>
+                <View style={styles.SelfarrowIcon}>
+                  <MaterialIcons
+                    name="arrow-forward-ios"
+                    size={15}
+                    color="#757575"
+                  />
+                </View>
+              </View>
+            </Animated.View>
+          </TouchableOpacity>
+        )}
+      </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  gradient: { flex: 1 },
   safeArea: {
     flex: 1,
+    backgroundColor: "#e0e0e0 ",
   },
   rowView: {
     display: "flex",
