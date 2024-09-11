@@ -165,7 +165,7 @@ const ChatsScreen = () => {
   };
 
   return (
-    <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.container}>
+    <View style={[styles.container, { backgroundColor: "#E3F2FD" }]}>
       <SafeAreaView style={styles.safeArea}>
         <ScrollView
           contentContainerStyle={styles.scrollContainer}
@@ -267,7 +267,7 @@ const ChatsScreen = () => {
             ))}
         </ScrollView>
       </SafeAreaView>
-    </LinearGradient>
+    </View>
   );
 };
 
