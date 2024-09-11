@@ -231,7 +231,10 @@ const HomeScreen = ({ navigation, route }) => {
         )}
         <View style={styles.microphoneContainer}>
           <TouchableOpacity
-            style={styles.microphoneButton}
+            style={[
+              styles.microphoneButton,
+              isRecording && { backgroundColor: "#ff6f61" }, // Pink when recording
+            ]}
             onPress={handleMicrophonePress}
           >
             {!isRecording ? (
@@ -251,6 +254,7 @@ const HomeScreen = ({ navigation, route }) => {
             )}
           </TouchableOpacity>
         </View>
+
         <Text style={styles.analyzingText}>
           {isRecording
             ? `Recording... ${formatDuration(durationMillis)}`
