@@ -182,7 +182,12 @@ const ChildChats = () => {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <View style={[styles.headerContainer, { backgroundColor: color }]}>
+      <View
+        style={[
+          styles.headerContainer,
+          { backgroundColor: lightenColor(color, 20) },
+        ]}
+      >
         <View style={[styles.avatarPlaceholder, { backgroundColor: color }]}>
           <Text style={styles.avatarText}>{childName.charAt(0)}</Text>
         </View>
