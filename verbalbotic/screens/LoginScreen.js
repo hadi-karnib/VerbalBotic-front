@@ -6,8 +6,8 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
+  Image, // Import the Image component
 } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../store/user/userActions";
 
@@ -32,7 +32,14 @@ export default function LoginScreen({ navigation }) {
   };
 
   return (
-    <LinearGradient colors={["#e0e0e0", "#e0e0e0"]} style={styles.container}>
+    <View style={[styles.container, { backgroundColor: "#E3F2FD" }]}>
+      {/* Add the logo */}
+      <Image
+        source={require("../assets/VerbalBotic-removebg.png")} // Ensure the correct path to your image file
+        style={styles.logo} // Apply styles for the logo
+        resizeMode="contain"
+      />
+
       <View style={styles.loginBox}>
         <Text style={styles.loginText}>Login</Text>
         <TextInput
@@ -58,7 +65,7 @@ export default function LoginScreen({ navigation }) {
           </Text>
         </TouchableOpacity>
       </View>
-    </LinearGradient>
+    </View>
   );
 }
 
@@ -67,6 +74,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  // Add styles for the logo
+  logo: {
+    width: 150,
+    height: 150,
+    marginBottom: 20, // Adds space between logo and login box
   },
   loginBox: {
     width: 300,
