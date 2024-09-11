@@ -103,158 +103,147 @@ const AdminProfile = ({ navigation }) => {
   }
 
   return (
-    <LinearGradient
-      colors={["#f3cfd6", "#90c2d8"]}
-      style={styles.gradientContainer}
-    >
-      <SafeAreaView style={styles.safeArea}>
-        <KeyboardAwareScrollView
-          style={styles.container}
-          resetScrollToCoords={{ x: 0, y: 0 }}
-          contentContainerStyle={styles.scrollContent}
-          scrollEnabled={true}
-        >
-          <Animatable.View animation="fadeInUp" style={styles.header}>
-            <Text style={styles.headerText}>Hello, {formData.name}</Text>
-          </Animatable.View>
-          <View style={styles.dropdownMargin}>
-            <Animatable.View
-              animation="fadeInUp"
-              duration={800}
-              style={styles.settingContainer}
-            >
-              <TouchableOpacity
-                onPress={() => toggleExpand("1")}
-                style={styles.settingHeader}
-              >
-                <Text style={styles.settingText}>My Profile</Text>
-                <MaterialIcons
-                  name={expandedId === "1" ? "expand-less" : "expand-more"}
-                  size={24}
-                  color="#000"
-                />
-              </TouchableOpacity>
-              {expandedId === "1" && (
-                <Animatable.View
-                  animation="fadeInUp"
-                  duration={800}
-                  style={styles.optionsContainer}
-                >
-                  <Text style={styles.label}>Name</Text>
-                  <TextInput
-                    style={styles.input}
-                    value={formData.name}
-                    onChangeText={(value) => handleInputChange("name", value)}
-                  />
-                  <Text style={styles.label}>Email</Text>
-                  <TextInput
-                    style={styles.input}
-                    value={formData.email}
-                    onChangeText={(value) => handleInputChange("email", value)}
-                    keyboardType="email-address"
-                  />
-                  <Text style={styles.label}>Phone Number</Text>
-                  <TextInput
-                    style={styles.input}
-                    value={formData.phoneNumber}
-                    onChangeText={(value) =>
-                      handleInputChange("phoneNumber", value)
-                    }
-                    keyboardType="phone-pad"
-                  />
-                  <Text style={styles.label}>Bio</Text>
-                  <TextInput
-                    style={styles.input}
-                    value={formData.bio}
-                    onChangeText={(value) => handleInputChange("bio", value)}
-                    multiline={true}
-                  />
-                  <Text style={styles.label}>Illness</Text>
-                  <TextInput
-                    style={styles.input}
-                    value={formData.illness}
-                    onChangeText={(value) =>
-                      handleInputChange("illness", value)
-                    }
-                  />
-                  <Text style={styles.label}>Work</Text>
-                  <TextInput
-                    style={styles.input}
-                    value={formData.work}
-                    onChangeText={(value) => handleInputChange("work", value)}
-                  />
-                  <TouchableOpacity style={styles.button} onPress={handleSave}>
-                    <Text style={styles.buttonText}>Save Profile</Text>
-                  </TouchableOpacity>
-                </Animatable.View>
-              )}
-            </Animatable.View>
-
-            <Animatable.View
-              animation="fadeInUp"
-              duration={800}
-              style={styles.addChildButtonContainer}
-            >
-              <TouchableOpacity
-                style={styles.addChildButton}
-                onPress={() => setScannerModalVisible(true)}
-              >
-                <Text style={styles.addChildButtonText}>
-                  Add Child Using QR
-                </Text>
-                <MaterialIcons
-                  name="arrow-forward-ios"
-                  size={20}
-                  color="#000"
-                  style={styles.arrowIcon}
-                />
-              </TouchableOpacity>
-            </Animatable.View>
-
-            <Animatable.View
-              animation="fadeInUp"
-              duration={800}
-              style={styles.logoutButtonContainer}
-            >
-              <TouchableOpacity
-                style={[styles.button, styles.logoutButton]}
-                onPress={handleLogout}
-              >
-                <Text style={styles.buttonText}>Logout</Text>
-              </TouchableOpacity>
-            </Animatable.View>
-          </View>
-
-          <Modal
-            animationType="slide"
-            transparent={false}
-            visible={scannerModalVisible}
-            onRequestClose={() => setScannerModalVisible(false)}
+    <SafeAreaView style={styles.safeArea}>
+      <KeyboardAwareScrollView
+        style={styles.container}
+        resetScrollToCoords={{ x: 0, y: 0 }}
+        contentContainerStyle={styles.scrollContent}
+        scrollEnabled={true}
+      >
+        <Animatable.View animation="fadeInUp" style={styles.header}>
+          <Text style={styles.headerText}>Hello, {formData.name}</Text>
+        </Animatable.View>
+        <View style={styles.dropdownMargin}>
+          <Animatable.View
+            animation="fadeInUp"
+            duration={800}
+            style={styles.settingContainer}
           >
-            <BarCodeScanner
-              onBarCodeScanned={handleBarCodeScanned}
-              style={StyleSheet.absoluteFillObject}
+            <TouchableOpacity
+              onPress={() => toggleExpand("1")}
+              style={styles.settingHeader}
             >
-              <TouchableOpacity
-                style={styles.modalCloseButton}
-                onPress={() => setScannerModalVisible(false)}
+              <Text style={styles.settingText}>My Profile</Text>
+              <MaterialIcons
+                name={expandedId === "1" ? "expand-less" : "expand-more"}
+                size={24}
+                color="#000"
+              />
+            </TouchableOpacity>
+            {expandedId === "1" && (
+              <Animatable.View
+                animation="fadeInUp"
+                duration={800}
+                style={styles.optionsContainer}
               >
-                <MaterialIcons name="close" size={24} color="#fff" />
-              </TouchableOpacity>
-            </BarCodeScanner>
-          </Modal>
-        </KeyboardAwareScrollView>
-      </SafeAreaView>
-    </LinearGradient>
+                <Text style={styles.label}>Name</Text>
+                <TextInput
+                  style={styles.input}
+                  value={formData.name}
+                  onChangeText={(value) => handleInputChange("name", value)}
+                />
+                <Text style={styles.label}>Email</Text>
+                <TextInput
+                  style={styles.input}
+                  value={formData.email}
+                  onChangeText={(value) => handleInputChange("email", value)}
+                  keyboardType="email-address"
+                />
+                <Text style={styles.label}>Phone Number</Text>
+                <TextInput
+                  style={styles.input}
+                  value={formData.phoneNumber}
+                  onChangeText={(value) =>
+                    handleInputChange("phoneNumber", value)
+                  }
+                  keyboardType="phone-pad"
+                />
+                <Text style={styles.label}>Bio</Text>
+                <TextInput
+                  style={styles.input}
+                  value={formData.bio}
+                  onChangeText={(value) => handleInputChange("bio", value)}
+                  multiline={true}
+                />
+                <Text style={styles.label}>Illness</Text>
+                <TextInput
+                  style={styles.input}
+                  value={formData.illness}
+                  onChangeText={(value) => handleInputChange("illness", value)}
+                />
+                <Text style={styles.label}>Work</Text>
+                <TextInput
+                  style={styles.input}
+                  value={formData.work}
+                  onChangeText={(value) => handleInputChange("work", value)}
+                />
+                <TouchableOpacity style={styles.button} onPress={handleSave}>
+                  <Text style={styles.buttonText}>Save Profile</Text>
+                </TouchableOpacity>
+              </Animatable.View>
+            )}
+          </Animatable.View>
+
+          <Animatable.View
+            animation="fadeInUp"
+            duration={800}
+            style={styles.addChildButtonContainer}
+          >
+            <TouchableOpacity
+              style={styles.addChildButton}
+              onPress={() => setScannerModalVisible(true)}
+            >
+              <Text style={styles.addChildButtonText}>Add Child Using QR</Text>
+              <MaterialIcons
+                name="arrow-forward-ios"
+                size={20}
+                color="#000"
+                style={styles.arrowIcon}
+              />
+            </TouchableOpacity>
+          </Animatable.View>
+
+          <Animatable.View
+            animation="fadeInUp"
+            duration={800}
+            style={styles.logoutButtonContainer}
+          >
+            <TouchableOpacity
+              style={[styles.button, styles.logoutButton]}
+              onPress={handleLogout}
+            >
+              <Text style={styles.buttonText}>Logout</Text>
+            </TouchableOpacity>
+          </Animatable.View>
+        </View>
+
+        <Modal
+          animationType="slide"
+          transparent={false}
+          visible={scannerModalVisible}
+          onRequestClose={() => setScannerModalVisible(false)}
+        >
+          <BarCodeScanner
+            onBarCodeScanned={handleBarCodeScanned}
+            style={StyleSheet.absoluteFillObject}
+          >
+            <TouchableOpacity
+              style={styles.modalCloseButton}
+              onPress={() => setScannerModalVisible(false)}
+            >
+              <MaterialIcons name="close" size={24} color="#fff" />
+            </TouchableOpacity>
+          </BarCodeScanner>
+        </Modal>
+      </KeyboardAwareScrollView>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  gradientContainer: {
-    flex: 1,
-  },
   safeArea: {
     flex: 1,
+    backgroundColor: "#e0e0e0 ",
   },
   container: {
     flex: 1,
@@ -269,7 +258,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   headerText: {
-    color: "#FFF",
+    color: "#000",
     fontSize: 28,
     fontWeight: "bold",
   },
@@ -289,7 +278,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     padding: 18,
-    backgroundColor: "#FFF3E0",
+    backgroundColor: "#74b4c4",
     alignItems: "center",
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
@@ -318,7 +307,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: "#FFF3E0",
+    backgroundColor: "#74b4c4",
     padding: 15,
     borderRadius: 10,
   },
