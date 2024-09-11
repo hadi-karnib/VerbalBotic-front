@@ -230,21 +230,21 @@ const styles = StyleSheet.create({
   noChildrenContainer: {
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 50, // Reduce the top margin to avoid excessive spacing
+    marginTop: 50,
     paddingVertical: 10,
   },
   noChildrenLottie: {
-    width: 200, // Reduce the size of the animation
+    width: 200,
     height: 200,
   },
   noChildrenText: {
-    fontSize: 16, // Reduce the font size
+    fontSize: 16,
     color: "#000",
     marginTop: 10,
     textAlign: "center",
   },
   childrenList: {
-    marginBottom: 20, // Add some bottom margin to avoid stretching too much
+    marginBottom: 20,
   },
   childItem: {
     backgroundColor: "#FFFFFF",
