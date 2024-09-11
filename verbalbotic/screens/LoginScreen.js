@@ -6,7 +6,7 @@ import {
   TextInput,
   TouchableOpacity,
   Alert,
-  Image, // Import the Image component
+  Image,
 } from "react-native";
 import { useDispatch } from "react-redux";
 import { loginUser } from "../store/user/userActions";
@@ -33,10 +33,9 @@ export default function LoginScreen({ navigation }) {
 
   return (
     <View style={[styles.container, { backgroundColor: "#E3F2FD" }]}>
-      {/* Add the logo */}
       <Image
-        source={require("../assets/VerbalBotic-removebg.png")} // Ensure the correct path to your image file
-        style={styles.logo} // Apply styles for the logo
+        source={require("../assets/VerbalBotic-removebg.png")}
+        style={styles.logo}
         resizeMode="contain"
       />
 
@@ -75,11 +74,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  // Add styles for the logo
+
   logo: {
     width: 150,
     height: 150,
-    marginBottom: 20, // Adds space between logo and login box
+    marginBottom: 20,
   },
   loginBox: {
     width: 300,
