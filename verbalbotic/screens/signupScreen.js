@@ -8,8 +8,10 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   Alert,
+  Image, // Import the Image component
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 import { useDispatch } from "react-redux";
 import { signupUser } from "../store/user/userActions"; // Import the signupUser action
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -23,14 +25,12 @@ export default function SignupScreen({ navigation }) {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [role, setRole] = useState("");
   const [age, setAge] = useState(null);
-  const [show, setShow] = useState(false);
   const dispatch = useDispatch();
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setDate(currentDate);
     calculateAge(currentDate);
-    setShow(false);
   };
 
   const calculateAge = (birthDate) => {
@@ -49,8 +49,6 @@ export default function SignupScreen({ navigation }) {
   };
 
   const handleRegister = () => {
-    console.log(phoneNumber);
-
     const formData = {
       name: username,
       email: email,
@@ -65,7 +63,18 @@ export default function SignupScreen({ navigation }) {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.container}>
+      {/* Adjusting for the keyboard opening */}
+      <KeyboardAvoidingView
+        style={styles.container}
+        behavior={Platform.OS === "ios" ? "padding" : null}
+      >
+        {/* Add the logo */}
+        <Image
+          source={require("../assets/VerbalBotic-removebg.png")} // Ensure the path to the logo image is correct
+          style={styles.logo}
+          resizeMode="contain"
+        />
+
         <View style={styles.signupBox}>
           <Text style={styles.signupText}>Sign Up</Text>
           <TextInput
@@ -131,7 +140,7 @@ export default function SignupScreen({ navigation }) {
             <Text style={styles.buttonText}>Register</Text>
           </TouchableOpacity>
         </View>
-      </LinearGradient>
+      </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
 }
@@ -141,6 +150,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#E3F2FD",
+  },
+  logo: {
+    width: 150,
+    height: 150,
+    marginBottom: 20, // Add spacing between logo and signup box
   },
   signupBox: {
     width: 300,
@@ -195,11 +210,6 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     fontSize: 16,
-  },
-  ageText: {
-    fontSize: 16,
-    marginBottom: 10,
-    color: "#333",
   },
 });
 
