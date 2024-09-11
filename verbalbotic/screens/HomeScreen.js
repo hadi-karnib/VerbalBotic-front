@@ -145,7 +145,7 @@ const HomeScreen = ({ navigation, route }) => {
   };
 
   return (
-    <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.container}>
+    <LinearGradient colors={["#E0F7FA", "#90c2d8"]} style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
         <View style={styles.header}>
           <Text style={styles.title}>Home</Text>
