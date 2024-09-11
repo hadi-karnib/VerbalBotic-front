@@ -228,24 +228,23 @@ const styles = StyleSheet.create({
     height: 150,
   },
   noChildrenContainer: {
-    flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginVertical: 100,
+    marginTop: 50, // Reduce the top margin to avoid excessive spacing
     paddingVertical: 10,
   },
   noChildrenLottie: {
-    width: 200,
+    width: 200, // Reduce the size of the animation
     height: 200,
   },
   noChildrenText: {
-    fontSize: 18,
+    fontSize: 16, // Reduce the font size
     color: "#000",
-    marginTop: 20,
+    marginTop: 10,
     textAlign: "center",
   },
   childrenList: {
-    flex: 0,
+    marginBottom: 20, // Add some bottom margin to avoid stretching too much
   },
   childItem: {
     backgroundColor: "#FFFFFF",
