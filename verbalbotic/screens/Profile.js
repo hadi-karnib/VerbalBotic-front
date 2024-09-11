@@ -64,10 +64,7 @@ const Profile = ({ navigation }) => {
   };
 
   return (
-    <LinearGradient
-      colors={["#f3cfd6", "#90c2d8"]}
-      style={styles.gradientContainer}
-    >
+    <View style={[styles.gradientContainer, { backgroundColor: "#E3F2FD" }]}>
       <SafeAreaView style={styles.safeArea}>
         <KeyboardAwareScrollView
           style={styles.container}
@@ -92,7 +89,7 @@ const Profile = ({ navigation }) => {
                 <MaterialIcons
                   name={expandedId === "1" ? "expand-less" : "expand-more"}
                   size={24}
-                  color="#00ACC1"
+                  color="#000"
                 />
               </TouchableOpacity>
               {expandedId === "1" && (
@@ -164,7 +161,7 @@ const Profile = ({ navigation }) => {
                 <MaterialIcons
                   name={expandedId === "2" ? "expand-less" : "expand-more"}
                   size={24}
-                  color="#00ACC1"
+                  color="#000"
                 />
               </TouchableOpacity>
               {expandedId === "2" && (
@@ -177,7 +174,7 @@ const Profile = ({ navigation }) => {
                     <QRCode
                       value={user._id || ""}
                       size={120}
-                      color="#00ACC1"
+                      color="#74b4c4"
                       backgroundColor="transparent"
                     />
                   </View>
@@ -200,7 +197,7 @@ const Profile = ({ navigation }) => {
           </View>
         </KeyboardAwareScrollView>
       </SafeAreaView>
-    </LinearGradient>
+    </View>
   );
 };
 
@@ -224,7 +221,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   headerText: {
-    color: "#FFF",
+    color: "#000",
     fontSize: 28,
     fontWeight: "bold",
   },
@@ -244,7 +241,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     padding: 18,
-    backgroundColor: "#FFF3E0",
+    backgroundColor: "#74b4c4",
     alignItems: "center",
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
