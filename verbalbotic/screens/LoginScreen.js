@@ -32,7 +32,7 @@ export default function LoginScreen({ navigation }) {
   };
 
   return (
-    <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.container}>
+    <LinearGradient colors={["#e0e0e0", "#e0e0e0"]} style={styles.container}>
       <View style={styles.loginBox}>
         <Text style={styles.loginText}>Login</Text>
         <TextInput
