@@ -4,7 +4,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import HomeScreen from "../screens/HomeScreen";
 import ChatsScreen from "../screens/ChatsScreen";
 import ProfileScreen from "../screens/Profile";
-import DailyHomeworkScreen from "../screens/DailyHomework"; // Import the Daily Homework screen
+import DailyHomeworkScreen from "../screens/DailyHomework";
 
 const Tab = createBottomTabNavigator();
 
@@ -56,8 +56,8 @@ const Tabs = ({ route }) => {
         options={{ headerShown: false }}
       />
       <Tab.Screen
-        name="Daily Exercises" // New tab for daily exercises
-        component={DailyHomeworkScreen} // This should be the screen handling the exercises
+        name="Daily Exercises"
+        component={DailyHomeworkScreen}
         options={{ headerShown: false }}
       />
       <Tab.Screen
