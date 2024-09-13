@@ -140,7 +140,7 @@ const chatsSlice = createSlice({
     },
     markHomeworkAsDoneSuccess: (state, action) => {
       state.loading = false;
-      const updatedHomework = state.homework.map((hw) =>
+      const updatedHomework = state.dailyHomework.map((hw) =>
         hw._id === action.payload._id ? action.payload : hw
       );
       state.homework = updatedHomework;

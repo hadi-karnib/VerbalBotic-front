@@ -302,3 +302,26 @@ export const markHomeworkAsDone = (homeworkId) => async (dispatch) => {
     console.error("Error marking homework as done: ", error);
   }
 };
+
+export const getUserDailyHomework = () => async (dispatch) => {
+  try {
+    dispatch(chatsActions.getDailyHomeworkRequest());
+
+    const token = await AsyncStorage.getItem("token");
+
+    const response = await axios.get(`${API_URL}/api/messages/getHomework`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    dispatch(chatsActions.getDailyHomeworkSuccess(response.data));
+  } catch (error) {
+    dispatch(
+      chatsActions.getDailyHomeworkFailure(
+        error.response?.data?.message || error.message
+      )
+    );
+    console.error("Error fetching daily homework: ", error);
+  }
+};
