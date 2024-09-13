@@ -135,6 +135,13 @@ const chatsSlice = createSlice({
       state.loading = true;
       state.error = null;
     },
+    markHomeworkAsDoneSuccess: (state, action) => {
+      state.loading = false;
+      const updatedHomework = state.homework.map((hw) =>
+        hw._id === action.payload._id ? action.payload : hw
+      );
+      state.homework = updatedHomework;
+    },
 
     clearChats: (state) => {
       state.chats = [];
