@@ -142,7 +142,10 @@ const chatsSlice = createSlice({
       );
       state.homework = updatedHomework;
     },
-
+    markHomeworkAsDoneFailure: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
     clearChats: (state) => {
       state.chats = [];
     },
