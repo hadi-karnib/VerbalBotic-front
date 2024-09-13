@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   Text,
@@ -10,7 +10,9 @@ import {
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
-import LottieView from "lottie-react-native"; // Import LottieView
+import LottieView from "lottie-react-native";
+import { markHomeworkAsDone } from "../store/Chats/chatsActions";
+import { getSelf } from "../store/user/userActions"; // Assuming getSelf is correctly imported from the user actions
 
 const DailyHomework = () => {
   const { user } = useSelector((state) => state.user);
@@ -19,12 +21,17 @@ const DailyHomework = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedHomework, setSelectedHomework] = useState(null);
 
-  const notCompletedHomework = user.dailyHomework.filter(
-    (homework) => !homework.isCompleted
-  );
-  const completedHomework = user.dailyHomework.filter(
-    (homework) => homework.isCompleted
-  );
+  // Fetch user data on component mount
+  useEffect(() => {
+    dispatch(getSelf());
+  }, [dispatch]);
+
+  // Check if user and dailyHomework exist before filtering
+  const notCompletedHomework =
+    user?.dailyHomework?.filter((homework) => !homework.isCompleted) || [];
+
+  const completedHomework =
+    user?.dailyHomework?.filter((homework) => homework.isCompleted) || [];
 
   const handleCardPress = (homework) => {
     setSelectedHomework(homework);
@@ -33,11 +40,11 @@ const DailyHomework = () => {
 
   const markAsDone = () => {
     if (selectedHomework) {
-      // Dispatch an action to mark this homework as completed
-      // Replace this with your actual dispatch or logic to update the homework status
-      // dispatch(markHomeworkAsDone(selectedHomework._id));
+      // Dispatch the action to mark homework as completed
+      dispatch(markHomeworkAsDone(selectedHomework._id));
 
-      setModalVisible(false); // Close the modal after marking as done
+      // Close the modal after marking as done
+      setModalVisible(false);
     }
   };
 
@@ -111,7 +118,6 @@ const DailyHomework = () => {
           >
             <View style={styles.modalContainer}>
               <View style={styles.modalContent}>
-                {/* Close button */}
                 <TouchableOpacity
                   style={styles.closeButton}
                   onPress={() => setModalVisible(false)}
@@ -138,12 +144,11 @@ const DailyHomework = () => {
                   <Text style={styles.doneButtonText}>Mark as Done</Text>
                 </TouchableOpacity>
 
-                {/* Lottie Animation */}
                 <LottieView
-                  source={require("../assets/ChildPressing.json")} // Add the Lottie animation JSON file
+                  source={require("../assets/ChildPressing.json")}
                   autoPlay
                   loop
-                  style={styles.lottieAnimation} // Add styling to control size
+                  style={styles.lottieAnimation}
                 />
               </View>
             </View>
@@ -278,7 +283,7 @@ const styles = StyleSheet.create({
   },
   lottieAnimation: {
     width: 200,
-    height: 200, // Adjust size based on how you want it to appear
+    height: 200,
     marginTop: -20,
     alignSelf: "center",
   },

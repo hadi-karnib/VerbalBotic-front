@@ -146,6 +146,18 @@ const chatsSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    getDailyHomeworkRequest: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+    getDailyHomeworkSuccess: (state, action) => {
+      state.loading = false;
+      state.dailyHomework = action.payload;
+    },
+    getDailyHomeworkFailure: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
     clearChats: (state) => {
       state.chats = [];
     },
