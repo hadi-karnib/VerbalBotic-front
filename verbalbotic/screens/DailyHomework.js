@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
+import LottieView from "lottie-react-native"; // Import LottieView
 
 const DailyHomework = () => {
   const { user } = useSelector((state) => state.user);
@@ -136,6 +137,14 @@ const DailyHomework = () => {
                 >
                   <Text style={styles.doneButtonText}>Mark as Done</Text>
                 </TouchableOpacity>
+
+                {/* Lottie Animation */}
+                <LottieView
+                  source={require("../assets/ChildPressing.json")} // Add the Lottie animation JSON file
+                  autoPlay
+                  loop
+                  style={styles.lottieAnimation} // Add styling to control size
+                />
               </View>
             </View>
           </Modal>
@@ -262,11 +271,16 @@ const styles = StyleSheet.create({
     backgroundColor: "#0288D1",
     padding: 10,
     borderRadius: 5,
-    marginBottom: 10,
   },
   doneButtonText: {
     color: "#fff",
     fontSize: 16,
+  },
+  lottieAnimation: {
+    width: 200,
+    height: 200, // Adjust size based on how you want it to appear
+    marginTop: -20,
+    alignSelf: "center",
   },
 });
 
