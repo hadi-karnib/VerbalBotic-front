@@ -15,11 +15,9 @@ const DailyHomework = () => {
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
-  // Modal visibility and selected homework
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedHomework, setSelectedHomework] = useState(null);
 
-  // Filter the not completed and completed homework
   const notCompletedHomework = user.dailyHomework.filter(
     (homework) => !homework.isCompleted
   );
@@ -27,13 +25,11 @@ const DailyHomework = () => {
     (homework) => homework.isCompleted
   );
 
-  // Handle card press
   const handleCardPress = (homework) => {
     setSelectedHomework(homework);
     setModalVisible(true);
   };
 
-  // Mark as done function
   const markAsDone = () => {
     if (selectedHomework) {
       // Dispatch an action to mark this homework as completed
@@ -105,7 +101,6 @@ const DailyHomework = () => {
           ))}
         </ScrollView>
 
-        {/* Modal for displaying detailed view */}
         {selectedHomework && (
           <Modal
             transparent={true}
@@ -127,7 +122,6 @@ const DailyHomework = () => {
                   {selectedHomework.description}
                 </Text>
 
-                {/* Mark as Done button */}
                 <TouchableOpacity
                   onPress={markAsDone}
                   style={styles.doneButton}
@@ -201,7 +195,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#333",
     marginVertical: 5,
-    flexWrap: "nowrap", // Prevent word breaking
+    flexWrap: "nowrap",
   },
   cardTime: {
     fontSize: 12,
@@ -238,13 +232,13 @@ const styles = StyleSheet.create({
   modalTime: {
     fontSize: 14,
     fontWeight: "bold",
-    color: "green", // Time in green color
+    color: "green",
   },
   modalDescription: {
     fontSize: 16,
     color: "#333",
-    textAlign: "justify", // Justify the description text
-    flexWrap: "nowrap", // Prevent word breaking
+    textAlign: "justify",
+    flexWrap: "nowrap",
     marginBottom: 10,
   },
   doneButton: {
