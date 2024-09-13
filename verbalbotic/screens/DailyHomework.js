@@ -1,7 +1,10 @@
 import React from "react";
 import { StyleSheet, Text, View, SafeAreaView } from "react-native";
+import { useSelector } from "react-redux";
 
 const DailyHomework = () => {
+  const { user } = useSelector((state) => state.user);
+
   return (
     <View style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
