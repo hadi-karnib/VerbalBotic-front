@@ -38,9 +38,26 @@ const HomeScreen = ({ navigation, route }) => {
 
   const languages = [
     { label: "English (United States)", value: "en-US" },
+    { label: "English (Australia)", value: "en-AU" },
+    { label: "English (Canada)", value: "en-CA" },
+    { label: "English (United Kingdom)", value: "en-GB" },
     { label: "Arabic (Lebanese)", value: "ar-LB" },
+    { label: "Arabic (Algeria)", value: "ar-DZ" },
+    { label: "Arabic (Bahrain)", value: "ar-BH" },
+    { label: "Chinese (Mandarin)", value: "zh" },
+    { label: "Arabic (Egypt)", value: "ar-EG" },
+    { label: "Arabic (Iraq)", value: "ar-IQ" },
+    { label: "Arabic (Kuwait)", value: "ar-KW" },
     { label: "French (France)", value: "fr-FR" },
-    // Other language options...
+    { label: "French (Belgium)", value: "fr-BE" },
+    { label: "French (Canada)", value: "fr-CA" },
+    { label: "French (Switzerland)", value: "fr-CH" },
+    { label: "Chinese (Simplified, China)", value: "cmn-Hans-CN" },
+    { label: "Chinese (Simplified, Hong Kong)", value: "cmn-Hans-HK" },
+    { label: "German (Germany)", value: "de-DE" },
+    { label: "German (Austria)", value: "de-AT" },
+    { label: "German (Switzerland)", value: "de-CH" },
+    { label: "Italian (Italy)", value: "it-IT" },
   ];
   useEffect(() => {
     dispatch(getSelf());
