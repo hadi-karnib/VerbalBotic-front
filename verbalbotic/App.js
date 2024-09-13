@@ -12,6 +12,12 @@ import BioScreen from "./screens/BioScreen";
 import Tabs from "./components/BottomTab";
 import ChatsScreen from "./screens/ChatsScreen";
 import Profile from "./screens/Profile";
+import AdminHome from "./screens/admin/adminHome";
+import AdminProfile from "./screens/admin/adminProfile";
+import AdminTabs from "./components/adminBottomTabs";
+import Adminchildren from "./screens/admin/adminchildren";
+import ChildChats from "./screens/admin/ChildChats";
+import MyChats from "./screens/admin/MyChats";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -32,6 +38,12 @@ export default function App() {
             <Stack.Screen name="Profile" component={Profile} />
             <Stack.Screen name="Chats" component={ChatsScreen} />
             <Stack.Screen name="Bio" component={BioScreen} />
+            <Stack.Screen name="adminHome" component={AdminHome} />
+            <Stack.Screen name="adminProfile" component={AdminProfile} />
+            <Stack.Screen name="adminChildren" component={Adminchildren} />
+            <Stack.Screen name="adminTabs" component={AdminTabs} />
+            <Stack.Screen name="ChildChats" component={ChildChats} />
+            <Stack.Screen name="MyChats" component={MyChats} />
           </Stack.Navigator>
           <StatusBar style="auto" />
         </NavigationContainer>

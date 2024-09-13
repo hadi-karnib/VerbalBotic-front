@@ -64,10 +64,7 @@ const Profile = ({ navigation }) => {
   };
 
   return (
-    <LinearGradient
-      colors={["#f3cfd6", "#90c2d8"]}
-      style={styles.gradientContainer}
-    >
+    <View style={[styles.gradientContainer, { backgroundColor: "#E3F2FD" }]}>
       <SafeAreaView style={styles.safeArea}>
         <KeyboardAwareScrollView
           style={styles.container}
@@ -88,11 +85,11 @@ const Profile = ({ navigation }) => {
                 onPress={() => toggleExpand("1")}
                 style={styles.settingHeader}
               >
-                <Text style={styles.settingText}>Profile Settings</Text>
+                <Text style={styles.settingText}>My Profile</Text>
                 <MaterialIcons
                   name={expandedId === "1" ? "expand-less" : "expand-more"}
                   size={24}
-                  color="#fff"
+                  color="#000"
                 />
               </TouchableOpacity>
               {expandedId === "1" && (
@@ -164,7 +161,7 @@ const Profile = ({ navigation }) => {
                 <MaterialIcons
                   name={expandedId === "2" ? "expand-less" : "expand-more"}
                   size={24}
-                  color="#fff"
+                  color="#000"
                 />
               </TouchableOpacity>
               {expandedId === "2" && (
@@ -177,16 +174,14 @@ const Profile = ({ navigation }) => {
                     <QRCode
                       value={user._id || ""}
                       size={120}
-                      color="#0c7076"
+                      color="#74b4c4"
                       backgroundColor="transparent"
                     />
-                    <Text style={styles.qrText}>ID: {user._id}</Text>
                   </View>
                 </Animatable.View>
               )}
             </Animatable.View>
 
-            {/* Logout Button */}
             <Animatable.View
               animation="fadeInUp"
               duration={800}
@@ -202,7 +197,7 @@ const Profile = ({ navigation }) => {
           </View>
         </KeyboardAwareScrollView>
       </SafeAreaView>
-    </LinearGradient>
+    </View>
   );
 };
 
@@ -221,14 +216,13 @@ const styles = StyleSheet.create({
   },
   header: {
     padding: 20,
-    backgroundColor: "#00ACC1",
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
     alignItems: "center",
   },
   headerText: {
-    color: "#FFF",
-    fontSize: 24,
+    color: "#000",
+    fontSize: 28,
     fontWeight: "bold",
   },
   settingContainer: {
@@ -247,7 +241,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     padding: 18,
-    backgroundColor: "#00ACC1",
+    backgroundColor: "#74b4c4",
     alignItems: "center",
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
@@ -255,7 +249,7 @@ const styles = StyleSheet.create({
   settingText: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#ffffff",
+    color: "#000",
   },
   optionsContainer: {
     padding: 20,
@@ -300,7 +294,8 @@ const styles = StyleSheet.create({
   },
   qrContainer: {
     alignItems: "center",
-    marginTop: 20,
+    justifyContent: "center",
+    margin: 20,
   },
   qrText: {
     fontSize: 16,

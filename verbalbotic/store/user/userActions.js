@@ -16,16 +16,25 @@ export const loginUser = (email, password, navigation) => async (dispatch) => {
       password,
     });
 
-    const { token, success } = response.data;
+    const { token, success, streak, UserType } = response.data;
 
     if (success) {
       await AsyncStorage.setItem("token", token);
       dispatch(userActions.loginUserSuccess(response.data));
 
-      navigation.reset({
-        index: 0,
-        routes: [{ name: "Tabs" }],
-      });
+      if (UserType === "parent") {
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "adminTabs", params: { streak } }],
+        });
+      } else if (UserType === "child") {
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "Tabs", params: { streak } }],
+        });
+      } else {
+        Alert.alert("Login Error", "Unknown UserType, please contact support.");
+      }
     } else {
       Alert.alert(
         "Login Failed",
@@ -53,7 +62,7 @@ export const signupUser = (formData, navigation) => async (dispatch) => {
     });
 
     console.log("signup response: ", response);
-    const { token, success } = response.data;
+    const { token, success, UserType } = response.data;
 
     if (success) {
       await AsyncStorage.setItem("token", token);
@@ -71,6 +80,7 @@ export const signupUser = (formData, navigation) => async (dispatch) => {
     );
   }
 };
+
 export const logoutUser = (navigation) => async (dispatch) => {
   try {
     await AsyncStorage.removeItem("token");
@@ -106,7 +116,23 @@ export const addBio = (bioData, navigation) => async (dispatch) => {
     if (success) {
       dispatch(userActions.updateUserSuccess(data));
       Alert.alert("Bio Updated", "Your bio has been successfully updated.");
-      navigation.navigate("Home");
+
+      if (data.UserType === "parent") {
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "adminTabs" }],
+        });
+      } else if (data.UserType === "child") {
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "Tabs" }],
+        });
+      } else {
+        Alert.alert(
+          "Navigation Error",
+          "Unknown UserType, please contact support."
+        );
+      }
     } else {
       Alert.alert("Update Failed", "Could not update bio, please try again.");
     }

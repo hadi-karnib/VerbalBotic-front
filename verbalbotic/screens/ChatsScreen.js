@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   StyleSheet,
   Text,
@@ -6,9 +6,11 @@ import {
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
+  InteractionManager,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useDispatch, useSelector } from "react-redux";
+import { useFocusEffect } from "@react-navigation/native";
 import { getMyChats } from "../store/Chats/chatsActions";
 import { Audio } from "expo-av";
 import Slider from "@react-native-community/slider";
@@ -16,6 +18,8 @@ import { API_URL } from "@env";
 import { MaterialIcons } from "@expo/vector-icons";
 import LottieView from "lottie-react-native";
 import loadingAnimation from "../assets/loading.json";
+import noChatsAnimation from "../assets/NoChats.json";
+import { chatsActions } from "../store/Chats/chatsSlice";
 
 const ChatsScreen = () => {
   const dispatch = useDispatch();
@@ -23,6 +27,11 @@ const ChatsScreen = () => {
   const [currentPlaying, setCurrentPlaying] = useState(null);
   const [progresses, setProgresses] = useState({});
   const [durations, setDurations] = useState({});
+  const scrollViewRef = useRef(null);
+
+  useEffect(() => {
+    dispatch(chatsActions.clearChats());
+  }, []);
 
   useEffect(() => {
     dispatch(getMyChats());
@@ -32,11 +41,23 @@ const ChatsScreen = () => {
     if (chats.length > 0) {
       const initialDurations = {};
       chats.forEach((chat) => {
-        initialDurations[chat._id] = chat.voiceNoteMetadata.duration * 1000; // Convert to milliseconds
+        if (chat.voiceNoteMetadata && chat.voiceNoteMetadata.duration) {
+          initialDurations[chat._id] = chat.voiceNoteMetadata.duration * 1000;
+        }
       });
       setDurations(initialDurations);
     }
   }, [chats]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      if (chats.length > 0) {
+        InteractionManager.runAfterInteractions(() => {
+          scrollViewRef.current?.scrollToEnd({ animated: true });
+        });
+      }
+    }, [chats])
+  );
 
   const playVoiceNote = async (chatId, messagePath) => {
     if (currentPlaying && currentPlaying.sound) {
@@ -52,6 +73,13 @@ const ChatsScreen = () => {
     }
 
     try {
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: false,
+        playsInSilentModeIOS: true,
+        staysActiveInBackground: false,
+        playThroughEarpieceAndroid: false,
+      });
+
       const fullPath = `${API_URL}/${messagePath}`;
       console.log("Playing voice note from:", fullPath);
 
@@ -137,9 +165,12 @@ const ChatsScreen = () => {
   };
 
   return (
-    <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.container}>
+    <View style={[styles.container, { backgroundColor: "#E3F2FD" }]}>
       <SafeAreaView style={styles.safeArea}>
-        <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <ScrollView
+          contentContainerStyle={styles.scrollContainer}
+          ref={scrollViewRef}
+        >
           {loading && (
             <View style={styles.lottieContainer}>
               <LottieView
@@ -150,7 +181,17 @@ const ChatsScreen = () => {
               />
             </View>
           )}
-          {error && <Text>Error: {error}</Text>}
+          {!loading && chats.length === 0 && (
+            <View style={styles.lottieContainer}>
+              <LottieView
+                source={noChatsAnimation}
+                autoPlay
+                loop
+                style={styles.lottie}
+              />
+              <Text style={styles.noChatsText}>No Chats Available</Text>
+            </View>
+          )}
           {!loading &&
             chats.map((chat) => (
               <View key={chat._id} style={styles.messageContainer}>
@@ -203,18 +244,22 @@ const ChatsScreen = () => {
                     </Text>
                   </View>
                   <Text style={styles.timeText}>
-                    {new Date(
-                      chat.voiceNoteMetadata.uploadDate
-                    ).toLocaleTimeString()}
+                    {new Date(chat.createdAt).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      hour12: true,
+                    })}
                   </Text>
                 </View>
                 {chat.AI_response && (
                   <View style={[styles.messageBubble, styles.aiResponseBubble]}>
                     <Text style={styles.chatText}>{chat.AI_response}</Text>
                     <Text style={styles.timeText}>
-                      {new Date(
-                        chat.voiceNoteMetadata.uploadDate
-                      ).toLocaleTimeString()}
+                      {new Date(chat.createdAt).toLocaleTimeString([], {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true,
+                      })}
                     </Text>
                   </View>
                 )}
@@ -222,7 +267,7 @@ const ChatsScreen = () => {
             ))}
         </ScrollView>
       </SafeAreaView>
-    </LinearGradient>
+    </View>
   );
 };
 
@@ -262,19 +307,9 @@ const styles = StyleSheet.create({
   iconButton: {
     marginRight: 10,
   },
-  voiceNoteText: {
-    color: "#0288D1",
-    fontSize: 16,
-  },
   progressBar: {
     flex: 1,
     height: 20,
-  },
-  thumb: {
-    width: 5,
-    height: 5,
-    borderRadius: 5,
-    backgroundColor: "#fff",
   },
   durationText: {
     fontSize: 12,
@@ -302,6 +337,12 @@ const styles = StyleSheet.create({
   lottie: {
     width: 200,
     height: 200,
+  },
+  noChatsText: {
+    fontSize: 18,
+    color: "#666",
+    marginTop: 20,
+    textAlign: "center",
   },
 });
 

@@ -1,13 +1,13 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import HomeScreen from "../screens/HomeScreen";
-import ChatsScreen from "../screens/ChatsScreen";
-import ProfileScreen from "../screens/Profile";
+import AdminHome from "../screens/admin/adminHome";
+import AdminProfile from "../screens/admin/adminProfile";
+import Adminchildren from "../screens/admin/adminchildren";
 
 const Tab = createBottomTabNavigator();
 
-const Tabs = ({ route }) => {
+const AdminTabs = ({ route }) => {
   const { streak } = route.params || {};
 
   return (
@@ -18,7 +18,7 @@ const Tabs = ({ route }) => {
 
           if (route.name === "Home") {
             iconName = focused ? "home-outline" : "home-outline";
-          } else if (route.name === "AI Chats") {
+          } else if (route.name === "Children Chats") {
             iconName = "robot-outline";
           } else if (route.name === "Profile") {
             iconName = "account-outline";
@@ -37,28 +37,36 @@ const Tabs = ({ route }) => {
         },
         tabBarActiveTintColor: "#0288D1",
         tabBarInactiveTintColor: "gray",
-        tabBarStyle: { backgroundColor: "#F5F5F5", paddingTop: 10 },
+        tabBarStyle: {
+          backgroundColor: "#F5F5F5",
+          paddingTop: 10,
+          elevation: 5,
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.2,
+          shadowRadius: 3.84,
+          shadowColor: "#000",
+        },
         tabBarLabelStyle: { marginBottom: -7 },
       })}
     >
       <Tab.Screen
         name="Home"
-        component={HomeScreen}
+        component={AdminHome}
         options={{ headerShown: false }}
         initialParams={{ streak }}
       />
       <Tab.Screen
-        name="AI Chats"
-        component={ChatsScreen}
+        name="Children Chats"
+        component={Adminchildren}
         options={{ headerShown: false }}
       />
       <Tab.Screen
         name="Profile"
-        component={ProfileScreen}
+        component={AdminProfile}
         options={{ headerShown: false }}
       />
     </Tab.Navigator>
   );
 };
 
-export default Tabs;
+export default AdminTabs;
