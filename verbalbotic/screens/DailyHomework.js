@@ -1,10 +1,22 @@
-import React from "react";
-import { StyleSheet, Text, View, SafeAreaView, ScrollView } from "react-native";
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  SafeAreaView,
+  ScrollView,
+  Modal,
+  TouchableOpacity,
+} from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
 
 const DailyHomework = () => {
   const { user } = useSelector((state) => state.user);
+
+  // Modal visibility and selected homework
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedHomework, setSelectedHomework] = useState(null);
 
   // Filter the not completed and completed homework
   const notCompletedHomework = user.dailyHomework.filter(
@@ -13,6 +25,12 @@ const DailyHomework = () => {
   const completedHomework = user.dailyHomework.filter(
     (homework) => homework.isCompleted
   );
+
+  // Handle card press
+  const handleCardPress = (homework) => {
+    setSelectedHomework(homework);
+    setModalVisible(true);
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -24,7 +42,11 @@ const DailyHomework = () => {
         <ScrollView contentContainerStyle={styles.content}>
           <Text style={styles.sectionTitle}>Not Completed</Text>
           {notCompletedHomework.map((homework) => (
-            <View key={homework._id} style={styles.card}>
+            <TouchableOpacity
+              key={homework._id}
+              style={styles.card}
+              onPress={() => handleCardPress(homework)}
+            >
               <View style={styles.cardContent}>
                 <View style={styles.textContainer}>
                   <Text style={styles.cardTitle}>{homework.title}</Text>
@@ -41,12 +63,16 @@ const DailyHomework = () => {
                   color="black"
                 />
               </View>
-            </View>
+            </TouchableOpacity>
           ))}
 
           <Text style={styles.sectionTitle}>Completed</Text>
           {completedHomework.map((homework) => (
-            <View key={homework._id} style={styles.card}>
+            <TouchableOpacity
+              key={homework._id}
+              style={styles.card}
+              onPress={() => handleCardPress(homework)}
+            >
               <View style={styles.cardContent}>
                 <View style={styles.textContainer}>
                   <Text style={styles.cardTitle}>{homework.title}</Text>
@@ -63,9 +89,39 @@ const DailyHomework = () => {
                   color="black"
                 />
               </View>
-            </View>
+            </TouchableOpacity>
           ))}
         </ScrollView>
+
+        {/* Modal for displaying detailed view */}
+        {selectedHomework && (
+          <Modal
+            transparent={true}
+            visible={modalVisible}
+            animationType="slide"
+            onRequestClose={() => setModalVisible(false)}
+          >
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                <Text style={styles.modalTitle}>{selectedHomework.title}</Text>
+                <Text style={styles.modalDescription}>
+                  {selectedHomework.description}
+                </Text>
+                <Text style={styles.modalTime}>
+                  Time: {selectedHomework.timeInMinutes} minutes
+                </Text>
+
+                {/* Close button */}
+                <TouchableOpacity
+                  onPress={() => setModalVisible(false)}
+                  style={styles.closeButton}
+                >
+                  <Text style={styles.closeButtonText}>Close</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+        )}
       </View>
     </SafeAreaView>
   );
@@ -133,6 +189,49 @@ const styles = StyleSheet.create({
   cardTime: {
     fontSize: 12,
     color: "#666",
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  modalContent: {
+    width: "90%",
+    backgroundColor: "#fff",
+    padding: 20,
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 10,
+    elevation: 5,
+  },
+  modalTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 10,
+    color: "#000",
+  },
+  modalDescription: {
+    fontSize: 16,
+    color: "#333",
+    marginBottom: 10,
+  },
+  modalTime: {
+    fontSize: 14,
+    color: "#666",
+  },
+  closeButton: {
+    marginTop: 20,
+    alignItems: "center",
+    backgroundColor: "#0288D1",
+    padding: 10,
+    borderRadius: 5,
+  },
+  closeButtonText: {
+    color: "#fff",
+    fontSize: 16,
   },
 });
 
