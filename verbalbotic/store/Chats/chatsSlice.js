@@ -131,6 +131,11 @@ const chatsSlice = createSlice({
       state.updatingAIResponse = false;
       state.updateAIResponseError = action.payload;
     },
+    markHomeworkAsDoneRequest: (state) => {
+      state.loading = true;
+      state.error = null;
+    },
+
     clearChats: (state) => {
       state.chats = [];
     },
