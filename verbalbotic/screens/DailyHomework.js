@@ -201,6 +201,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#333",
     marginVertical: 5,
+    flexWrap: "nowrap", // Prevent word breaking
   },
   cardTime: {
     fontSize: 12,
@@ -242,6 +243,8 @@ const styles = StyleSheet.create({
   modalDescription: {
     fontSize: 16,
     color: "#333",
+    textAlign: "justify", // Justify the description text
+    flexWrap: "nowrap", // Prevent word breaking
     marginBottom: 10,
   },
   doneButton: {
