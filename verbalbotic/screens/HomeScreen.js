@@ -14,6 +14,7 @@ import { useDispatch } from "react-redux";
 import { saveVoiceNote } from "../store/Chats/chatsActions";
 import SwitchToggle from "react-native-switch-toggle";
 import { Dropdown } from "react-native-element-dropdown";
+import { getSelf } from "../store/user/userActions";
 
 const HomeScreen = ({ navigation, route }) => {
   const { streak } = route.params || {};
@@ -41,6 +42,9 @@ const HomeScreen = ({ navigation, route }) => {
     { label: "French (France)", value: "fr-FR" },
     // Other language options...
   ];
+  useEffect(() => {
+    dispatch(getSelf());
+  }, [dispatch]);
 
   const handleToggle = () => {
     setToggleOn(!toggleOn);
