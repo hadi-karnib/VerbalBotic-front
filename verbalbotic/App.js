@@ -18,6 +18,7 @@ import AdminTabs from "./components/adminBottomTabs";
 import Adminchildren from "./screens/admin/adminchildren";
 import ChildChats from "./screens/admin/ChildChats";
 import MyChats from "./screens/admin/MyChats";
+import DailyHomework from "./screens/DailyHomework";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -44,6 +45,7 @@ export default function App() {
             <Stack.Screen name="adminTabs" component={AdminTabs} />
             <Stack.Screen name="ChildChats" component={ChildChats} />
             <Stack.Screen name="MyChats" component={MyChats} />
+            <Stack.Screen name="DailyHomework" component={DailyHomework} />
           </Stack.Navigator>
           <StatusBar style="auto" />
         </NavigationContainer>
