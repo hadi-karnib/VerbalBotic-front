@@ -9,10 +9,11 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 const DailyHomework = () => {
   const { user } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
 
   // Modal visibility and selected homework
   const [modalVisible, setModalVisible] = useState(false);
@@ -30,6 +31,17 @@ const DailyHomework = () => {
   const handleCardPress = (homework) => {
     setSelectedHomework(homework);
     setModalVisible(true);
+  };
+
+  // Mark as done function
+  const markAsDone = () => {
+    if (selectedHomework) {
+      // Dispatch an action to mark this homework as completed
+      // Replace this with your actual dispatch or logic to update the homework status
+      // dispatch(markHomeworkAsDone(selectedHomework._id));
+
+      setModalVisible(false); // Close the modal after marking as done
+    }
   };
 
   return (
@@ -103,20 +115,24 @@ const DailyHomework = () => {
           >
             <View style={styles.modalContainer}>
               <View style={styles.modalContent}>
-                <Text style={styles.modalTitle}>{selectedHomework.title}</Text>
+                <View style={styles.modalHeader}>
+                  <Text style={styles.modalTitle}>
+                    {selectedHomework.title}
+                  </Text>
+                  <Text style={styles.modalTime}>
+                    Time: {selectedHomework.timeInMinutes} minutes
+                  </Text>
+                </View>
                 <Text style={styles.modalDescription}>
                   {selectedHomework.description}
                 </Text>
-                <Text style={styles.modalTime}>
-                  Time: {selectedHomework.timeInMinutes} minutes
-                </Text>
 
-                {/* Close button */}
+                {/* Mark as Done button */}
                 <TouchableOpacity
-                  onPress={() => setModalVisible(false)}
-                  style={styles.closeButton}
+                  onPress={markAsDone}
+                  style={styles.doneButton}
                 >
-                  <Text style={styles.closeButtonText}>Close</Text>
+                  <Text style={styles.doneButtonText}>Mark as Done</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -207,29 +223,35 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     elevation: 5,
   },
+  modalHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 15,
+  },
   modalTitle: {
     fontSize: 20,
     fontWeight: "bold",
-    marginBottom: 10,
     color: "#000",
+  },
+  modalTime: {
+    fontSize: 14,
+    fontWeight: "bold",
+    color: "green", // Time in green color
   },
   modalDescription: {
     fontSize: 16,
     color: "#333",
     marginBottom: 10,
   },
-  modalTime: {
-    fontSize: 14,
-    color: "#666",
-  },
-  closeButton: {
+  doneButton: {
     marginTop: 20,
     alignItems: "center",
     backgroundColor: "#0288D1",
     padding: 10,
     borderRadius: 5,
   },
-  closeButtonText: {
+  doneButtonText: {
     color: "#fff",
     fontSize: 16,
   },
