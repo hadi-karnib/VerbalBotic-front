@@ -110,6 +110,14 @@ const DailyHomework = () => {
           >
             <View style={styles.modalContainer}>
               <View style={styles.modalContent}>
+                {/* Close button */}
+                <TouchableOpacity
+                  style={styles.closeButton}
+                  onPress={() => setModalVisible(false)}
+                >
+                  <MaterialIcons name="close" size={24} color="black" />
+                </TouchableOpacity>
+
                 <View style={styles.modalHeader}>
                   <Text style={styles.modalTitle}>
                     {selectedHomework.title}
@@ -218,11 +226,18 @@ const styles = StyleSheet.create({
     shadowRadius: 10,
     elevation: 5,
   },
+  closeButton: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    zIndex: 1,
+  },
   modalHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     marginBottom: 15,
+    marginTop: 30,
   },
   modalTitle: {
     fontSize: 20,
