@@ -4,6 +4,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import HomeScreen from "../screens/HomeScreen";
 import ChatsScreen from "../screens/ChatsScreen";
 import ProfileScreen from "../screens/Profile";
+import DailyHomeworkScreen from "../screens/DailyHomework"; // Import the Daily Homework screen
 
 const Tab = createBottomTabNavigator();
 
@@ -22,6 +23,8 @@ const Tabs = ({ route }) => {
             iconName = "robot-outline";
           } else if (route.name === "Profile") {
             iconName = "account-outline";
+          } else if (route.name === "Daily Exercises") {
+            iconName = "calendar-check-outline";
           }
 
           return (
@@ -50,6 +53,11 @@ const Tabs = ({ route }) => {
       <Tab.Screen
         name="AI Chats"
         component={ChatsScreen}
+        options={{ headerShown: false }}
+      />
+      <Tab.Screen
+        name="Daily Exercises" // New tab for daily exercises
+        component={DailyHomeworkScreen} // This should be the screen handling the exercises
         options={{ headerShown: false }}
       />
       <Tab.Screen
