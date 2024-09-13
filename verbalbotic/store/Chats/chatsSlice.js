@@ -2,6 +2,8 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   chats: [],
+  dailyHomework: [], // Add this to store homework
+
   loading: false,
   error: null,
   savingVoiceNote: false,
@@ -80,6 +82,7 @@ const chatsSlice = createSlice({
       state.updateChatGPTError = null;
       state.analysisError = null;
     },
+
     transcribeAudioGoogleRequest: (state) => {
       state.loading = true;
       state.error = null;
