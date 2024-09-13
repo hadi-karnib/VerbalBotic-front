@@ -11,27 +11,31 @@ import {
 import { MaterialIcons } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
 import LottieView from "lottie-react-native";
-import { markHomeworkAsDone } from "../store/Chats/chatsActions";
-import { getSelf } from "../store/user/userActions"; // Assuming getSelf is correctly imported from the user actions
+import {
+  markHomeworkAsDone,
+  getUserDailyHomework,
+} from "../store/Chats/chatsActions";
 
 const DailyHomework = () => {
-  const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+
+  // Get the dailyHomework and loading state from Redux
+  const { dailyHomework, loading } = useSelector((state) => state.chats);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedHomework, setSelectedHomework] = useState(null);
 
-  // Fetch user data on component mount
+  // Fetch daily homework on component mount
   useEffect(() => {
-    dispatch(getSelf());
+    dispatch(getUserDailyHomework());
   }, [dispatch]);
 
-  // Check if user and dailyHomework exist before filtering
+  // Separate the completed and not completed homework
   const notCompletedHomework =
-    user?.dailyHomework?.filter((homework) => !homework.isCompleted) || [];
+    dailyHomework?.filter((homework) => !homework.isCompleted) || [];
 
   const completedHomework =
-    user?.dailyHomework?.filter((homework) => homework.isCompleted) || [];
+    dailyHomework?.filter((homework) => homework.isCompleted) || [];
 
   const handleCardPress = (homework) => {
     setSelectedHomework(homework);
@@ -55,59 +59,64 @@ const DailyHomework = () => {
           <Text style={styles.title}>Daily Exercises</Text>
         </View>
 
-        <ScrollView contentContainerStyle={styles.content}>
-          <Text style={styles.sectionTitle}>Not Completed</Text>
-          {notCompletedHomework.map((homework) => (
-            <TouchableOpacity
-              key={homework._id}
-              style={styles.card}
-              onPress={() => handleCardPress(homework)}
-            >
-              <View style={styles.cardContent}>
-                <View style={styles.textContainer}>
-                  <Text style={styles.cardTitle}>{homework.title}</Text>
-                  <Text style={styles.cardDescription}>
-                    {homework.description}
-                  </Text>
-                  <Text style={styles.cardTime}>
-                    Time: {homework.timeInMinutes} minutes
-                  </Text>
+        {/* Display loading spinner or homework content */}
+        {loading ? (
+          <Text>Loading...</Text>
+        ) : (
+          <ScrollView contentContainerStyle={styles.content}>
+            <Text style={styles.sectionTitle}>Not Completed</Text>
+            {notCompletedHomework.map((homework) => (
+              <TouchableOpacity
+                key={homework._id}
+                style={styles.card}
+                onPress={() => handleCardPress(homework)}
+              >
+                <View style={styles.cardContent}>
+                  <View style={styles.textContainer}>
+                    <Text style={styles.cardTitle}>{homework.title}</Text>
+                    <Text style={styles.cardDescription}>
+                      {homework.description}
+                    </Text>
+                    <Text style={styles.cardTime}>
+                      Time: {homework.timeInMinutes} minutes
+                    </Text>
+                  </View>
+                  <MaterialIcons
+                    name="keyboard-arrow-right"
+                    size={24}
+                    color="black"
+                  />
                 </View>
-                <MaterialIcons
-                  name="keyboard-arrow-right"
-                  size={24}
-                  color="black"
-                />
-              </View>
-            </TouchableOpacity>
-          ))}
+              </TouchableOpacity>
+            ))}
 
-          <Text style={styles.sectionTitle}>Completed</Text>
-          {completedHomework.map((homework) => (
-            <TouchableOpacity
-              key={homework._id}
-              style={styles.card}
-              onPress={() => handleCardPress(homework)}
-            >
-              <View style={styles.cardContent}>
-                <View style={styles.textContainer}>
-                  <Text style={styles.cardTitle}>{homework.title}</Text>
-                  <Text style={styles.cardDescription}>
-                    {homework.description}
-                  </Text>
-                  <Text style={styles.cardTime}>
-                    Time: {homework.timeInMinutes} minutes
-                  </Text>
+            <Text style={styles.sectionTitle}>Completed</Text>
+            {completedHomework.map((homework) => (
+              <TouchableOpacity
+                key={homework._id}
+                style={styles.card}
+                onPress={() => handleCardPress(homework)}
+              >
+                <View style={styles.cardContent}>
+                  <View style={styles.textContainer}>
+                    <Text style={styles.cardTitle}>{homework.title}</Text>
+                    <Text style={styles.cardDescription}>
+                      {homework.description}
+                    </Text>
+                    <Text style={styles.cardTime}>
+                      Time: {homework.timeInMinutes} minutes
+                    </Text>
+                  </View>
+                  <MaterialIcons
+                    name="keyboard-arrow-right"
+                    size={24}
+                    color="black"
+                  />
                 </View>
-                <MaterialIcons
-                  name="keyboard-arrow-right"
-                  size={24}
-                  color="black"
-                />
-              </View>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        )}
 
         {selectedHomework && (
           <Modal
