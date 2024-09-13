@@ -268,3 +268,37 @@ export const getParentAdviceWithMessageId =
       console.error("Error fetching parent advice:", errorMessage);
     }
   };
+
+export const markHomeworkAsDone = (homeworkId) => async (dispatch) => {
+  try {
+    // Dispatching request action
+    dispatch(chatsActions.markHomeworkAsDoneRequest());
+
+    // Get token from AsyncStorage
+    const token = await AsyncStorage.getItem("token");
+
+    // Send PATCH request to mark homework as done
+    const response = await axios.patch(
+      `${API_URL}/api/messages/homework`,
+      { homeworkId }, // Send the homework ID in the body
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    // Dispatch success action with the updated homework data
+    dispatch(chatsActions.markHomeworkAsDoneSuccess(response.data));
+    Alert.alert("Homework Marked as Done", "You've completed this task!");
+  } catch (error) {
+    // Dispatch failure action if an error occurs
+    dispatch(
+      chatsActions.markHomeworkAsDoneFailure(
+        error.response?.data?.message || error.message
+      )
+    );
+    console.error("Error marking homework as done: ", error);
+  }
+};
