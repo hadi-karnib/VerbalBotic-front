@@ -136,6 +136,7 @@ export const updateAfterChatGPT =
         "The AI has finished processing your request."
       );
       dispatch(getMyChats());
+      dispatch(getUserDailyHomework());
     } catch (error) {
       dispatch(
         chatsActions.updateChatGPTFailure(
