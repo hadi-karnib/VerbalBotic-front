@@ -180,7 +180,7 @@ const HomeScreen = ({ navigation, route }) => {
         );
       }, 1000);
 
-      animateWaves(); // Start the wave animation when recording starts
+      animateWaves();
     } catch (error) {
       console.error("Error starting recording: ", error);
     }
@@ -254,7 +254,7 @@ const HomeScreen = ({ navigation, route }) => {
           <TouchableOpacity
             style={[
               styles.microphoneButton,
-              isRecording && { backgroundColor: "#ff6f61" }, // Pink when recording
+              isRecording && { backgroundColor: "#ff6f61" },
             ]}
             onPress={handleMicrophonePress}
           >
