@@ -44,14 +44,13 @@ const DailyHomework = () => {
 
   const markAsDone = () => {
     if (selectedHomework) {
-      // Dispatch the action to mark homework as completed
+      // Optimistically update without showing any loading
       dispatch(markHomeworkAsDone(selectedHomework._id));
 
-      // Close the modal after marking as done
+      // Close the modal immediately after the dispatch
       setModalVisible(false);
     }
   };
-
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
