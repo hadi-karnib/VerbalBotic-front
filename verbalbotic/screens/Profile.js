@@ -30,10 +30,6 @@ const Profile = ({ navigation }) => {
 
   const [expandedId, setExpandedId] = useState(null);
 
-  // useEffect(() => {
-  //   dispatch(getSelf());
-  // }, [dispatch]);
-
   useEffect(() => {
     if (user) {
       setFormData({
