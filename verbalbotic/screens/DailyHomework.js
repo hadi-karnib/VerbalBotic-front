@@ -52,6 +52,11 @@ const DailyHomework = () => {
     }
   };
 
+  // Handle closing the modal for "Already Done"
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
@@ -154,12 +159,13 @@ const DailyHomework = () => {
                 </Text>
 
                 <TouchableOpacity
-                  onPress={markAsDone}
+                  onPress={
+                    selectedHomework.isCompleted ? closeModal : markAsDone
+                  }
                   style={[
                     styles.doneButton,
-                    selectedHomework.isCompleted && styles.doneButtonDisabled,
+                    selectedHomework.isCompleted && styles.alreadyDoneButton,
                   ]}
-                  disabled={selectedHomework.isCompleted}
                 >
                   <Text style={styles.doneButtonText}>
                     {selectedHomework.isCompleted
@@ -304,8 +310,8 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
   },
-  doneButtonDisabled: {
-    backgroundColor: "#a1a1a1",
+  alreadyDoneButton: {
+    backgroundColor: "#B3E5FC", // gold color for "Already Done"
   },
   doneButtonText: {
     color: "#fff",
