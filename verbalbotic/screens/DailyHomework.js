@@ -28,7 +28,7 @@ const DailyHomework = () => {
   // Fetch daily homework on component mount
   useEffect(() => {
     dispatch(getUserDailyHomework());
-  }, [dispatch]);
+  }, []);
 
   // Separate the completed and not completed homework
   const notCompletedHomework =
