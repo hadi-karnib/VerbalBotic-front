@@ -78,7 +78,7 @@ const AdminHome = () => {
             />
           </View>
         )}
-        {/* {error && <Text style={styles.errorText}>Error: {error}</Text>} */}
+
         {!loading && children.length === 0 && (
           <TouchableOpacity onPress={handleNoChildrenPress}>
             <Animated.View
