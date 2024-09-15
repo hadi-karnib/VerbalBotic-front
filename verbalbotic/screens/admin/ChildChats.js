@@ -78,7 +78,7 @@ const ChildChats = () => {
         playThroughEarpieceAndroid: false,
       });
 
-      const fullPath = `${API_URL}/${messagePath}`;
+      const fullPath = `http://13.38.64.181:80/${messagePath}`;
       console.log("Playing voice note from:", fullPath);
 
       const { sound } = await Audio.Sound.createAsync(
