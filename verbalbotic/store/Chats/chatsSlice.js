@@ -134,20 +134,25 @@ const chatsSlice = createSlice({
       state.updatingAIResponse = false;
       state.updateAIResponseError = action.payload;
     },
-    markHomeworkAsDoneRequest: (state) => {
-      state.loading = true;
-      state.error = null;
+    markHomeworkAsDoneRequest: (state, action) => {
+      const updatedHomework = state.dailyHomework.map((hw) =>
+        hw._id === action.payload ? { ...hw, isCompleted: true } : hw
+      );
+      state.dailyHomework = updatedHomework; // Optimistic update
+      state.loading = true; // Show loading while the request is happening
     },
     markHomeworkAsDoneSuccess: (state, action) => {
       state.loading = false;
-      const updatedHomework = state.dailyHomework.map((hw) =>
-        hw._id === action.payload._id ? action.payload : hw
-      );
-      state.homework = updatedHomework;
     },
     markHomeworkAsDoneFailure: (state, action) => {
       state.loading = false;
-      state.error = action.payload;
+      const updatedHomework = state.dailyHomework.map((hw) =>
+        hw._id === action.payload.homeworkId
+          ? { ...hw, isCompleted: false }
+          : hw
+      );
+      state.dailyHomework = updatedHomework; // Rollback the change
+      state.error = action.payload.error;
     },
     getDailyHomeworkRequest: (state) => {
       state.loading = true;
