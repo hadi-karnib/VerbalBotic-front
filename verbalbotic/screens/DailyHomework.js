@@ -28,7 +28,7 @@ const DailyHomework = () => {
   // Fetch daily homework on component mount
   useEffect(() => {
     dispatch(getUserDailyHomework());
-  }, []);
+  }, [dispatch]);
 
   // Separate the completed and not completed homework
   const notCompletedHomework =
@@ -43,7 +43,7 @@ const DailyHomework = () => {
   };
 
   const markAsDone = () => {
-    if (selectedHomework) {
+    if (selectedHomework && !selectedHomework.isCompleted) {
       // Optimistically update without showing any loading
       dispatch(markHomeworkAsDone(selectedHomework._id));
 
@@ -155,17 +155,28 @@ const DailyHomework = () => {
 
                 <TouchableOpacity
                   onPress={markAsDone}
-                  style={styles.doneButton}
+                  style={[
+                    styles.doneButton,
+                    selectedHomework.isCompleted && styles.doneButtonDisabled,
+                  ]}
+                  disabled={selectedHomework.isCompleted}
                 >
-                  <Text style={styles.doneButtonText}>Mark as Done</Text>
+                  <Text style={styles.doneButtonText}>
+                    {selectedHomework.isCompleted
+                      ? "Already Done"
+                      : "Mark as Done"}
+                  </Text>
                 </TouchableOpacity>
 
-                <LottieView
-                  source={require("../assets/ChildPressing.json")}
-                  autoPlay
-                  loop
-                  style={styles.lottieAnimation}
-                />
+                {/* Only show the animation if homework is not completed */}
+                {!selectedHomework.isCompleted && (
+                  <LottieView
+                    source={require("../assets/ChildPressing.json")}
+                    autoPlay
+                    loop
+                    style={styles.lottieAnimation}
+                  />
+                )}
               </View>
             </View>
           </Modal>
@@ -292,6 +303,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#0288D1",
     padding: 10,
     borderRadius: 5,
+  },
+  doneButtonDisabled: {
+    backgroundColor: "#a1a1a1",
   },
   doneButtonText: {
     color: "#fff",
