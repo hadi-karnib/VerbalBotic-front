@@ -133,7 +133,6 @@ const Adminchildren = () => {
           )}
         </View>
 
-        {/* Title for My Chats */}
         <Text style={styles.title}>My Chats</Text>
         {userLoading && (
           <View style={styles.loadingContainer}>
