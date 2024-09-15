@@ -8,12 +8,12 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   Alert,
-  Image, // Import the Image component
+  Image,
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
 import { useDispatch } from "react-redux";
-import { signupUser } from "../store/user/userActions"; // Import the signupUser action
+import { signupUser } from "../store/user/userActions";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import RNPickerSelect from "react-native-picker-select";
 
@@ -63,14 +63,12 @@ export default function SignupScreen({ navigation }) {
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      {/* Adjusting for the keyboard opening */}
       <KeyboardAvoidingView
         style={styles.container}
         behavior={Platform.OS === "ios" ? "padding" : null}
       >
-        {/* Add the logo */}
         <Image
-          source={require("../assets/VerbalBotic-removebg.png")} // Ensure the path to the logo image is correct
+          source={require("../assets/VerbalBotic-removebg.png")}
           style={styles.logo}
           resizeMode="contain"
         />
@@ -155,7 +153,7 @@ const styles = StyleSheet.create({
   logo: {
     width: 150,
     height: 150,
-    marginBottom: 20, // Add spacing between logo and signup box
+    marginBottom: 20,
   },
   signupBox: {
     width: 300,
