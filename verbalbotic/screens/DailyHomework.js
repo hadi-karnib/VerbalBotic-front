@@ -51,6 +51,7 @@ const DailyHomework = () => {
       setModalVisible(false);
     }
   };
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
@@ -60,7 +61,14 @@ const DailyHomework = () => {
 
         {/* Display loading spinner or homework content */}
         {loading ? (
-          <Text>Loading...</Text>
+          <View style={styles.loadingContainer}>
+            <LottieView
+              source={require("../assets/loading.json")}
+              autoPlay
+              loop
+              style={styles.loadingAnimation}
+            />
+          </View>
         ) : (
           <ScrollView contentContainerStyle={styles.content}>
             <Text style={styles.sectionTitle}>Not Completed</Text>
@@ -294,6 +302,15 @@ const styles = StyleSheet.create({
     height: 200,
     marginTop: -20,
     alignSelf: "center",
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  loadingAnimation: {
+    width: 200,
+    height: 200,
   },
 });
 
