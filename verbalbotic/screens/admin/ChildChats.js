@@ -10,7 +10,7 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { useDispatch, useSelector } from "react-redux";
 import { useFocusEffect, useRoute } from "@react-navigation/native";
-import { fetchChildChats } from "../../store/Chats/chatsActions"; // Import clearChats
+import { fetchChildChats } from "../../store/Chats/chatsActions";
 import { chatsActions } from "../../store/Chats/chatsSlice";
 import { Audio } from "expo-av";
 import Slider from "@react-native-community/slider";
@@ -32,7 +32,6 @@ const ChildChats = () => {
 
   useEffect(() => {
     if (childId) {
-      // Clear chats before fetching new child chats
       dispatch(chatsActions.clearChats());
       dispatch(fetchChildChats(childId));
     }
@@ -53,7 +52,7 @@ const ChildChats = () => {
     React.useCallback(() => {
       setTimeout(() => {
         scrollViewRef.current?.scrollToEnd({ animated: true });
-      }, 0); // Scroll to the bottom after chats load
+      }, 0);
     }, [chats])
   );
 
