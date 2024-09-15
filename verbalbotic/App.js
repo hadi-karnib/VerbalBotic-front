@@ -19,12 +19,13 @@ import Adminchildren from "./screens/admin/adminchildren";
 import ChildChats from "./screens/admin/ChildChats";
 import MyChats from "./screens/admin/MyChats";
 import DailyHomework from "./screens/DailyHomework";
+import { View } from "react-native";
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
     <Provider store={store}>
-      <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={{ flex: 1 }}>
+      <View style={{ flex: 1, backgroundColor: "#E3F2FD " }}>
         <NavigationContainer>
           <Stack.Navigator
             initialRouteName="Login"
@@ -49,7 +50,7 @@ export default function App() {
           </Stack.Navigator>
           <StatusBar style="auto" />
         </NavigationContainer>
-      </LinearGradient>
+      </View>
     </Provider>
   );
 }
