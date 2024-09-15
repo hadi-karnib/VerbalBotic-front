@@ -86,7 +86,6 @@ const AdminProfile = ({ navigation }) => {
       try {
         await dispatch(addChild(data));
       } catch (error) {
-        // Handle error if necessary
       } finally {
         setTimeout(() => {
           setIsScanning(false);
