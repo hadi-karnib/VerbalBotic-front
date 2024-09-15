@@ -228,10 +228,8 @@ export const adminMessages = (messageContent) => async (dispatch) => {
 
     const { _id: messageId } = response.data;
 
-    // Immediately update the chat list with the new message
     dispatch(chatsActions.adminMessageSuccess(response.data));
 
-    // Fetch AI response in the background
     dispatch(getParentAdviceWithMessageId(messageContent, messageId));
   } catch (error) {
     const errorMessage = error.response?.data?.message || error.message;
@@ -272,13 +270,10 @@ export const getParentAdviceWithMessageId =
 
 export const markHomeworkAsDone = (homeworkId) => async (dispatch) => {
   try {
-    // Dispatch optimistic update
     dispatch(chatsActions.markHomeworkAsDoneRequest(homeworkId));
 
-    // Get token from AsyncStorage
     const token = await AsyncStorage.getItem("token");
 
-    // Send PATCH request to mark homework as done
     await axios.patch(
       `${API_URL}/messages/homework`,
       { homeworkId },
@@ -290,11 +285,9 @@ export const markHomeworkAsDone = (homeworkId) => async (dispatch) => {
       }
     );
 
-    // Dispatch success if API call is successful
     dispatch(chatsActions.markHomeworkAsDoneSuccess());
     Alert.alert("Homework Marked as Done", "You've completed this task!");
   } catch (error) {
-    // Rollback the optimistic update in case of failure
     dispatch(chatsActions.markHomeworkAsDoneFailure({ homeworkId, error }));
     console.error("Error marking homework as done: ", error);
   }
