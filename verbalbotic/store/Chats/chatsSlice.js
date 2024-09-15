@@ -138,22 +138,21 @@ const chatsSlice = createSlice({
       const updatedHomework = state.dailyHomework.map((hw) =>
         hw._id === action.payload ? { ...hw, isCompleted: true } : hw
       );
-      state.dailyHomework = updatedHomework; // Optimistic update
-      state.loading = true; // Show loading while the request is happening
+      state.dailyHomework = updatedHomework; // Optimistic update without loading
     },
-    markHomeworkAsDoneSuccess: (state, action) => {
-      state.loading = false;
+    markHomeworkAsDoneSuccess: (state) => {
+      // Success can stay empty or trigger a message
     },
     markHomeworkAsDoneFailure: (state, action) => {
-      state.loading = false;
       const updatedHomework = state.dailyHomework.map((hw) =>
         hw._id === action.payload.homeworkId
           ? { ...hw, isCompleted: false }
           : hw
       );
-      state.dailyHomework = updatedHomework; // Rollback the change
+      state.dailyHomework = updatedHomework; // Rollback if API call fails
       state.error = action.payload.error;
     },
+
     getDailyHomeworkRequest: (state) => {
       state.loading = true;
       state.error = null;
