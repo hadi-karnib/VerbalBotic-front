@@ -315,19 +315,19 @@ const styles = StyleSheet.create({
   dailyStreakText: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#FF8A65",
+    color: "#0277BD",
   },
   streakBox: {
     width: 60,
     height: 60,
-    backgroundColor: "#FFE0B2",
+    backgroundColor: "#E3F2FD",
     borderRadius: 30,
     justifyContent: "center",
     alignItems: "center",
   },
   streakNumber: {
     fontSize: 30,
-    color: "#E64A19",
+    color: "#0277BD",
     fontWeight: "bold",
   },
   toggleContainer: {
