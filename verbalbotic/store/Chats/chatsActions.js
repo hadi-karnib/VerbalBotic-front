@@ -10,7 +10,7 @@ export const getMyChats = () => async (dispatch) => {
 
     dispatch(chatsActions.getChatsRequest());
     const token = await AsyncStorage.getItem("token");
-    const response = await axios.get(`${API_URL}/api/messages/`, {
+    const response = await axios.get(`${API_URL}/messages/`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -33,7 +33,7 @@ export const saveVoiceNote = (formData, uri, language) => async (dispatch) => {
 
     const token = await AsyncStorage.getItem("token");
 
-    const response = await axios.post(`${API_URL}/api/messages/`, formData, {
+    const response = await axios.post(`${API_URL}/messages/`, formData, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "multipart/form-data",
@@ -96,7 +96,7 @@ export const updateDiagnosis = (messageId, diagnosis) => async (dispatch) => {
     const token = await AsyncStorage.getItem("token");
 
     const response = await axios.patch(
-      `${API_URL}/api/messages/${messageId}/analysis`,
+      `${API_URL}/messages/${messageId}/analysis`,
       { diagnosis },
       {
         headers: {
@@ -120,7 +120,7 @@ export const updateAfterChatGPT =
       const token = await AsyncStorage.getItem("token");
 
       const response = await axios.patch(
-        `${API_URL}/api/messages/${messageId}/chatgpt`,
+        `${API_URL}/messages/${messageId}/chatgpt`,
         { diagnosis },
         {
           headers: {
@@ -154,7 +154,7 @@ export const transcribeAudioGoogle =
       const token = await AsyncStorage.getItem("token");
 
       const response = await axios.post(
-        `${API_URL}/api/messages/transcribeGoogle`,
+        `${API_URL}/messages/transcribeGoogle`,
         { language, messageId },
         {
           headers: {
@@ -188,7 +188,7 @@ export const fetchChildChats = (childId) => async (dispatch) => {
 
     const token = await AsyncStorage.getItem("token");
     const response = await axios.post(
-      `${API_URL}/api/messages/child-chats`,
+      `${API_URL}/messages/child-chats`,
       { childId },
       {
         headers: {
@@ -215,7 +215,7 @@ export const adminMessages = (messageContent) => async (dispatch) => {
     const token = await AsyncStorage.getItem("token");
 
     const response = await axios.post(
-      `${API_URL}/api/messages/parentMessage`,
+      `${API_URL}/messages/parentMessage`,
       { messageContent },
       {
         headers: {
@@ -248,7 +248,7 @@ export const getParentAdviceWithMessageId =
 
       const token = await AsyncStorage.getItem("token");
       const response = await axios.post(
-        `${API_URL}/api/messages/parentAdvice`,
+        `${API_URL}/messages/parentAdvice`,
         { prompt, messageId },
         {
           headers: {
@@ -271,16 +271,16 @@ export const getParentAdviceWithMessageId =
 
 export const markHomeworkAsDone = (homeworkId) => async (dispatch) => {
   try {
-    // Dispatching request action
-    dispatch(chatsActions.markHomeworkAsDoneRequest());
+    // Dispatch optimistic update
+    dispatch(chatsActions.markHomeworkAsDoneRequest(homeworkId));
 
     // Get token from AsyncStorage
     const token = await AsyncStorage.getItem("token");
 
     // Send PATCH request to mark homework as done
-    const response = await axios.patch(
-      `${API_URL}/api/messages/homework`,
-      { homeworkId }, // Send the homework ID in the body
+    await axios.patch(
+      `${API_URL}/messages/homework`,
+      { homeworkId },
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -289,16 +289,12 @@ export const markHomeworkAsDone = (homeworkId) => async (dispatch) => {
       }
     );
 
-    // Dispatch success action with the updated homework data
-    dispatch(chatsActions.markHomeworkAsDoneSuccess(response.data));
+    // Dispatch success if API call is successful
+    dispatch(chatsActions.markHomeworkAsDoneSuccess());
     Alert.alert("Homework Marked as Done", "You've completed this task!");
   } catch (error) {
-    // Dispatch failure action if an error occurs
-    dispatch(
-      chatsActions.markHomeworkAsDoneFailure(
-        error.response?.data?.message || error.message
-      )
-    );
+    // Rollback the optimistic update in case of failure
+    dispatch(chatsActions.markHomeworkAsDoneFailure({ homeworkId, error }));
     console.error("Error marking homework as done: ", error);
   }
 };
@@ -309,7 +305,7 @@ export const getUserDailyHomework = () => async (dispatch) => {
 
     const token = await AsyncStorage.getItem("token");
 
-    const response = await axios.get(`${API_URL}/api/messages/getHomework`, {
+    const response = await axios.get(`${API_URL}/messages/getHomework`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
