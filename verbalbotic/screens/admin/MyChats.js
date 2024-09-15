@@ -152,7 +152,7 @@ const MyChats = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#f0f0f0", // Lighter background color
+    backgroundColor: "#f0f0f0",
   },
   container: {
     flex: 1,
@@ -164,7 +164,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginBottom: 20,
     paddingVertical: 10,
-    backgroundColor: "#0288D1", // Darker color for the header
+    backgroundColor: "#0288D1",
     marginHorizontal: -20,
   },
   avatarPlaceholder: {
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 18,
     fontWeight: "600",
-    color: "#FFFFFF", // White text color for contrast
+    color: "#FFFFFF",
   },
   scrollContainer: {
     flexGrow: 1,
@@ -225,12 +225,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 10,
     paddingVertical: 5,
-    backgroundColor: "#e0e0e0", // Slightly darker input container background
+    backgroundColor: "#e0e0e0",
   },
   input: {
     flex: 1,
     padding: 10,
-    backgroundColor: "#f5f5f5", // Darker input background
+    backgroundColor: "#f5f5f5",
     borderRadius: 25,
     fontSize: 16,
     marginRight: 10,
