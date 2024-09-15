@@ -55,12 +55,12 @@ const MyChats = () => {
   const isInputEmpty = messageInput.trim().length === 0;
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={styles.container}
-        keyboardVerticalOffset={0}
-      >
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+      keyboardVerticalOffset={0}
+    >
+      <SafeAreaView style={styles.safeAreaTop}>
         <ScrollView
           contentContainerStyle={styles.scrollContainer}
           keyboardShouldPersistTaps="handled"
@@ -125,7 +125,9 @@ const MyChats = () => {
             ))
           )}
         </ScrollView>
+      </SafeAreaView>
 
+      <SafeAreaView style={styles.safeAreaBottom}>
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.input}
@@ -144,18 +146,23 @@ const MyChats = () => {
             <MaterialIcons name="send" size={24} color="#FFF" />
           </TouchableOpacity>
         </View>
-      </KeyboardAvoidingView>
-    </SafeAreaView>
+      </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
-  safeArea: {
+  container: {
+    flex: 1,
+  },
+  safeAreaTop: {
     flex: 1,
     backgroundColor: "#E3F2FD",
   },
-  container: {
-    flex: 1,
+  safeAreaBottom: {
+    backgroundColor: "#fff",
+    borderTopWidth: 1,
+    borderTopColor: "#e0e0e0",
   },
   headerContainer: {
     flexDirection: "row",
@@ -225,7 +232,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingHorizontal: 10,
     paddingVertical: 5,
-    backgroundColor: "#e0e0e0",
+    backgroundColor: "#fff",
   },
   input: {
     flex: 1,
