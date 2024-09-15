@@ -152,7 +152,7 @@ const MyChats = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#E3F2FD", // Set the same background color here
+    backgroundColor: "#E3F2FD",
   },
   container: {
     flex: 1,
