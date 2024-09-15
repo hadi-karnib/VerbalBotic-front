@@ -147,7 +147,7 @@ const AdminHome = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#e0e0e0 ",
+    backgroundColor: "#E3F2FD",
   },
   container: {
     flex: 1,
