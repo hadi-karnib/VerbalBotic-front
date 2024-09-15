@@ -242,13 +242,15 @@ const AdminProfile = ({ navigation }) => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#e0e0e0 ",
+    backgroundColor: "#E3F2FD", // Set background color to white or your desired color
   },
   container: {
     flex: 1,
+    backgroundColor: "#E3F2FD", // Set the same background color here
   },
   scrollContent: {
     flexGrow: 1,
+    backgroundColor: "#E3F2FD", // Ensure the scrollable content also has the correct background
   },
   header: {
     padding: 20,
