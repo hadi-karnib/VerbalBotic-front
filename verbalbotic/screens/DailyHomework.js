@@ -147,13 +147,18 @@ const DailyHomework = () => {
                 </TouchableOpacity>
 
                 <View style={styles.modalHeader}>
-                  <Text style={styles.modalTitle}>
+                  <Text
+                    style={styles.modalTitle}
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                  >
                     {selectedHomework.title}
                   </Text>
                   <Text style={styles.modalTime}>
                     Time: {selectedHomework.timeInMinutes} minutes
                   </Text>
                 </View>
+
                 <Text style={styles.modalDescription}>
                   {selectedHomework.description}
                 </Text>
@@ -290,7 +295,9 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: "#000",
+    width: "60%", // Restrict title width to 1/3 of the modal width
   },
+
   modalTime: {
     fontSize: 14,
     fontWeight: "bold",
