@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   chats: [],
-  dailyHomework: [], // Add this to store homework
+  dailyHomework: [],
 
   loading: false,
   error: null,
@@ -113,7 +113,7 @@ const chatsSlice = createSlice({
     },
     adminMessageSuccess: (state, action) => {
       state.adminMessageLoading = false;
-      state.chats.push(action.payload); // Add the message without refetching chats
+      state.chats.push(action.payload);
     },
     adminMessageFailure: (state, action) => {
       state.adminMessageLoading = false;
@@ -138,18 +138,16 @@ const chatsSlice = createSlice({
       const updatedHomework = state.dailyHomework.map((hw) =>
         hw._id === action.payload ? { ...hw, isCompleted: true } : hw
       );
-      state.dailyHomework = updatedHomework; // Optimistic update without loading
+      state.dailyHomework = updatedHomework;
     },
-    markHomeworkAsDoneSuccess: (state) => {
-      // Success can stay empty or trigger a message
-    },
+    markHomeworkAsDoneSuccess: (state) => {},
     markHomeworkAsDoneFailure: (state, action) => {
       const updatedHomework = state.dailyHomework.map((hw) =>
         hw._id === action.payload.homeworkId
           ? { ...hw, isCompleted: false }
           : hw
       );
-      state.dailyHomework = updatedHomework; // Rollback if API call fails
+      state.dailyHomework = updatedHomework;
       state.error = action.payload.error;
     },
 
