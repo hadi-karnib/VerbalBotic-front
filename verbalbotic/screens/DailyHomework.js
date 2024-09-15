@@ -19,18 +19,15 @@ import {
 const DailyHomework = () => {
   const dispatch = useDispatch();
 
-  // Get the dailyHomework and loading state from Redux
   const { dailyHomework, loading } = useSelector((state) => state.chats);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedHomework, setSelectedHomework] = useState(null);
 
-  // Fetch daily homework on component mount
   useEffect(() => {
     dispatch(getUserDailyHomework());
   }, [dispatch]);
 
-  // Separate the completed and not completed homework
   const notCompletedHomework =
     dailyHomework?.filter((homework) => !homework.isCompleted) || [];
 
@@ -44,15 +41,12 @@ const DailyHomework = () => {
 
   const markAsDone = () => {
     if (selectedHomework && !selectedHomework.isCompleted) {
-      // Optimistically update without showing any loading
       dispatch(markHomeworkAsDone(selectedHomework._id));
 
-      // Close the modal immediately after the dispatch
       setModalVisible(false);
     }
   };
 
-  // Handle closing the modal for "Already Done"
   const closeModal = () => {
     setModalVisible(false);
   };
@@ -64,7 +58,6 @@ const DailyHomework = () => {
           <Text style={styles.title}>Daily Exercises</Text>
         </View>
 
-        {/* Display loading spinner or homework content */}
         {loading ? (
           <View style={styles.loadingContainer}>
             <LottieView
@@ -179,7 +172,6 @@ const DailyHomework = () => {
                   </Text>
                 </TouchableOpacity>
 
-                {/* Only show the animation if homework is not completed */}
                 {!selectedHomework.isCompleted && (
                   <LottieView
                     source={require("../assets/ChildPressing.json")}
@@ -295,7 +287,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: "#000",
-    width: "60%", // Restrict title width to 1/3 of the modal width
+    width: "60%",
   },
 
   modalTime: {
@@ -318,7 +310,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   alreadyDoneButton: {
-    backgroundColor: "#B3E5FC", // gold color for "Already Done"
+    backgroundColor: "#B3E5FC",
   },
   doneButtonText: {
     color: "#fff",
