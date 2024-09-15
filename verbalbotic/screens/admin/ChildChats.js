@@ -297,7 +297,7 @@ const ChildChats = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#E3F2FD", // Set the same background color here
+    backgroundColor: "#E3F2FD",
   },
   headerContainer: {
     flexDirection: "row",
