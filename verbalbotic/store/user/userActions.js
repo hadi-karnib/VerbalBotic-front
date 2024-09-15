@@ -11,7 +11,7 @@ export const loginUser = (email, password, navigation) => async (dispatch) => {
   dispatch(userActions.loginUserRequest());
 
   try {
-    const response = await axios.post(`${API_URL}/api/user/login`, {
+    const response = await axios.post(`${API_URL}/user/login`, {
       email,
       password,
     });
@@ -55,7 +55,7 @@ export const signupUser = (formData, navigation) => async (dispatch) => {
   dispatch(userActions.signupUserRequest());
 
   try {
-    const response = await axios.post(`${API_URL}/api/user/signup`, formData, {
+    const response = await axios.post(`${API_URL}/user/signup`, formData, {
       headers: {
         "Content-Type": "application/json",
       },
@@ -104,7 +104,7 @@ export const addBio = (bioData, navigation) => async (dispatch) => {
       throw new Error("No token found, please log in again.");
     }
 
-    const response = await axios.put(`${API_URL}/api/user/add-bio`, bioData, {
+    const response = await axios.put(`${API_URL}/user/add-bio`, bioData, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
@@ -156,7 +156,7 @@ export const getSelf = () => async (dispatch) => {
       throw new Error("No token found, please log in again.");
     }
 
-    const response = await axios.get(`${API_URL}/api/user/self`, {
+    const response = await axios.get(`${API_URL}/user/self`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -184,7 +184,7 @@ export const updateUser = (formData) => async (dispatch) => {
       throw new Error("No token found, please log in again.");
     }
 
-    const response = await axios.patch(`${API_URL}/api/user`, formData, {
+    const response = await axios.patch(`${API_URL}/user`, formData, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
