@@ -187,7 +187,7 @@ const Adminchildren = () => {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: "#e0e0e0 ",
+    backgroundColor: "#E3F2FD",
   },
   rowView: {
     display: "flex",
@@ -204,6 +204,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 20,
     paddingVertical: 20,
+    backgroundColor: "#E3F2FD",
   },
   title: {
     fontSize: 24,
