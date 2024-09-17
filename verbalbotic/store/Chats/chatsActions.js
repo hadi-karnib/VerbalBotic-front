@@ -286,7 +286,7 @@ export const markHomeworkAsDone = (homeworkId) => async (dispatch) => {
     );
 
     dispatch(chatsActions.markHomeworkAsDoneSuccess());
-    Alert.alert("Homework Marked as Done", "You've completed this task!");
+    // Alert.alert("Homework Marked as Done", "You've completed this task!");
   } catch (error) {
     dispatch(chatsActions.markHomeworkAsDoneFailure({ homeworkId, error }));
     console.error("Error marking homework as done: ", error);
