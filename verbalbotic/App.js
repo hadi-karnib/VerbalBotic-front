@@ -6,7 +6,7 @@ import { Provider } from "react-redux";
 import { LinearGradient } from "expo-linear-gradient";
 import store from "./store/store";
 import LoginScreen from "./screens/LoginScreen";
-import SignupScreen from "./screens/SignupScreen";
+import SignupScreen from "./screens/signupScreen";
 import HomeScreen from "./screens/HomeScreen";
 import BioScreen from "./screens/BioScreen";
 import Tabs from "./components/BottomTab";
