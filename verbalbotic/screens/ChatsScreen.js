@@ -80,7 +80,7 @@ const ChatsScreen = () => {
         playThroughEarpieceAndroid: false,
       });
 
-      const fullPath = `http://13.38.64.181:80/${messagePath}`;
+      const fullPath = `http://35.180.127.209:80/${messagePath}`;
       console.log("Playing voice note from:", fullPath);
 
       const { sound } = await Audio.Sound.createAsync(
