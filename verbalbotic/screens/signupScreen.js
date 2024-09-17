@@ -68,7 +68,7 @@ export default function SignupScreen({ navigation }) {
         behavior={Platform.OS === "ios" ? "padding" : null}
       >
         <Image
-          source={require("../assets/VerbalBotic-removebg.png")}
+          source={require("../assets/VerbalBoticLogo_noText.png")}
           style={styles.logo}
           resizeMode="contain"
         />
@@ -151,9 +151,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#E3F2FD",
   },
   logo: {
-    width: 150,
-    height: 150,
-    marginBottom: 20,
+    width: 200,
+    height: 200,
+    marginBottom: -20,
   },
   signupBox: {
     width: 300,
