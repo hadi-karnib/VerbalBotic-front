@@ -360,7 +360,7 @@ const styles = StyleSheet.create({
   },
   noChatsText: {
     fontSize: 18,
-    color: "#666",
+    color: "#000",
     marginTop: 20,
     textAlign: "center",
   },
