@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   StyleSheet,
   Text,
@@ -7,6 +7,7 @@ import {
   ScrollView,
   Modal,
   TouchableOpacity,
+  Animated,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
@@ -23,10 +24,37 @@ const DailyHomework = () => {
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedHomework, setSelectedHomework] = useState(null);
+  const fadeAnim = useRef(new Animated.Value(0)).current; // Initial fade value is 0
 
   useEffect(() => {
     dispatch(getUserDailyHomework());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (modalVisible) {
+      fadeIn();
+    } else {
+      fadeOut();
+    }
+  }, [modalVisible]);
+
+  const fadeIn = () => {
+    fadeAnim.setValue(0);
+
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const fadeOut = () => {
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+  };
 
   const notCompletedHomework =
     dailyHomework?.filter((homework) => !homework.isCompleted) || [];
@@ -42,13 +70,13 @@ const DailyHomework = () => {
   const markAsDone = () => {
     if (selectedHomework && !selectedHomework.isCompleted) {
       dispatch(markHomeworkAsDone(selectedHomework._id));
-
       setModalVisible(false);
     }
   };
 
   const closeModal = () => {
     setModalVisible(false);
+    fadeOut();
   };
 
   return (
@@ -127,10 +155,15 @@ const DailyHomework = () => {
           <Modal
             transparent={true}
             visible={modalVisible}
-            animationType="slide"
+            animationType="none" // Disable default animation
             onRequestClose={() => setModalVisible(false)}
           >
-            <View style={styles.modalContainer}>
+            <Animated.View
+              style={[
+                styles.modalContainer,
+                { opacity: fadeAnim }, // Apply fade-in animation
+              ]}
+            >
               <View style={styles.modalContent}>
                 <TouchableOpacity
                   style={styles.closeButton}
@@ -181,7 +214,7 @@ const DailyHomework = () => {
                   />
                 )}
               </View>
-            </View>
+            </Animated.View>
           </Modal>
         )}
       </View>
@@ -257,7 +290,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    // backgroundColor: "rgba(0,0,0,0.5)",
+    backgroundColor: "rgba(0,0,0,0.5)", // Add background color to the modal
   },
   modalContent: {
     width: "90%",
@@ -289,7 +322,6 @@ const styles = StyleSheet.create({
     color: "#000",
     width: "60%",
   },
-
   modalTime: {
     fontSize: 14,
     fontWeight: "bold",
