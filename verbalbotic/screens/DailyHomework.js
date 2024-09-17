@@ -404,8 +404,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   noHomeworkAnimation: {
-    width: 200,
-    height: 200,
+    width: 250,
+    height: 250,
   },
   noHomeworkText: {
     fontSize: 20,
