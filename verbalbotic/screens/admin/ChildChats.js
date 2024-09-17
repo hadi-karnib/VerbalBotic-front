@@ -77,7 +77,7 @@ const ChildChats = () => {
         playThroughEarpieceAndroid: false,
       });
 
-      const fullPath = `http://13.38.64.181:80/${messagePath}`;
+      const fullPath = `http://35.180.127.209:80/${messagePath}`;
       console.log("Playing voice note from:", fullPath);
 
       const { sound } = await Audio.Sound.createAsync(
@@ -206,7 +206,7 @@ const ChildChats = () => {
             />
           </View>
         )}
-        {error && (
+        {error ? (
           <View style={styles.noChatsContainer}>
             <LottieView
               source={NoChatsAnimation}
@@ -214,8 +214,23 @@ const ChildChats = () => {
               loop
               style={styles.noChatsLottie}
             />
-            <Text style={styles.noChatsText}>No chats for this child yet!</Text>
+            <Text style={styles.noChatsText}>Failed to load chats!</Text>
           </View>
+        ) : (
+          chats.length === 0 &&
+          !loading && (
+            <View style={styles.noChatsContainer}>
+              <LottieView
+                source={NoChatsAnimation}
+                autoPlay
+                loop
+                style={styles.noChatsLottie}
+              />
+              <Text style={styles.noChatsText}>
+                No chats for this child yet!
+              </Text>
+            </View>
+          )
         )}
         {!loading &&
           chats.map((chat) => (
