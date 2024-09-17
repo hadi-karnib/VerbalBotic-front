@@ -1,14 +1,50 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { View, ActivityIndicator, Alert } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { isAdmin } from "./checkUser"; // Import isAdmin function
 import AdminHome from "../screens/admin/adminHome";
 import AdminProfile from "../screens/admin/adminProfile";
 import Adminchildren from "../screens/admin/adminchildren";
+import { useNavigation } from "@react-navigation/native"; // To navigate to login if not admin
 
 const Tab = createBottomTabNavigator();
 
 const AdminTabs = ({ route }) => {
+  const [loading, setLoading] = useState(true);
+  const [isAdminUser, setIsAdminUser] = useState(false);
+  const navigation = useNavigation();
   const { streak } = route.params || {};
+
+  useEffect(() => {
+    const checkAdminStatus = async () => {
+      const adminStatus = await isAdmin();
+      if (adminStatus) {
+        setIsAdminUser(true);
+      } else {
+        Alert.alert(
+          "Access Denied",
+          "You are not authorized to access this page."
+        );
+        navigation.navigate("Login"); // Redirect to login if not admin
+      }
+      setLoading(false); // Stop loading after check
+    };
+
+    checkAdminStatus();
+  }, []);
+
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator size="large" color="#0288D1" />
+      </View>
+    );
+  }
+
+  if (!isAdminUser) {
+    return null; // Return nothing if the user is not admin (to prevent screen flicker)
+  }
 
   return (
     <Tab.Navigator
@@ -17,7 +53,7 @@ const AdminTabs = ({ route }) => {
           let iconName;
 
           if (route.name === "Home") {
-            iconName = focused ? "home-outline" : "home-outline";
+            iconName = "home-outline";
           } else if (route.name === "Children Chats") {
             iconName = "robot-outline";
           } else if (route.name === "Profile") {

@@ -14,6 +14,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { MaterialIcons } from "@expo/vector-icons";
 import QRCode from "react-native-qrcode-svg";
+import { isAuthenticated } from "../components/checkUser";
 
 const Profile = ({ navigation }) => {
   const { user } = useSelector((state) => state.user);
@@ -29,7 +30,25 @@ const Profile = ({ navigation }) => {
   });
 
   const [expandedId, setExpandedId] = useState(null);
+  const [loadingAuth, setLoadingAuth] = useState(true);
+  const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      const authStatus = await isAuthenticated();
+      if (!authStatus) {
+        Alert.alert(
+          "Access Denied",
+          "You are not authorized to access this page."
+        );
+        navigation.navigate("Login"); // Redirect to login if not authenticated
+      } else {
+        setIsUserAuthenticated(true);
+      }
+      setLoadingAuth(false);
+    };
 
+    checkAuthStatus();
+  }, []);
   useEffect(() => {
     if (user) {
       setFormData({

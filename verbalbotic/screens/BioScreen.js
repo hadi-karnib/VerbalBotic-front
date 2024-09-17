@@ -11,13 +11,35 @@ import { LinearGradient } from "expo-linear-gradient";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { addBio } from "../store/user/userActions";
 import { useDispatch } from "react-redux";
+import { isAuthenticated } from "../components/checkUser";
 const BioScreen = ({ navigation }) => {
   const [selectedHobbies, setSelectedHobbies] = useState([]);
   const [work, setWork] = useState("");
   const [illness, setIllness] = useState("");
   const [bio, setBio] = useState("");
   const dispatch = useDispatch();
+  const [loadingAuth, setLoadingAuth] = useState(true);
+  const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
+
   const hobbies = ["Reading", "Swimming", "Playing Football", "Cooking"];
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      const authStatus = await isAuthenticated();
+      if (!authStatus) {
+        Alert.alert(
+          "Access Denied",
+          "You are not authorized to access this page."
+        );
+        nav.navigate("Login"); // Redirect to login if not authenticated
+      } else {
+        setIsUserAuthenticated(true);
+      }
+      setLoadingAuth(false);
+    };
+
+    checkAuthStatus();
+  }, []);
+
   useEffect(() => {
     console.log(selectedHobbies);
   }, [selectedHobbies]);

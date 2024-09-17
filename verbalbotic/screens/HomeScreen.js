@@ -15,6 +15,7 @@ import { saveVoiceNote } from "../store/Chats/chatsActions";
 import SwitchToggle from "react-native-switch-toggle";
 import { Dropdown } from "react-native-element-dropdown";
 import { getSelf } from "../store/user/userActions";
+import { isAuthenticated } from "../components/checkUser";
 
 const HomeScreen = ({ navigation, route }) => {
   const { streak } = route.params || {};
@@ -30,7 +31,8 @@ const HomeScreen = ({ navigation, route }) => {
   const [startTime, setStartTime] = useState(0);
   const [toggleOn, setToggleOn] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState(null);
-
+  const [loadingAuth, setLoadingAuth] = useState(true);
+  const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
   const recordingInterval = useRef(null);
   const waveAnim1 = useRef(new Animated.Value(1)).current;
   const waveAnim2 = useRef(new Animated.Value(1)).current;
@@ -60,8 +62,28 @@ const HomeScreen = ({ navigation, route }) => {
     { label: "Italian (Italy)", value: "it-IT" },
   ];
   useEffect(() => {
-    dispatch(getSelf());
-  }, [dispatch]);
+    const checkAuthStatus = async () => {
+      const authStatus = await isAuthenticated();
+      if (!authStatus) {
+        Alert.alert(
+          "Access Denied",
+          "You are not authorized to access this page."
+        );
+        navigation.navigate("Login"); // Redirect to login if not authenticated
+      } else {
+        setIsUserAuthenticated(true);
+      }
+      setLoadingAuth(false);
+    };
+
+    checkAuthStatus();
+  }, []);
+
+  useEffect(() => {
+    if (isUserAuthenticated) {
+      dispatch(getSelf());
+    }
+  }, [dispatch, isUserAuthenticated]);
 
   const handleToggle = () => {
     setToggleOn(!toggleOn);

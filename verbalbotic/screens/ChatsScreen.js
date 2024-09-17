@@ -20,6 +20,7 @@ import LottieView from "lottie-react-native";
 import loadingAnimation from "../assets/loading.json";
 import noChatsAnimation from "../assets/NoChats.json";
 import { chatsActions } from "../store/Chats/chatsSlice";
+import { isAuthenticated } from "../components/checkUser";
 
 const ChatsScreen = () => {
   const dispatch = useDispatch();
@@ -28,14 +29,33 @@ const ChatsScreen = () => {
   const [progresses, setProgresses] = useState({});
   const [durations, setDurations] = useState({});
   const scrollViewRef = useRef(null);
+  const [loadingAuth, setLoadingAuth] = useState(true);
+  const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
 
   useEffect(() => {
-    dispatch(chatsActions.clearChats());
+    const checkAuthStatus = async () => {
+      const authStatus = await isAuthenticated();
+      if (!authStatus) {
+        Alert.alert(
+          "Access Denied",
+          "You are not authorized to access this page."
+        );
+        navigation.navigate("Login"); // Redirect to login if not authenticated
+      } else {
+        setIsUserAuthenticated(true);
+      }
+      setLoadingAuth(false);
+    };
+
+    checkAuthStatus();
   }, []);
 
   useEffect(() => {
-    dispatch(getMyChats());
-  }, [dispatch]);
+    if (isUserAuthenticated) {
+      dispatch(chatsActions.clearChats());
+      dispatch(getMyChats());
+    }
+  }, [dispatch, isUserAuthenticated]);
 
   useEffect(() => {
     if (chats.length > 0) {

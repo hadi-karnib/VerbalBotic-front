@@ -16,7 +16,7 @@ import {
   markHomeworkAsDone,
   getUserDailyHomework,
 } from "../store/Chats/chatsActions";
-
+import { isAuthenticated } from "../components/checkUser";
 const DailyHomework = () => {
   const dispatch = useDispatch();
 
@@ -25,10 +25,32 @@ const DailyHomework = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedHomework, setSelectedHomework] = useState(null);
   const fadeAnim = useRef(new Animated.Value(0)).current; // Initial fade value is 0
+  const [loadingAuth, setLoadingAuth] = useState(true);
+  const [isUserAuthenticated, setIsUserAuthenticated] = useState(false);
 
   useEffect(() => {
-    dispatch(getUserDailyHomework());
-  }, [dispatch]);
+    const checkAuthStatus = async () => {
+      const authStatus = await isAuthenticated();
+      if (!authStatus) {
+        Alert.alert(
+          "Access Denied",
+          "You are not authorized to access this page."
+        );
+        navigation.navigate("Login"); // Redirect to login if not authenticated
+      } else {
+        setIsUserAuthenticated(true);
+      }
+      setLoadingAuth(false);
+    };
+
+    checkAuthStatus();
+  }, []);
+
+  useEffect(() => {
+    if (isUserAuthenticated) {
+      dispatch(getUserDailyHomework());
+    }
+  }, [dispatch, isUserAuthenticated]);
 
   useEffect(() => {
     if (modalVisible) {
