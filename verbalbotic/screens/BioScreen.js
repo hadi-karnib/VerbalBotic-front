@@ -64,7 +64,7 @@ const BioScreen = ({ navigation }) => {
   };
 
   return (
-    <LinearGradient colors={["#f3cfd6", "#90c2d8"]} style={styles.container}>
+    <View style={styles.container}>
       <SafeAreaView style={styles.safeArea}>
         <KeyboardAwareScrollView
           contentContainerStyle={styles.scrollContainer}
@@ -117,7 +117,7 @@ const BioScreen = ({ navigation }) => {
           </TouchableOpacity>
         </KeyboardAwareScrollView>
       </SafeAreaView>
-    </LinearGradient>
+    </View>
   );
 };
 
@@ -127,6 +127,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
+    backgroundColor: "#E3F2FD",
   },
   scrollContainer: {
     padding: 20,
