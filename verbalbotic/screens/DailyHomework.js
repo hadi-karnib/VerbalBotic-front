@@ -17,6 +17,8 @@ import {
   getUserDailyHomework,
 } from "../store/Chats/chatsActions";
 import { isAuthenticated } from "../components/checkUser";
+import { Alert } from "react-native";
+
 const DailyHomework = () => {
   const dispatch = useDispatch();
 
@@ -116,6 +118,17 @@ const DailyHomework = () => {
               loop
               style={styles.loadingAnimation}
             />
+          </View>
+        ) : notCompletedHomework.length === 0 &&
+          completedHomework.length === 0 ? (
+          <View style={styles.noHomeworkContainer}>
+            <LottieView
+              source={require("../assets/NoHomework.json")} // NoHomework animation
+              autoPlay
+              loop
+              style={styles.noHomeworkAnimation}
+            />
+            <Text style={styles.noHomeworkText}>No Homework Assigned!</Text>
           </View>
         ) : (
           <ScrollView contentContainerStyle={styles.content}>
@@ -384,6 +397,21 @@ const styles = StyleSheet.create({
   loadingAnimation: {
     width: 200,
     height: 200,
+  },
+  noHomeworkContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  noHomeworkAnimation: {
+    width: 200,
+    height: 200,
+  },
+  noHomeworkText: {
+    fontSize: 20,
+    color: "#000",
+    marginTop: 20,
+    textAlign: "center",
   },
 });
 
