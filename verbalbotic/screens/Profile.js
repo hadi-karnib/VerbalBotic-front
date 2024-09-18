@@ -104,7 +104,7 @@ const Profile = ({ navigation }) => {
                 <MaterialIcons
                   name={expandedId === "1" ? "expand-less" : "expand-more"}
                   size={24}
-                  color="#000"
+                  color="#fff"
                 />
               </TouchableOpacity>
               {expandedId === "1" && (
@@ -176,7 +176,7 @@ const Profile = ({ navigation }) => {
                 <MaterialIcons
                   name={expandedId === "2" ? "expand-less" : "expand-more"}
                   size={24}
-                  color="#000"
+                  color="#fff"
                 />
               </TouchableOpacity>
               {expandedId === "2" && (
