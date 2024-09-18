@@ -189,7 +189,7 @@ const Profile = ({ navigation }) => {
                     <QRCode
                       value={user._id || ""}
                       size={120}
-                      color="#74b4c4"
+                      color="#0277BD"
                       backgroundColor="transparent"
                     />
                   </View>
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     padding: 18,
-    backgroundColor: "#74b4c4",
+    backgroundColor: "#0277BD",
     alignItems: "center",
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
@@ -264,7 +264,7 @@ const styles = StyleSheet.create({
   settingText: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#000",
+    color: "#fff",
   },
   optionsContainer: {
     padding: 20,
@@ -299,7 +299,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   logoutButton: {
-    backgroundColor: "#74b4c4",
+    backgroundColor: "#0277BD",
     width: "100%",
   },
   buttonText: {
