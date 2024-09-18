@@ -178,7 +178,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   noChildrenContainer: {
-    backgroundColor: "#d0d0d0",
+    backgroundColor: "#fff",
     padding: 15,
     borderRadius: 8,
     flexDirection: "row",
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
   },
   infoBox: {
     flex: 1,
-    backgroundColor: "#F5F5F5",
+    backgroundColor: "#fff",
     padding: 25,
     borderTopLeftRadius: 60,
     borderTopRightRadius: 60,
