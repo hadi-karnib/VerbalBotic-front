@@ -73,7 +73,7 @@ const Tabs = ({ route }) => {
         },
         tabBarActiveTintColor: "#0288D1",
         tabBarInactiveTintColor: "gray",
-        tabBarStyle: { backgroundColor: "#F5F5F5", paddingTop: 10 },
+        tabBarStyle: { backgroundColor: "#fff", paddingTop: 10 },
         tabBarLabelStyle: { marginBottom: -7 },
       })}
     >

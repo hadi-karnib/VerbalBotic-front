@@ -74,7 +74,7 @@ const AdminTabs = ({ route }) => {
         tabBarActiveTintColor: "#0288D1",
         tabBarInactiveTintColor: "gray",
         tabBarStyle: {
-          backgroundColor: "#F5F5F5",
+          backgroundColor: "#fff",
           paddingTop: 10,
           elevation: 5,
           shadowOffset: { width: 0, height: 2 },
