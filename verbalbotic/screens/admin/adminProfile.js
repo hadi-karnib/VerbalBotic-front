@@ -126,7 +126,7 @@ const AdminProfile = ({ navigation }) => {
               <MaterialIcons
                 name={expandedId === "1" ? "expand-less" : "expand-more"}
                 size={24}
-                color="#000"
+                color="#fff"
               />
             </TouchableOpacity>
             {expandedId === "1" && (
@@ -196,7 +196,7 @@ const AdminProfile = ({ navigation }) => {
               <MaterialIcons
                 name="arrow-forward-ios"
                 size={20}
-                color="#000"
+                color="#fff"
                 style={styles.arrowIcon}
               />
             </TouchableOpacity>
@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     padding: 18,
-    backgroundColor: "#74b4c4",
+    backgroundColor: "#0277BD",
     alignItems: "center",
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
@@ -287,7 +287,7 @@ const styles = StyleSheet.create({
   settingText: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#000",
+    color: "#fff",
   },
   optionsContainer: {
     padding: 20,
@@ -308,12 +308,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: "#74b4c4",
+    backgroundColor: "#0277BD",
     padding: 15,
     borderRadius: 10,
   },
   addChildButtonText: {
-    color: "#000",
+    color: "#fff",
     fontSize: 18,
     fontWeight: "bold",
     paddingVertical: 5,
@@ -338,7 +338,7 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   logoutButton: {
-    backgroundColor: "#74b4c4",
+    backgroundColor: "#0277BD",
     width: "100%",
   },
   buttonText: {
